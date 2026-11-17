@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Puintuin Plantenluisteraar</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+<style>
+  :root { --bg:#f5f7f2; --card:#fff; --ink:#1f2a1f; --mute:#667; --line:#e3e8df; --green:#2f7d4f;
+          --c1:#d1495b; --c2:#2e86ab; --c3:#8a5a2b; --c4:#e0a100; --c5:#7b4fa3; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#141a14; --card:#1d261d; --ink:#e8efe6; --mute:#9aa89a; --line:#2c382c; --green:#6cc78c;
+            --c1:#ff7a8a; --c2:#5fb4dc; --c3:#c99560; --c4:#f0c040; --c5:#b48be0; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font:15px/1.4 system-ui,sans-serif; background:var(--bg); color:var(--ink); }
+  header { padding:20px 16px 8px; max-width:1100px; margin:auto; }
+  h1 { margin:0; font-size:22px; } .sub { color:var(--mute); font-size:13px; }
+  main { max-width:1100px; margin:auto; padding:8px 16px 40px; display:grid; gap:14px; }
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .kpi .label { color:var(--mute); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  .kpi .value { font-size:28px; font-weight:600; margin-top:2px; } .kpi .unit { font-size:14px; color:var(--mute); }
+  .kpi .delta { font-size:12px; color:var(--mute); }
+  .charts { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:14px; }
+  .card h2 { margin:0 0 8px; font-size:14px; }
+  .chartbox { position:relative; height:200px; }
+  #map { height:320px; border-radius:8px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th,td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
+  th { color:var(--mute); font-weight:500; }
+  .two { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:14px; }
+  #plants { max-height:320px; overflow:auto; }
+  .err { color:#c0392b; }
+</style>
+</head>
+<body>
+<header>
+  <a href="/garden/" style="float:right;color:var(--green);font-weight:600;text-decoration:none">3D tuin →</a>
+  <h1 id="title">Puintuin</h1>
+  <div class="sub" id="status">Laden…</div>
+</header>
+<main>
+  <section class="kpis" id="kpis"></section>
+  <section class="charts">
+    <div class="card"><h2>Luchttemperatuur (°C)</h2><div class="chartbox"><canvas id="cAirT"></canvas></div></div>
+    <div class="card"><h2>Luchtvochtigheid (%)</h2><div class="chartbox"><canvas id="cAirH"></canvas></div></div>
+    <div class="card"><h2>Bodemtemperatuur (°C)</h2><div class="chartbox"><canvas id="cSoilT"></canvas></div></div>
+    <div class="card"><h2>Bodemvocht (ruwe sensorwaarde)</h2><div class="chartbox"><canvas id="cSoilH"></canvas></div></div>
+    <div class="card"><h2>Licht (clear &amp; nabij-infrarood)</h2><div class="chartbox"><canvas id="cLight"></canvas></div></div>
+    <div class="card"><h2>Lichtspectrum laatste meting (F1–F8)</h2><div class="chartbox"><canvas id="cSpec"></canvas></div></div>
+  </section>
+  <section class="two">
+    <div class="card"><h2>Plattegrond</h2><div id="map"></div></div>
+    <div class="card"><h2>Beplanting</h2><div id="plants"></div></div>
+  </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

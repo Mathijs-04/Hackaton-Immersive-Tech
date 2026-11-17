@@ -1,0 +1,142 @@
+:root {
+  --panel: rgba(250, 251, 247, 0.84);
+  --panel-solid: #fafbf7;
+  --ink: #1d261d;
+  --mute: #5e6b5e;
+  --line: rgba(30, 50, 30, 0.12);
+  --accent: #2f7d4f;
+  --accent-ink: #fff;
+  --warn: #b5562c;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --panel: rgba(20, 27, 22, 0.8);
+    --panel-solid: #161d18;
+    --ink: #e7efe5;
+    --mute: #9fae9f;
+    --line: rgba(220, 240, 220, 0.12);
+    --accent: #6cc78c;
+    --accent-ink: #0f1a12;
+    --warn: #f0a070;
+    --shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #0d1410; }
+body { font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); }
+#app { position: fixed; inset: 0; }
+#scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; outline: none; }
+[hidden] { display: none !important; }
+
+.panel {
+  position: absolute;
+  background: var(--panel);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+/* HUD */
+.hud { top: 16px; left: 16px; width: 280px; padding: 12px 14px; }
+.hud-head { display: flex; justify-content: space-between; align-items: start; gap: 8px; }
+.hud h1 { margin: 0; font-size: 16px; }
+.link { color: var(--accent); font-weight: 600; text-decoration: none; font-size: 12px; border: 1px solid var(--line); border-radius: 8px; padding: 2px 8px; }
+.clock { color: var(--mute); font-size: 13px; font-variant-numeric: tabular-nums; }
+.values { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; margin: 10px 0 0; }
+.values div { min-width: 0; }
+.values dt { font-size: 11px; color: var(--mute); text-transform: uppercase; letter-spacing: .04em; }
+.values dd { margin: 0; font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.values dd small { font-size: 12px; font-weight: 400; color: var(--mute); }
+.bar { height: 3px; border-radius: 2px; background: var(--line); margin-top: 3px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); }
+
+/* Buttons */
+.toolbar { position: absolute; top: 16px; right: 16px; display: flex; gap: 8px; }
+.btn {
+  font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line);
+  border-radius: 10px; padding: 7px 12px; cursor: pointer; box-shadow: var(--shadow);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.btn:hover { border-color: var(--accent); }
+.btn[aria-expanded="true"], #btn-fly[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.btn.round { width: 40px; height: 40px; padding: 0; border-radius: 50%; font-size: 14px; box-shadow: none; }
+.icon-btn { background: none; border: 0; color: var(--mute); font-size: 16px; cursor: pointer; padding: 4px; }
+
+/* Plant list */
+.side { top: 64px; right: 16px; width: 300px; max-height: calc(100% - 64px - 96px); display: flex; flex-direction: column; padding: 12px; }
+.side-head { display: flex; justify-content: space-between; align-items: center; }
+.side h2 { margin: 0; font-size: 15px; }
+.search { margin: 8px 0; width: 100%; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel-solid); color: var(--ink); font: inherit; }
+.plant-list { list-style: none; margin: 0; padding: 0; overflow: auto; }
+.plant-list li { display: flex; align-items: center; gap: 10px; padding: 6px 4px; border-radius: 8px; cursor: pointer; }
+.plant-list li:hover, .plant-list li.on { background: var(--line); }
+.plant-list .nm { flex: 1; min-width: 0; }
+.plant-list .nm b { display: block; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.plant-list .ct { color: var(--mute); font-size: 12px; font-variant-numeric: tabular-nums; }
+.swatch { width: 14px; height: 14px; border-radius: 50%; flex: none; border: 1px solid rgba(0,0,0,.15); display: inline-block; }
+
+/* Plant card */
+.card { left: 16px; bottom: 84px; width: 260px; padding: 12px 14px; }
+.card h2 { margin: 0 0 6px; font-size: 16px; display: flex; align-items: center; gap: 8px; padding-right: 20px; }
+.card dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; font-size: 13px; }
+.card dt { color: var(--mute); }
+.card dd { margin: 0; }
+.card .close { position: absolute; top: 8px; right: 8px; }
+
+/* Timebar: just play/pause + the moment */
+.timebar { left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 6px 16px 6px 6px; border-radius: 99px; }
+.time-label { font-variant-numeric: tabular-nums; font-size: 13px; white-space: nowrap; }
+
+/* Butterfly flight */
+.flight { top: 16px; left: 50%; transform: translateX(-50%); width: 340px; padding: 10px 14px; }
+.flight-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.fl-status { color: var(--mute); font-size: 13px; text-align: right; }
+.meters { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; margin-top: 8px; align-items: end; }
+.meters span { display: block; font-size: 11px; color: var(--mute); text-transform: uppercase; letter-spacing: .04em; }
+.meter { height: 7px; border-radius: 4px; background: var(--line); overflow: hidden; margin-top: 3px; }
+.meter i { display: block; height: 100%; width: 100%; background: var(--accent); transition: width .3s; }
+.meter.warm i { background: #e8913a; }
+.meter i.low { background: var(--warn); }
+.visits b { font-size: 18px; font-variant-numeric: tabular-nums; }
+.toast { position: absolute; top: 112px; left: 50%; transform: translateX(-50%); background: var(--panel-solid); color: var(--ink); border: 1px solid var(--line); border-radius: 14px; padding: 7px 16px; box-shadow: var(--shadow); font-size: 13px; transition: opacity .4s, transform .4s; text-align: center; width: max-content; max-width: calc(100% - 32px); }
+.toast.out { opacity: 0; transform: translate(-50%, -8px); }
+kbd { font: 11px ui-monospace, monospace; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 4px; background: var(--panel); }
+.touch { position: absolute; left: 0; right: 0; bottom: 24px; height: 0; }
+.stick { position: absolute; left: 20px; bottom: 0; width: 120px; height: 120px; border-radius: 50%; background: var(--panel); border: 1px solid var(--line); backdrop-filter: blur(8px); touch-action: none; }
+.knob { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: var(--accent); opacity: .85; transition: transform .08s; }
+.vbtns { position: absolute; right: 20px; bottom: 0; display: flex; flex-direction: column; gap: 12px; }
+.vbtns .btn { width: 56px; height: 56px; font-size: 18px; touch-action: none; }
+.flying .card, .flying .side { display: none !important; }
+
+/* Loader */
+.overlay { position: absolute; inset: 0; display: grid; place-items: center; background: #0d1410; color: #e7efe5; transition: opacity .6s; z-index: 10; }
+.overlay.gone { opacity: 0; pointer-events: none; }
+.loader { text-align: center; max-width: 360px; padding: 16px; }
+.sprout { font-size: 40px; animation: bob 1.6s ease-in-out infinite; }
+.loader a { color: #6cc78c; }
+@keyframes bob { 50% { transform: translateY(-6px); } }
+.stats { position: absolute; right: 16px; bottom: 16px; margin: 0; padding: 6px 8px; background: rgba(0,0,0,.65); color: #9f9; font: 11px/1.3 ui-monospace, monospace; border-radius: 6px; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .sprout { animation: none; } }
+
+/* Narrow screens */
+@media (max-width: 900px) {
+  .flight { top: auto; bottom: 72px; width: min(340px, calc(100% - 32px)); }
+  .flying .timebar { display: none; }
+}
+@media (max-width: 720px) {
+  .hud { left: 8px; right: 8px; top: 8px; width: auto; padding: 8px 10px; }
+  .values { grid-template-columns: repeat(3, 1fr); gap: 4px 8px; margin-top: 6px; }
+  .values dd { font-size: 14px; }
+  .toolbar { top: auto; bottom: 68px; right: 8px; }
+  .side { left: 8px; right: 8px; width: auto; top: 150px; max-height: calc(100% - 150px - 120px); }
+  .card { left: 8px; right: 8px; width: auto; bottom: 120px; }
+  .timebar { bottom: 10px; }
+  .flying .hud { display: none; }
+  .flying .toolbar { top: 8px; bottom: auto; }
+  .flight { top: 56px; bottom: auto; left: 8px; right: 8px; width: auto; transform: none; padding: 8px 10px; }
+  .toast { top: 150px; }
+}

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Digitale Puintuin</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "/vendor/three/three.module.min.js",
+    "three/addons/": "/vendor/three/addons/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app">
+  <canvas id="scene" aria-label="3D weergave van de Puintuin"></canvas>
+
+  <!-- Live data -->
+  <section class="panel hud" id="hud" hidden>
+    <div class="hud-head">
+      <h1 id="garden-name">Puintuin</h1>
+      <a class="link" href="/" title="Naar het 2D-dashboard">2D</a>
+    </div>
+    <div class="clock"><span id="clock">–</span> · <span id="weather"></span></div>
+    <dl class="values" id="values"></dl>
+  </section>
+
+  <div class="toolbar" id="toolbar" hidden>
+    <button class="btn" id="btn-fly" aria-pressed="false" title="Vlieg als vlinder (V)">🦋 Vliegen</button>
+    <button class="btn" id="btn-plants" aria-expanded="false">🌿 Planten</button>
+  </div>
+
+  <aside class="panel side" id="plant-panel" hidden>
+    <div class="side-head">
+      <h2>Beplanting</h2>
+      <button class="icon-btn" data-close="plant-panel" aria-label="Sluiten">✕</button>
+    </div>
+    <input class="search" id="plant-search" type="search" placeholder="Zoek plant…" aria-label="Zoek plant">
+    <ul class="plant-list" id="plant-list"></ul>
+  </aside>
+
+  <section class="panel card" id="plant-card" hidden aria-live="polite"></section>
+
+  <!-- Time: play / pause, 1 hour per second -->
+  <section class="panel timebar" id="timebar" hidden>
+    <button class="btn round" id="btn-play" aria-label="Afspelen">▶</button>
+    <span class="time-label" id="time-label"></span>
+  </section>
+
+  <!-- Butterfly flight -->
+  <section class="panel flight" id="flight" hidden aria-live="polite">
+    <div class="flight-head">
+      <b id="fl-name">🦋</b>
+      <span class="fl-status" id="fl-status"></span>
+    </div>
+    <div class="meters">
+      <div><span>Energie</span><div class="meter"><i id="fl-energy"></i></div></div>
+      <div><span title="Uit luchttemperatuur en zonlicht van dit moment">Warmte</span><div class="meter warm"><i id="fl-warmth"></i></div></div>
+      <div class="visits"><span>Soorten</span><b id="fl-visits">0/0</b></div>
+    </div>
+  </section>
+  <div class="toast" id="toast" hidden></div>
+  <div class="touch" id="touch-controls" hidden>
+    <div class="stick" aria-label="Stuur"><div class="knob"></div></div>
+    <div class="vbtns">
+      <button class="btn round" data-v="up" aria-label="Omhoog">▲</button>
+      <button class="btn round" data-v="down" aria-label="Omlaag">▼</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="loader" id="loader">
+      <div class="sprout">🌱</div>
+      <div id="loader-text">De tuin wordt wakker…</div>
+    </div>
+  </div>
+
+  <pre class="stats" id="stats" hidden></pre>
+</div>
+<script type="module" src="main.js"></script>
+</body>
+</html>

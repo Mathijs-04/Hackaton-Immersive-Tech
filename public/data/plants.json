@@ -1,0 +1,1114 @@
+{
+  "_meta": {
+    "description": "Aanvullende informatie per plant in de Puintuin, één entry per planting batch uit planting.json.",
+    "pollinatorScale": "0 (geen waarde) tot 5 (uitstekend). Redactionele inschatting op basis van algemene kennis, niet gemeten.",
+    "sources": "Namen en volgorde: Bioto-API (planting.json). Foto's: Wikimedia Commons via Wikipedia, zie image.author en image.license. dutchNameSource \"added\" = Nederlandse naam ontbrak in de API en is aangevuld.",
+    "count": 48
+  },
+  "plants": [
+    {
+      "id": "filipendula-ulmaria",
+      "dutchName": "Moerasspirea",
+      "dutchNameSource": "api",
+      "latinName": "Filipendula ulmaria",
+      "speciesName": "Filipendula ulmaria",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/20140715Filipendula_ulmaria.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:20140715Filipendula_ulmaria.jpg",
+        "author": "AnRo0002",
+        "license": "CC0",
+        "depicts": "Filipendula ulmaria"
+      },
+      "description": "Statige plant van vochtige weides en slootkanten met pluimen van schuimige, romige bloemetjes die zoet naar amandel geuren. Bloeit van juni tot augustus.",
+      "pollinatorValue": {
+        "butterflies": 2,
+        "bees": 3,
+        "note": "Geeft geen nectar maar veel stuifmeel: een buffet voor bijen en zweefvliegen. De geur trekt ook vlinders aan."
+      },
+      "funFact": "Uit deze plant (vroeger Spiraea genoemd) werd salicylzuur gewonnen, en daar komt de naam aspirine vandaan."
+    },
+    {
+      "id": "verbena-bonariensis",
+      "dutchName": "Stijf ijzerhard",
+      "dutchNameSource": "api",
+      "latinName": "Verbena bonariensis",
+      "speciesName": "Verbena bonariensis",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Verbena_lila_(Verbena_bonariensis)%2C_Jard%C3%ADn_Bot%C3%A1nico%2C_M%C3%BAnich%2C_Alemania%2C_2013-09-08%2C_DD_01.JPG?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Verbena_lila_(Verbena_bonariensis),_Jard%C3%ADn_Bot%C3%A1nico,_M%C3%BAnich,_Alemania,_2013-09-08,_DD_01.JPG",
+        "author": "Diego Delso",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Verbena bonariensis"
+      },
+      "description": "Hoge, ijle plant met stevige stengels en pluimen paarse bloemetjes die tot de eerste vorst doorbloeien. Vormt een luchtige wolk boven lagere planten.",
+      "pollinatorValue": {
+        "butterflies": 5,
+        "bees": 3,
+        "note": "Absolute vlindermagneet: dagpauwoog, atalanta, kleine vos en koolwitjes zitten er in het late seizoen massaal op."
+      },
+      "funFact": "Komt oorspronkelijk uit Zuid-Amerika; de soortnaam bonariensis verwijst naar Buenos Aires."
+    },
+    {
+      "id": "cichorium-intybus",
+      "dutchName": "Wilde cichorei",
+      "dutchNameSource": "api",
+      "latinName": "Cichorium intybus",
+      "speciesName": "Cichorium intybus",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cichorium_intybus_01.JPG?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Cichorium_intybus_01.JPG",
+        "author": "Uoaei1",
+        "license": "CC BY-SA 4.0",
+        "depicts": "Cichorium intybus"
+      },
+      "description": "Robuuste wegbermplant met hemelsblauwe bloemen op bijna kale, stijve stengels. Bloeit van juli tot oktober.",
+      "pollinatorValue": {
+        "butterflies": 2,
+        "bees": 4,
+        "note": "Vooral wilde bijen en zweefvliegen bezoeken de bloemen; vlinders komen er af en toe op af."
+      },
+      "funFact": "De bloemen openen in de ochtend en sluiten al rond het middaguur. De gedroogde wortel werd gebruikt als koffiesurrogaat."
+    },
+    {
+      "id": "helianthus-annuus",
+      "dutchName": "Zonnebloem",
+      "dutchNameSource": "added",
+      "latinName": "Helianthus annuus",
+      "speciesName": "Helianthus annuus",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sunflower_sky_backdrop.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Sunflower_sky_backdrop.jpg",
+        "author": "Fir0002",
+        "license": "GFDL 1.2",
+        "depicts": "Helianthus annuus"
+      },
+      "description": "Eenjarige reus met grote gele bloemhoofden. In de tuin is hij ook een zaadplant: in het najaar eten vinken en mezen de zaden.",
+      "pollinatorValue": {
+        "butterflies": 3,
+        "bees": 5,
+        "note": "Een hoofd bestaat uit honderden buisbloemetjes vol nectar en stuifmeel; hommels en honingbijen zijn er dol op. Kies ongevulde variëteiten."
+      },
+      "funFact": "Jonge bloemknoppen draaien mee met de zon (heliotropisme); volgroeide bloemen kijken vrijwel altijd naar het oosten."
+    },
+    {
+      "id": "verbascum-nigrum",
+      "dutchName": "Zwarte toorts",
+      "dutchNameSource": "api",
+      "latinName": "Verbascum nigrum",
+      "speciesName": "Verbascum nigrum",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Verbascum_nigrum_02.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Verbascum_nigrum_02.jpg",
+        "author": "onbekend",
+        "license": "CC BY-SA 2.0",
+        "depicts": "Verbascum nigrum"
+      },
+      "description": "Slanke aar met gele bloemen met paarse meeldraadharen. Bloeit van juni tot september en zaait zich makkelijk uit op schrale grond.",
+      "pollinatorValue": {
+        "butterflies": 1,
+        "bees": 4,
+        "note": "Bijen verzamelen het stuifmeel; de plant geeft weinig nectar. Rupsen van de helmkruidmonnik (nachtvlinder) eten van de bladeren."
+      },
+      "funFact": "De meeldraden dragen paarse haartjes, die insecten houvast geven op de bloem."
+    },
+    {
+      "id": "lythrum-salicaria",
+      "dutchName": "Grote kattenstaart",
+      "dutchNameSource": "api",
+      "latinName": "Lythrum salicaria",
+      "speciesName": "Lythrum salicaria",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lythrum_salicaria_-_harilik_kukesaba.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Lythrum_salicaria_-_harilik_kukesaba.jpg",
+        "author": "Ivar Leidus",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Lythrum salicaria"
+      },
+      "description": "Hoge, paarsroze bloemaren op vochtige plekken, van juli tot september. Een sieraad voor oevers en vochtige tuinhoeken.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 4,
+        "note": "Rijke nectarbron laat in de zomer, favoriet bij hommels, honingbijen en vlinders zoals het dagpauwoog."
+      },
+      "funFact": "De plant heeft drie typen bloemen (met korte, middellange en lange stijlen). Charles Darwin bestudeerde dit uitgebreid."
+    },
+    {
+      "id": "malva-sylvestris",
+      "dutchName": "Groot kaasjeskruid",
+      "dutchNameSource": "api",
+      "latinName": "Malva sylvestris",
+      "speciesName": "Malva sylvestris",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mallow_January_2008-1.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Mallow_January_2008-1.jpg",
+        "author": "Alvesgaspar",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Malva sylvestris"
+      },
+      "description": "Robuuste, ruwe plant met grote roze bloemen met donkere aders, die van juni tot oktober bloeit.",
+      "pollinatorValue": {
+        "butterflies": 3,
+        "bees": 4,
+        "note": "Bijen en hommels zijn de belangrijkste bezoekers; rupsen van sommige dikkopjes en de distelvlinder kunnen de bladeren eten."
+      },
+      "funFact": "De platte, ronde vruchtjes lijken op kaasjes, vandaar de naam kaasjeskruid."
+    },
+    {
+      "id": "dipsacus-fullonum",
+      "dutchName": "Grote kaardenbol",
+      "dutchNameSource": "api",
+      "latinName": "Dipsacus fullonum",
+      "speciesName": "Dipsacus fullonum",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dipsacus_fullonum1.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Dipsacus_fullonum1.jpg",
+        "author": "MPF",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Dipsacus fullonum"
+      },
+      "description": "Stekelige tweejarige plant met paarse bloemkoppen die in ringen opengaan. In de winter blijven de kale koppen staan.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 4,
+        "note": "Zomers bezoeken bijen, hommels en vlinders de bloemen; in de winter eten putters de zaden."
+      },
+      "funFact": "De paarsgewijs gegroeide bladeren vormen een bekertje dat regenwater vasthoudt. De droge koppen werden gebruikt om wol te kaarden."
+    },
+    {
+      "id": "thymus-serpyllum",
+      "dutchName": "Kleine tijm",
+      "dutchNameSource": "api",
+      "latinName": "Thymus serpyllum",
+      "speciesName": "Thymus serpyllum",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Thymus_serpyllum1.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Thymus_serpyllum1.jpg",
+        "author": "onbekend",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Thymus serpyllum"
+      },
+      "description": "Laag, kruipend kruid dat dichte matten vormt en in de zomer volop roze-paars bloeit. Prima voor droge, zonnige plekken.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 5,
+        "note": "Een van de beste nectarplanten voor bijen en dagvlinders op droge grond; ook voor zweefvliegen."
+      },
+      "funFact": "Het tijmblauwtje begint zijn leven als rups op tijm en leeft daarna in mierennesten. In Nederland was het uitgestorven en is het opnieuw uitgezet."
+    },
+    {
+      "id": "echium-vulgare",
+      "dutchName": "Slangenkruid",
+      "dutchNameSource": "api",
+      "latinName": "Echium vulgare",
+      "speciesName": "Echium vulgare",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Echium_vulgare_L.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Echium_vulgare_L.jpg",
+        "author": "Kasjanek24",
+        "license": "CC BY-SA 4.0",
+        "depicts": "Echium vulgare"
+      },
+      "description": "Ruwbehaarde plant met blauwe bloemen die eerst roze zijn. Houdt van zon, zand en schrale grond; bloeit van juni tot september.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 5,
+        "note": "Top voor wilde bijen: de slangenkruidbij is zelfs afhankelijk van deze plant. Ook veel vlinders en hommels."
+      },
+      "funFact": "De bloemknoppen zijn roze en de geopende bloemen blauw, dus één plant heeft twee kleuren tegelijk."
+    },
+    {
+      "id": "geranium-pratense",
+      "dutchName": "Beemdooievaarsbek",
+      "dutchNameSource": "api",
+      "latinName": "Geranium pratense",
+      "speciesName": "Geranium pratense",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Meadow_Cranesbill.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Meadow_Cranesbill.jpg",
+        "author": "Rob Bendall (Highfields)",
+        "license": "Attribution",
+        "depicts": "Geranium pratense"
+      },
+      "description": "Grote, blauwviolette schaalbloemen en diep ingesneden bladeren. Bloeit in juni en juli in vochtig grasland.",
+      "pollinatorValue": {
+        "butterflies": 2,
+        "bees": 4,
+        "note": "Veel hommels en wilde bijen bezoeken de open bloemen; voor vlinders minder belangrijk."
+      },
+      "funFact": "De vrucht lijkt op een ooievaarssnavel en slingert bij het openspringen de zaden weg."
+    },
+    {
+      "id": "aster-ageratoides-asran",
+      "dutchName": "Herfstaster",
+      "dutchNameSource": "added",
+      "latinName": "Aster ageratoides 'Asran'",
+      "speciesName": "Aster ageratoides",
+      "cultivar": "Asran",
+      "taxonomicRank": "Doubtful",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aster_ageratoides.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Aster_ageratoides.jpg",
+        "author": "Juni from Kyoto, Japan",
+        "license": "CC BY 2.0",
+        "depicts": "Aster ageratoides (soortfoto, niet de cultivar)"
+      },
+      "description": "Compacte aster met veel kleine, lichtpaarse bloemen. Bloeit laat, tot in oktober of november.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 4,
+        "note": "Door de late bloei een belangrijke nectarbron als bijna niets anders meer bloeit; vooral voor de laatste vlinders en bijen."
+      },
+      "funFact": "Het is een cultivar (Asran), geselecteerd door kwekers. Daarom staat de soort als onzeker (Doubtful) in de lijst."
+    },
+    {
+      "id": "tanacetum-vulgare",
+      "dutchName": "Boerenwormkruid",
+      "dutchNameSource": "api",
+      "latinName": "Tanacetum vulgare",
+      "speciesName": "Tanacetum vulgare",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Tanacetum_vulgare_-_harilik_soolikarohi_Keilas2.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Tanacetum_vulgare_-_harilik_soolikarohi_Keilas2.jpg",
+        "author": "Ivar Leidus",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Tanacetum vulgare"
+      },
+      "description": "Sterk geurend kruid met knopvormige, goudgele bloemhoofdjes in platte schermen, van juli tot oktober. Groeit in wegbermen en op ruige plekken.",
+      "pollinatorValue": {
+        "butterflies": 3,
+        "bees": 3,
+        "note": "Een late, makkelijke stuifmeelbron voor zweefvliegen, wilde bijen en kleine vlinders; ook bladluisetende insecten komen op de plant af."
+      },
+      "funFact": "De sterke geur werd vroeger gebruikt om vliegen en insecten te weren; de plant is licht giftig voor mensen."
+    },
+    {
+      "id": "viburnum-opulus",
+      "dutchName": "Gelderse roos",
+      "dutchNameSource": "api",
+      "latinName": "Viburnum opulus",
+      "speciesName": "Viburnum opulus",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Viburnum_01.JPG?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Viburnum_01.JPG",
+        "author": "Lestat (Jan Mehlich)",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Viburnum opulus"
+      },
+      "description": "Struik met witte schermen waarvan de grote buitenste bloemen steriel zijn. In het najaar volgen glanzende rode bessen en rode herfstkleur.",
+      "pollinatorValue": {
+        "butterflies": 2,
+        "bees": 3,
+        "note": "Zweefvliegen, kevers en bijen bezoeken de bloemen; de bessen zijn voedsel voor vogels."
+      },
+      "funFact": "De grote steriele randbloemen dienen alleen als uithangbord voor insecten; de kleine binnenbloemetjes doen het eigenlijke werk."
+    },
+    {
+      "id": "tropaeolum-majus",
+      "dutchName": "Oost-Indische kers",
+      "dutchNameSource": "added",
+      "latinName": "Tropaeolum majus",
+      "speciesName": "Tropaeolum majus",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Tropaeolum_majus_2005_G1.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Tropaeolum_majus_2005_G1.jpg",
+        "author": "George Chernilevsky",
+        "license": "Public domain",
+        "depicts": "Tropaeolum majus"
+      },
+      "description": "Kruipende of klimmende eenjarige met ronde bladeren en oranje, gele of rode trompetbloemen. Wordt gezaaid en bloeit tot de eerste vorst.",
+      "pollinatorValue": {
+        "butterflies": 3,
+        "bees": 3,
+        "note": "Hommels bezoeken de nectarrijke bloemen; koolwitjes leggen eitjes op de bladeren, dus de plant is ook een kraamkamer."
+      },
+      "funFact": "Bloemen en bladeren zijn eetbaar en smaken peperig, vergelijkbaar met waterkers."
+    },
+    {
+      "id": "leucanthemum-vulgare",
+      "dutchName": "Gewone margriet",
+      "dutchNameSource": "api",
+      "latinName": "Leucanthemum vulgare",
+      "speciesName": "Leucanthemum vulgare",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Leucanthemum_vulgare_'Filigran'_Flower_2200px.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Leucanthemum_vulgare_%27Filigran%27_Flower_2200px.jpg",
+        "author": "Photo by and (c)2008 Derek Ramsey (Ram-Man). Co-attribution must be given to the Chanticleer Garden.",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Leucanthemum vulgare"
+      },
+      "description": "Witte lintbloemen rond een gele schijf, van mei tot augustus in schrale graslanden.",
+      "pollinatorValue": {
+        "butterflies": 3,
+        "bees": 4,
+        "note": "Open bloemen met makkelijk bereikbare nectar voor bijen, zweefvliegen en kleine vlinders."
+      },
+      "funFact": "Wat op één bloem lijkt, is een bloemhoofd van honderden kleine bloemetjes: gele buisbloemen in het midden, witte lintbloemen aan de rand."
+    },
+    {
+      "id": "papaver-rhoeas",
+      "dutchName": "Grote klaproos",
+      "dutchNameSource": "api",
+      "latinName": "Papaver rhoeas",
+      "speciesName": "Papaver rhoeas",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Papaver_rhoeas_Lincolnshire_2026.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Papaver_rhoeas_Lincolnshire_2026.jpg",
+        "author": "Kieran Roy Powell",
+        "license": "CC BY 4.0",
+        "depicts": "Papaver rhoeas"
+      },
+      "description": "Zachtrode bloemen die maar één dag bloeien, vooral in verstoorde grond en akkerranden.",
+      "pollinatorValue": {
+        "butterflies": 1,
+        "bees": 3,
+        "note": "Geen nectar, wel veel stuifmeel voor bijen, hommels en zweefvliegen."
+      },
+      "funFact": "De zaden kunnen tientallen jaren slapen in de bodem en ontkiemen pas als de grond wordt omgewoeld. De klaproos is een symbool van herdenking."
+    },
+    {
+      "id": "centaurea-scabiosa",
+      "dutchName": "Grote centaurie",
+      "dutchNameSource": "api",
+      "latinName": "Centaurea scabiosa",
+      "speciesName": "Centaurea scabiosa",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Centaurea_scabiosa.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Centaurea_scabiosa.jpg",
+        "author": "Carl Axel Magnus Lindman",
+        "license": "Public domain",
+        "depicts": "Centaurea scabiosa"
+      },
+      "description": "Hoge, stevige plant met grote paarsroze bloemhoofden met gefranjerde randbloemen. Houdt van kalkrijke, droge grond en bloeit van juni tot september.",
+      "pollinatorValue": {
+        "butterflies": 5,
+        "bees": 4,
+        "note": "Een van de beste vlinderplanten: veel nectar, goed bereikbaar voor dagvlinders, dikkopjes en pijlstaartjes."
+      },
+      "funFact": "Raak je de meeldraden aan, dan krommen ze en pompen ze stuifmeel uit de bloem: een gevoelige plant."
+    },
+    {
+      "id": "limonium-vulgare",
+      "dutchName": "Lamsoor",
+      "dutchNameSource": "api",
+      "latinName": "Limonium vulgare",
+      "speciesName": "Limonium vulgare",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Limonium_vulgare_001.JPG?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Limonium_vulgare_001.JPG",
+        "author": "Meneerke bloem",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Limonium vulgare"
+      },
+      "description": "Plant van zoute kwelders met een rozet van leerachtige bladeren en wolkige, paarse bloempluimen in de late zomer.",
+      "pollinatorValue": {
+        "butterflies": 3,
+        "bees": 3,
+        "note": "Biedt in de late zomer nectar aan bijen, zweefvliegen en kleine vlinders."
+      },
+      "funFact": "Kan zout water verdragen: het zout wordt via kliertjes op de bladeren uitgescheiden."
+    },
+    {
+      "id": "veronica-longifolia",
+      "dutchName": "Lange ereprijs",
+      "dutchNameSource": "api",
+      "latinName": "Veronica longifolia",
+      "speciesName": "Veronica longifolia",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Veronica_longifolia_Przetacznik_d%C5%82ugolistny_2020-07-12_05.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Veronica_longifolia_Przetacznik_d%C5%82ugolistny_2020-07-12_05.jpg",
+        "author": "Agnieszka Kwiecień, Nova",
+        "license": "CC BY-SA 4.0",
+        "depicts": "Veronica longifolia"
+      },
+      "description": "Lange blauwe aren op rechte stengels, van juli tot september. Houdt van vochtige, voedselrijke plekken.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 4,
+        "note": "De lange bloeitijd maakt hem waardevol voor bijen, zweefvliegen en vlinders."
+      },
+      "funFact": "De bloempjes bloeien onderaan de aar eerst, dus de aar blijft wekenlang in bloei terwijl elk bloempje kort leeft."
+    },
+    {
+      "id": "dianthus-carthusianorum",
+      "dutchName": "Kartuizer anjer",
+      "dutchNameSource": "api",
+      "latinName": "Dianthus carthusianorum",
+      "speciesName": "Dianthus carthusianorum",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dianthus_carthusianorum_1.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Dianthus_carthusianorum_1.jpg",
+        "author": "Audrius Meskauskas (Audriusa)",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Dianthus carthusianorum"
+      },
+      "description": "Rechtopstaande anjer met bundels diep karmijnrode bloemen op slanke stengels, van juni tot september. Houdt van droge, kalkrijke grond.",
+      "pollinatorValue": {
+        "butterflies": 5,
+        "bees": 2,
+        "note": "De lange buisbloemen zijn vooral bereikbaar voor vlinders met een lange tong, zoals dagvlinders, pijlstaarten en uiltjes."
+      },
+      "funFact": "De soortnaam verwijst naar de Kartuizer monniken."
+    },
+    {
+      "id": "juncus-inflexus",
+      "dutchName": "Zeegroene rus",
+      "dutchNameSource": "api",
+      "latinName": "Juncus inflexus",
+      "speciesName": "Juncus inflexus",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Juncus_inflexus_kz06.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Juncus_inflexus_kz06.jpg",
+        "author": "Krzysztof Ziarnek, Kenraiz",
+        "license": "CC BY-SA 4.0",
+        "depicts": "Juncus inflexus"
+      },
+      "description": "Zeegroene, stijve, ronde stengels in dichte pollen; groeit op vochtige, kleiige grond en bloeit onopvallend.",
+      "pollinatorValue": {
+        "butterflies": 1,
+        "bees": 0,
+        "note": "Windbestuiver: geen nectar of stuifmeel voor insecten, maar de pollen bieden schuilplaatsen en overwinteringsplekken."
+      },
+      "funFact": null
+    },
+    {
+      "id": "saponaria-officinalis",
+      "dutchName": "Zeepkruid",
+      "dutchNameSource": "api",
+      "latinName": "Saponaria officinalis",
+      "speciesName": "Saponaria officinalis",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Saponaria-officinalis-flower.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Saponaria-officinalis-flower.jpg",
+        "author": "onbekend",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Saponaria officinalis"
+      },
+      "description": "Roze bloemen in trossen op rechte stengels, van juli tot september. Verspreidt zich met uitlopers en groeit langs paden en oevers.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 3,
+        "note": "De buisbloemen geuren 's avonds sterk en trekken nachtvlinders (zoals pijlstaarten) aan; overdag ook dagvlinders en hommels."
+      },
+      "funFact": "Bladeren en wortels bevatten saponinen, waarmee je in water schuimt: vroeger werd de plant als zeep gebruikt."
+    },
+    {
+      "id": "echinops-bannaticus-blue-globe",
+      "dutchName": "Kogeldistel",
+      "dutchNameSource": "added",
+      "latinName": "Echinops bannaticus 'Blue Globe'",
+      "speciesName": "Echinops bannaticus",
+      "cultivar": "Blue Globe",
+      "taxonomicRank": "Doubtful",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Echinops_bannaticus_-_Boule_azur%C3%A9e.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Echinops_bannaticus_-_Boule_azur%C3%A9e.jpg",
+        "author": "JackyM59",
+        "license": "CC BY-SA 4.0",
+        "depicts": "Echinops bannaticus (soortfoto, niet de cultivar)"
+      },
+      "description": "Blauwgrijze bollen op stevige stengels met stekelig blad, van juli tot september. Gekweekte vorm: 'Blue Globe'.",
+      "pollinatorValue": {
+        "butterflies": 3,
+        "bees": 5,
+        "note": "Een magneet voor hommels, bijen en zweefvliegen; later in het zaad vinden vinken voedsel."
+      },
+      "funFact": "Elke bol is een verzameling van honderden bloemetjes, die elk een eigen minibloemhoofdje vormen."
+    },
+    {
+      "id": "foeniculum-vulgare",
+      "dutchName": "Venkel",
+      "dutchNameSource": "api",
+      "latinName": "Foeniculum vulgare",
+      "speciesName": "Foeniculum vulgare",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Foeniculum_July_2011-1a.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Foeniculum_July_2011-1a.jpg",
+        "author": "Alvesgaspar",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Foeniculum vulgare"
+      },
+      "description": "Hoog kruid met fijn, veerachtig blad en gele schermen van juli tot september. Geurt naar anijs.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 3,
+        "note": "Open schermen zijn makkelijk bereikbaar voor zweefvliegen, kleine wespen en vlinders. De rupsen van de koninginnenpage eten het blad."
+      },
+      "funFact": "Komt uit het Middellandse Zeegebied en werd door de Romeinen als medicijn en kruid gebruikt."
+    },
+    {
+      "id": "salvia-pratensis",
+      "dutchName": "Veldsalie",
+      "dutchNameSource": "api",
+      "latinName": "Salvia pratensis",
+      "speciesName": "Salvia pratensis",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Salvia_pratensis_LC0340.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Salvia_pratensis_LC0340.jpg",
+        "author": "Jörg Hempel",
+        "license": "CC BY-SA 3.0 de",
+        "depicts": "Salvia pratensis"
+      },
+      "description": "Violetblauwe lipbloemen in kransen langs de stengel, van mei tot juli. Houdt van kalkrijke graslanden.",
+      "pollinatorValue": {
+        "butterflies": 3,
+        "bees": 5,
+        "note": "Vooral bij hommels en solitaire bijen erg populair; de lange buis past bij hun tong."
+      },
+      "funFact": "De bloem heeft een hefboom: een duwtje van een hommel zwaait de meeldraden naar beneden en tikt stuifmeel op zijn rug."
+    },
+    {
+      "id": "galium-verum",
+      "dutchName": "Geel walstro",
+      "dutchNameSource": "api",
+      "latinName": "Galium verum",
+      "speciesName": "Galium verum",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/(MHNT)_Galium_verum_inflorescence.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:(MHNT)_Galium_verum_inflorescence.jpg",
+        "author": "Didier Descouens",
+        "license": "CC BY-SA 4.0",
+        "depicts": "Galium verum"
+      },
+      "description": "Fijn plantje met schuimige gele bloemwolken die naar honing geuren. Bloeit van juni tot september.",
+      "pollinatorValue": {
+        "butterflies": 3,
+        "bees": 3,
+        "note": "Veel kleine bloemetjes leveren nectar voor kleine vlinders en vliegen; de rupsen van de walstrospijlstaart eten het blad."
+      },
+      "funFact": "Werd vroeger gebruikt om melk te laten stremmen voor kaas. In het Engels heet het 'lady's bedstraw', omdat het als matrasvulling werd gebruikt."
+    },
+    {
+      "id": "geum-rivale",
+      "dutchName": "Knikkend nagelkruid",
+      "dutchNameSource": "api",
+      "latinName": "Geum rivale",
+      "speciesName": "Geum rivale",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Geum_rivale_flower_-_Keila.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Geum_rivale_flower_-_Keila.jpg",
+        "author": "Ivar Leidus",
+        "license": "CC BY-SA 4.0",
+        "depicts": "Geum rivale"
+      },
+      "description": "Knikkende, bruinrode bloemen met een oranje gloed en paarsbruine kelk, van april tot juni. Houdt van vochtige, beschaduwde plekken.",
+      "pollinatorValue": {
+        "butterflies": 1,
+        "bees": 4,
+        "note": "Hommels klimmen onder de hangende bloemen en bereiken zo de nectar; goed voor het vroege voorjaar."
+      },
+      "funFact": "De bloemen knikken, waardoor stuifmeel en nectar tegen regen beschermd zijn."
+    },
+    {
+      "id": "althaea-officinalis",
+      "dutchName": "Heemst",
+      "dutchNameSource": "api",
+      "latinName": "Althaea officinalis",
+      "speciesName": "Althaea officinalis",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Althaea_officinalis_-_flower_top_(aka).jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Althaea_officinalis_-_flower_top_(aka).jpg",
+        "author": "André Karwath aka Aka",
+        "license": "CC BY-SA 2.5",
+        "depicts": "Althaea officinalis"
+      },
+      "description": "Zachtbehaarde plant met grijsgroene bladeren en lichtroze bloemen, van juli tot september. Komt van nature voor langs zoute kwelders en dijken.",
+      "pollinatorValue": {
+        "butterflies": 3,
+        "bees": 4,
+        "note": "Nectar- en stuifmeelrijke bloemen voor bijen, hommels en kleine vlinders."
+      },
+      "funFact": "De wortel was de oorspronkelijke grondstof voor marshmallows; 'marshmallow' is gewoon het Engelse woord voor heemst."
+    },
+    {
+      "id": "amaranthus-caudatus",
+      "dutchName": "Vossenstaart",
+      "dutchNameSource": "added",
+      "latinName": "Amaranthus caudatus",
+      "speciesName": "Amaranthus caudatus",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/3836_-_Amaranthus_caudatus_(Zieramaranth).JPG?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:3836_-_Amaranthus_caudatus_(Zieramaranth).JPG",
+        "author": "Tubifex",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Amaranthus caudatus"
+      },
+      "description": "Eenjarige met lange, hangende, karmozijnrode pluimen die tot de eerste vorst blijven staan.",
+      "pollinatorValue": {
+        "butterflies": 1,
+        "bees": 2,
+        "note": "Vooral windbestoven; af en toe bezoeken bijen en zweefvliegen de bloemen, en de zaden zijn voedsel voor vogels."
+      },
+      "funFact": "In de Andes wordt deze plant als graan (kiwicha) geteeld, al duizenden jaren."
+    },
+    {
+      "id": "catananche-caerulea-blue",
+      "dutchName": "Blauwe strobloem",
+      "dutchNameSource": "added",
+      "latinName": "Catananche caerulea 'Blue'",
+      "speciesName": "Catananche caerulea",
+      "cultivar": "Blue",
+      "taxonomicRank": "Doubtful",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Catananche_caerulea_001.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Catananche_caerulea_001.jpg",
+        "author": "Ltshears - Trisha M Shears",
+        "license": "CC BY-SA 2.5",
+        "depicts": "Catananche caerulea (soortfoto, niet de cultivar)"
+      },
+      "description": "Blauwe, margrietachtige bloemen met papierachtige, zilverachtige schutbladeren op dunne stengels. Houdt van droge, zonnige plekken.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 4,
+        "note": "Dagvlinders, hommels en zweefvliegen zijn trouwe bezoekers van de open bloemen in de zomer."
+      },
+      "funFact": "De bloemknoppen en gedroogde bloemen ritselen als papier: een echte droogbloem."
+    },
+    {
+      "id": "cornus-mas",
+      "dutchName": "Gele kornoelje",
+      "dutchNameSource": "api",
+      "latinName": "Cornus mas",
+      "speciesName": "Cornus mas",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CornusMas_Fruits_01.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:CornusMas_Fruits_01.jpg",
+        "author": "B.navez",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Cornus mas"
+      },
+      "description": "Struik of kleine boom met gele bloemetjes die al in februari of maart verschijnen, voor de bladeren. In de herfst volgen eetbare rode vruchten.",
+      "pollinatorValue": {
+        "butterflies": 3,
+        "bees": 5,
+        "note": "Een van de eerste nectar- en stuifmeelbronnen van het jaar: bijen, hommelkoninginnen en vroege vlinders zoals de citroenvlinder en kleine vos tanken hier bij."
+      },
+      "funFact": "De rode vruchten (kornoeljes) zijn eetbaar en worden tot jam en siroop verwerkt."
+    },
+    {
+      "id": "frangula-alnus",
+      "dutchName": "Sporkehout",
+      "dutchNameSource": "api",
+      "latinName": "Frangula alnus",
+      "speciesName": "Frangula alnus",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Frangula-alnus-fruits.JPG?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Frangula-alnus-fruits.JPG",
+        "author": "Sten Porse",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Frangula alnus"
+      },
+      "description": "Struik met onopvallende groenwitte bloemetjes, gevolgd door bessen die van groen via rood naar zwart kleuren. Groeit op vochtige, voedselarme grond.",
+      "pollinatorValue": {
+        "butterflies": 5,
+        "bees": 3,
+        "note": "Waardplant van de citroenvlinder en het boomblauwtje; de bloemen zijn ook een goede nectarbron voor bijen."
+      },
+      "funFact": "Het hout leverde de beste houtskool voor buskruit, daarom heette het ook wel kruithout."
+    },
+    {
+      "id": "eryngium-planum-hobbit-blue",
+      "dutchName": "Vlakke distel",
+      "dutchNameSource": "added",
+      "latinName": "Eryngium planum 'Hobbit Blue'",
+      "speciesName": "Eryngium planum",
+      "cultivar": "Hobbit Blue",
+      "taxonomicRank": "Doubtful",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Eryngium_planum_bgiu.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Eryngium_planum_bgiu.jpg",
+        "author": "No machine-readable author provided. Bogdan assumed (based on copyright claims).",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Eryngium planum (soortfoto, niet de cultivar)"
+      },
+      "description": "Staalblauwe, distelachtige bloemen met stekelige schutbladeren op blauwe stengels, van juli tot september. Gekweekte vorm: 'Hobbit Blue'.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 5,
+        "note": "Bijen, hommels, zweefvliegen en vlinders zitten er massaal op; een topplant voor insecten."
+      },
+      "funFact": "Ondanks de naam is het geen echte distel, maar een verre verwant van wortel en peterselie (schermbloemigen)."
+    },
+    {
+      "id": "sedum-album",
+      "dutchName": "Wit vetkruid",
+      "dutchNameSource": "api",
+      "latinName": "Sedum album",
+      "speciesName": "Sedum album",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/White_stonecrop%2C_Autonomous_Province_of_Bolzano_%E2%80%93_South_Tyrol%2C_Italy_imported_from_iNaturalist_photo_382140510.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:White_stonecrop,_Autonomous_Province_of_Bolzano_%E2%80%93_South_Tyrol,_Italy_imported_from_iNaturalist_photo_382140510.jpg",
+        "author": "(c) Thierry Arbault, some rights reserved (CC BY)",
+        "license": "CC BY 4.0",
+        "depicts": "Sedum album"
+      },
+      "description": "Laag, vlezig plantje met kleine, witte sterbloempjes in juli en augustus. Overleeft droogte op daken, muren en grind.",
+      "pollinatorValue": {
+        "butterflies": 2,
+        "bees": 3,
+        "note": "Kleine bijen, zweefvliegen en vlinders bezoeken de bloemetjes; geschikt voor schrale, zonnige plekken."
+      },
+      "funFact": "Veel gebruikt op groene daken: bij droogte slaat de plant water op in zijn dikke blaadjes."
+    },
+    {
+      "id": "thymus-pulegioides",
+      "dutchName": "Grote tijm",
+      "dutchNameSource": "api",
+      "latinName": "Thymus pulegioides",
+      "speciesName": "Thymus pulegioides",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Breitbl%C3%A4ttrige_Thymian_(Thymus_pulegioides)-1.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Breitbl%C3%A4ttrige_Thymian_(Thymus_pulegioides)-1.jpg",
+        "author": "Andreas Trepte",
+        "license": "CC BY-SA 2.5",
+        "depicts": "Thymus pulegioides"
+      },
+      "description": "Struikachtig, kruidig tijmplantje met paarse bloemetjes van juli tot september.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 5,
+        "note": "Geweldige nectarbron voor bijen, hommels en vlinders; ook een waardplant van het tijmblauwtje."
+      },
+      "funFact": "Anders dan kleine tijm heeft grote tijm vierkante stengels met haren op de hoeken."
+    },
+    {
+      "id": "thymus-praecox-red-carpet",
+      "dutchName": "Kruiptijm",
+      "dutchNameSource": "added",
+      "latinName": "Thymus praecox 'Red Carpet'",
+      "speciesName": "Thymus praecox",
+      "cultivar": "Red Carpet",
+      "taxonomicRank": "Doubtful",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Thymus_praecox.JPG?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Thymus_praecox.JPG",
+        "author": "onbekend",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Thymus praecox (soortfoto, niet de cultivar)"
+      },
+      "description": "Dicht, kruipend matje met roodpaarse bloemetjes in mei en juni. De cultivar 'Red Carpet' bloeit bijzonder rijk.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 5,
+        "note": "Zoals andere tijmsoorten een bijenmagneet in het voorjaar; ook vlinders komen voor de nectar."
+      },
+      "funFact": null
+    },
+    {
+      "id": "euonymus-europaeus",
+      "dutchName": "Wilde kardinaalsmuts",
+      "dutchNameSource": "api",
+      "latinName": "Euonymus europaeus",
+      "speciesName": "Euonymus europaeus",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Euonymus_europaeus_2024_G2.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Euonymus_europaeus_2024_G2.jpg",
+        "author": "George Chernilevsky",
+        "license": "CC BY 4.0",
+        "depicts": "Euonymus europaeus"
+      },
+      "description": "Struik met groenige, onopvallende bloemetjes in mei en juni. In de herfst volgen roze vruchten die opengaan en oranje zaden tonen, en kleuren de bladeren rood.",
+      "pollinatorValue": {
+        "butterflies": 2,
+        "bees": 2,
+        "note": "De bloemen worden door vliegen, kleine bijen en zweefvliegen bezocht; rupsen van de kardinaalsmutsspinselmot eten het blad."
+      },
+      "funFact": "De roze vrucht lijkt op de muts van een kardinaal. Ze is giftig voor mensen maar geliefd bij vogels."
+    },
+    {
+      "id": "helianthemum-nummularium-the-bride",
+      "dutchName": "Zonneroosje",
+      "dutchNameSource": "added",
+      "latinName": "Helianthemum nummularium 'The Bride'",
+      "speciesName": "Helianthemum nummularium",
+      "cultivar": "The Bride",
+      "taxonomicRank": "Doubtful",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sonnenr%C3%B6schen.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Sonnenr%C3%B6schen.jpg",
+        "author": "Tigerente",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Helianthemum nummularium (soortfoto, niet de cultivar)"
+      },
+      "description": "Laag, wintergroen struikje met sierlijke bloemen dat vooral in de zon bloeit. Gekweekte vorm: 'The Bride' met witte bloemen.",
+      "pollinatorValue": {
+        "butterflies": 2,
+        "bees": 4,
+        "note": "Bijen en zweefvliegen verzamelen stuifmeel; de bloem geeft weinig nectar."
+      },
+      "funFact": "Een bloem leeft maar één dag, en de meeldraden bewegen als je ze aanraakt."
+    },
+    {
+      "id": "campanula-trachelium",
+      "dutchName": "Ruig klokje",
+      "dutchNameSource": "api",
+      "latinName": "Campanula trachelium",
+      "speciesName": "Campanula trachelium",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Campanula_trachelium_2026_G1.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Campanula_trachelium_2026_G1.jpg",
+        "author": "George Chernilevsky",
+        "license": "CC BY 4.0",
+        "depicts": "Campanula trachelium"
+      },
+      "description": "Ruwbehaarde klokjesplant met blauwpaarse bloemen langs de stengel, van juli tot september. Groeit aan bosranden en in halfschaduw.",
+      "pollinatorValue": {
+        "butterflies": 1,
+        "bees": 4,
+        "note": "Hommels en klokjesbijen kruipen in de klokjes; voor vlinders minder interessant."
+      },
+      "funFact": "De Latijnse naam verwijst naar de keel: de plant werd vroeger gebruikt tegen keelpijn."
+    },
+    {
+      "id": "primula-elatior",
+      "dutchName": "Slanke sleutelbloem",
+      "dutchNameSource": "api",
+      "latinName": "Primula elatior",
+      "speciesName": "Primula elatior",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Primula_elatior_170405a.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Primula_elatior_170405a.jpg",
+        "author": "onbekend",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Primula elatior"
+      },
+      "description": "Bleekgele bloemetjes aan één kant van een slanke stengel, die in maart en april opengaan. Houdt van vochtige loofbossen en hooilanden.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 4,
+        "note": "Een vroege nectarbron: hommelkoninginnen en overwinterende vlinders tanken hier in het voorjaar."
+      },
+      "funFact": "Sommige planten hebben bloemen met een lange stijl en andere met lange meeldraden. Dat bevordert kruisbestuiving."
+    },
+    {
+      "id": "scabiosa-columbaria",
+      "dutchName": "Duifkruid",
+      "dutchNameSource": "api",
+      "latinName": "Scabiosa columbaria",
+      "speciesName": "Scabiosa columbaria",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Scabiosa_columbaria_Butterfly_Blue_2.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Scabiosa_columbaria_Butterfly_Blue_2.jpg",
+        "author": "Stan Shebs",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Scabiosa columbaria"
+      },
+      "description": "Lichtblauwe speldenkussenbloemen op slanke stengels, van juli tot oktober. Houdt van kalkrijke, droge grond.",
+      "pollinatorValue": {
+        "butterflies": 5,
+        "bees": 5,
+        "note": "Zowel dagvlinders als bijen, hommels en zweefvliegen gebruiken de brede bloemen met veel nectar; bloeit lang door."
+      },
+      "funFact": "Bloeit door tot in de herfst, vaak als bijna alle andere planten al klaar zijn."
+    },
+    {
+      "id": "centaurea-jacea",
+      "dutchName": "Knoopkruid",
+      "dutchNameSource": "api",
+      "latinName": "Centaurea jacea",
+      "speciesName": "Centaurea jacea",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Centaurea_jacea_01.JPG?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Centaurea_jacea_01.JPG",
+        "author": "Uoaei1",
+        "license": "CC BY-SA 3.0",
+        "depicts": "Centaurea jacea"
+      },
+      "description": "Roze-paarse bloemhoofden met bruine, gefranjerde schutbladen, van juni tot oktober. Groeit op schrale graslanden en in bermen.",
+      "pollinatorValue": {
+        "butterflies": 5,
+        "bees": 5,
+        "note": "Een van de beste vlinder- en bijenplanten van Nederland: veel nectar, lange bloeitijd, grote variatie aan bezoekers."
+      },
+      "funFact": "Net als bij de grote centaurie reageren de meeldraden op aanraking door te krommen."
+    },
+    {
+      "id": "allium-millenium",
+      "dutchName": "Sierui",
+      "dutchNameSource": "added",
+      "latinName": "Allium 'Millenium'",
+      "speciesName": "Allium",
+      "cultivar": "Millenium",
+      "taxonomicRank": "Doubtful",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Allium_hollandicum_'Purple_Sensation'%2C_Longwood_Gardens_2023_01.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Allium_hollandicum_%27Purple_Sensation%27,_Longwood_Gardens_2023_01.jpg",
+        "author": "Shuvaev",
+        "license": "CC BY 4.0",
+        "depicts": "Allium (soortfoto, niet de cultivar)"
+      },
+      "description": "Grote paarse bolbloemen op stevige stengels. De cultivar 'Millenium' bloeit laat (juli-augustus) en staat bekend als erg sterk.",
+      "pollinatorValue": {
+        "butterflies": 4,
+        "bees": 5,
+        "note": "Bloeit wanneer veel andere tuinplanten stoppen, en wordt druk bezocht door hommels, bijen en vlinders."
+      },
+      "funFact": "De cultivar 'Millenium' werd in 2018 in de VS uitgeroepen tot Perennial Plant of the Year."
+    },
+    {
+      "id": "campanula-persicifolia",
+      "dutchName": "Prachtklokje",
+      "dutchNameSource": "api",
+      "latinName": "Campanula persicifolia",
+      "speciesName": "Campanula persicifolia",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Stor_bl%C3%A5klocka.Campanula_persicifolia.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Stor_bl%C3%A5klocka.Campanula_persicifolia.jpg",
+        "author": "Skalle-Per Hedenhös",
+        "license": "CC BY-SA 4.0",
+        "depicts": "Campanula persicifolia"
+      },
+      "description": "Slank klokje met grote, wijd opengaande blauwe bloemen op rechte stengels, van juni tot augustus. Houdt van lichte schaduw.",
+      "pollinatorValue": {
+        "butterflies": 2,
+        "bees": 4,
+        "note": "Bijen en hommels kruipen in de klokjes; voor vlinders minder belangrijk."
+      },
+      "funFact": "De soortnaam persicifolia betekent perzikbladig: de smalle bladeren lijken op die van een perzikboom."
+    },
+    {
+      "id": "silene-flos-cuculi",
+      "dutchName": "Echte koekoeksbloem",
+      "dutchNameSource": "api",
+      "latinName": "Silene flos-cuculi",
+      "speciesName": "Silene flos-cuculi",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Silene_flos-cuculi_flower_-_Niitv%C3%A4lja.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Silene_flos-cuculi_flower_-_Niitv%C3%A4lja.jpg",
+        "author": "Ivar Leidus",
+        "license": "CC BY-SA 4.0",
+        "depicts": "Silene flos-cuculi"
+      },
+      "description": "Roze bloemen met diep ingesneden kroonbladen, die op vochtige hooilanden in mei en juni bloeien en een ragfijne indruk maken.",
+      "pollinatorValue": {
+        "butterflies": 5,
+        "bees": 3,
+        "note": "Een uitstekende nectarbron voor dagvlinders (zoals het oranjetipje) en nachtvlinders; ook voor bijen en hommels."
+      },
+      "funFact": "De bloemen verschijnen rond de tijd dat de koekoek roept. Het schuim van de schuimcicade op dezelfde planten heet koekoeksspog."
+    },
+    {
+      "id": "symphytum-grandiflorum-wisley-blue",
+      "dutchName": "Kruipende smeerwortel",
+      "dutchNameSource": "added",
+      "latinName": "Symphytum grandiflorum 'Wisley Blue'",
+      "speciesName": "Symphytum grandiflorum",
+      "cultivar": "Wisley Blue",
+      "taxonomicRank": "Doubtful",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Creeping_Comfrey_(Symphytum_grandiflorum)%2C_Heddon_Common_-_geograph.org.uk_-_6444101.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Creeping_Comfrey_(Symphytum_grandiflorum),_Heddon_Common_-_geograph.org.uk_-_6444101.jpg",
+        "author": "Andrew Curtis",
+        "license": "CC BY-SA 2.0",
+        "depicts": "Symphytum grandiflorum (soortfoto, niet de cultivar)"
+      },
+      "description": "Lage, bodembedekkende vaste plant met crèmewitte tot blauwe klokjes in het vroege voorjaar. Gekweekte vorm: 'Wisley Blue'.",
+      "pollinatorValue": {
+        "butterflies": 2,
+        "bees": 5,
+        "note": "Een vroege bron voor hommels en bijen, in een tijd waarin er nog weinig bloeit."
+      },
+      "funFact": "Aardhommels bijten vaak een gaatje in de bloem om de nectar te bereiken, zonder te bestuiven (nectarroof)."
+    },
+    {
+      "id": "daucus-carota",
+      "dutchName": "Peen",
+      "dutchNameSource": "api",
+      "latinName": "Daucus carota",
+      "speciesName": "Daucus carota",
+      "cultivar": null,
+      "taxonomicRank": "Species",
+      "image": {
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Daucus_carota_Aberystwyth_2024_Far.jpg?width=800",
+        "sourcePage": "https://commons.wikimedia.org/wiki/File:Daucus_carota_Aberystwyth_2024_Far.jpg",
+        "author": "Kieran Roy Powell",
+        "license": "CC BY 4.0",
+        "depicts": "Daucus carota"
+      },
+      "description": "Wilde peen heeft witte schermen met vaak een donkerpaarse bloem in het midden, van juni tot september. Groeit op wegbermen en in ruige graslanden.",
+      "pollinatorValue": {
+        "butterflies": 3,
+        "bees": 3,
+        "note": "Open schermen zijn ideaal voor zweefvliegen, sluipwespen en kleine bijen; de rupsen van de koninginnenpage eten ook het blad."
+      },
+      "funFact": "Is de wilde voorouder van de gekweekte wortel. Het donkere bloempje in het midden lijkt op een insect en trekt andere insecten aan."
+    }
+  ]
+}

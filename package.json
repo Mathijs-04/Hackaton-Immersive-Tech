@@ -1,0 +1,12 @@
+{
+  "name": "puintuin-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "fetch": "node --env-file=.env fetch-static.js",
+    "start": "node --env-file=.env server.js"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  }
+}
