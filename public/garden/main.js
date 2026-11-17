@@ -109,7 +109,13 @@ async function boot() {
     engine.wake();
   };
   for (const dlg of document.querySelectorAll('dialog')) {
-    dlg.addEventListener('close', () => { input.enabled = !anyDialogOpen(); engine.wake(); });
+    dlg.addEventListener('close', () => {
+      input.enabled = !anyDialogOpen();
+      // A closed dialog hands focus back to the button that opened it; in flight that button would
+      // catch Space. Drop the focus after the browser has restored it.
+      if (document.body.classList.contains('flying')) requestAnimationFrame(() => document.activeElement?.blur?.());
+      engine.wake();
+    });
     dlg.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => dlg.close()));
     // A click on the backdrop closes it too.
     dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
@@ -165,7 +171,8 @@ async function boot() {
       camera.position.copy(orbit.controls.target).add(new THREE.Vector3(2.2, 1.6, 2.2));
       engine.setRig(orbit);
     }
-    if (document.activeElement && !document.activeElement.closest('nav')) document.activeElement.blur?.();
+    // Starting a flight: nothing may keep focus, or Space ("up") would press that button.
+    if (on || !document.activeElement?.closest('nav')) document.activeElement?.blur?.();
     engine.wake();
   };
   hud.keysEnabled = () => !flying && !anyDialogOpen();
@@ -243,6 +250,10 @@ async function boot() {
     const { gained, load } = e.detail;
     flightHud.toast(`+${Math.round(gained * LOAD_MG)} mg nectar · honingmaag ${Math.round(load * 100)}%${load >= 0.999 ? ' · vol!' : ''}`, 2600);
   });
+  for (const p of [butterfly, bee]) {
+    p.addEventListener('exhausted', () => { if (p === player && flying) flightHud.toast('😮‍💨 Je energie is op. Je zweeft naar beneden en rust even uit; daarna kun je weer vliegen.', 5000); });
+    p.addEventListener('rested', () => { if (p === player && flying) flightHud.toast('💪 Uitgerust! Vlieg naar een bloem om bij te tanken.'); });
+  }
   bee.addEventListener('home', () => { if (bee.controlled) flightHud.toast('🏠 Thuis: even bijtanken. Ga nu nectar zoeken!'); });
   bee.addEventListener('deliver', (e) => {
     if (!bee.controlled || anyDialogOpen()) return;
@@ -251,6 +262,8 @@ async function boot() {
 
   window.addEventListener('keydown', (e) => {
     if (e.target.closest?.('input, select, textarea') || anyDialogOpen()) return;
+    // In flight, Space means "up": never let it activate a focused button (Enter still works).
+    if (flying && e.code === 'Space' && e.target.closest?.('button, a, summary')) { e.preventDefault(); e.target.blur(); }
     if (e.code === 'KeyV') (flying ? setFlying(false) : openChooser());
     if (e.key === 'Escape' && flying) setFlying(false);
   }, true);

@@ -10,10 +10,10 @@ const vert = /* glsl */`
   uniform float uTime, uAmount, uLen;
   varying float vAlpha;
   void main() {
-    vec3 p = position * uBox;                         // base position inside the box
-    p.y = mod(p.y - uTime * (5.5 + aRand * 2.5), uBox.y);
+    vec3 p = position * uBox;                         // fixed world-space phase per drop
+    p.y -= uTime * (5.5 + aRand * 2.5);               // falling
     vec3 origin = uCenter - uBox * 0.5;
-    vec3 w = origin + mod(p - origin, uBox);          // wrap around the camera
+    vec3 w = origin + mod(p - origin, uBox);          // wrap (in world space) around the camera
     w.y += aEnd * uLen;
     w.x += aEnd * uLen * 0.12;                         // slight slant
     vAlpha = step(aRand, uAmount) * (0.35 + 0.65 * aEnd);
@@ -30,7 +30,7 @@ const frag = /* glsl */`
   }`;
 
 export class Rain {
-  constructor(count = 4500) {
+  constructor(count = 8000) { // taller fixed box than before, so more drops for the same density
     const rnd = mulberry32(99);
     const pos = new Float32Array(count * 6), rand = new Float32Array(count * 2), end = new Float32Array(count * 2);
     for (let i = 0; i < count; i++) {
@@ -57,14 +57,18 @@ export class Rain {
 
   update(time, camera, amount, small) {
     const u = this.uniforms;
-    u.uTime.value = time;
+    u.uTime.value = time % 900; // keeps float precision in the shader (one invisible reshuffle per 15 min)
     u.uAmount.value = amount;
     this.mesh.visible = amount > 0.01;
-    // Box from the ground up to just above the camera; smaller and denser at butterfly scale.
-    const h = Math.max(3, camera.position.y + 2.5);
-    const s = small ? 6 : 16;
+    // A fixed-size box centred on the camera. Drops wrap in *world* space, so moving the camera
+    // (up, down or sideways) never drags the rain along: it keeps falling at its own speed.
+    // (The box size must not depend on the camera position, or every drop shifts when you move.)
+    // Smaller and denser at insect scale.
+    // Only the *window* follows the camera: it spans from the ground to just above the camera.
+    const s = small ? 6 : 16, h = small ? 4 : 22;
     u.uBox.value.set(s, h, s);
     u.uLen.value = small ? 0.12 : 0.35;
-    u.uCenter.value.set(camera.position.x, h / 2 - 0.05, camera.position.z);
+    const lo = small ? camera.position.y - h / 2 : Math.max(-0.5, camera.position.y + 3 - h);
+    u.uCenter.value.set(camera.position.x, lo + h / 2, camera.position.z);
   }
 }

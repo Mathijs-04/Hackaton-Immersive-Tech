@@ -58,6 +58,7 @@ export class Bee extends Butterfly {
     this.state = 'flying';
     this.flower = null;
     this.energy = Math.max(this.energy, 0.7);
+    this.exhausted = false;
   }
 
   get full() { return this.load >= 0.999; }
@@ -172,6 +173,7 @@ export class Bee extends Butterfly {
   }
 
   get statusText() {
+    if (this.state === 'landed' && this.exhausted) return this.restText;
     if (this.state === 'landed') {
       if (this.flower?.hive) return 'Thuis in de bijenkast';
       if (this.flower?.sensor) return 'Uitrusten op de Plantenluisteraar';
@@ -185,7 +187,7 @@ export class Bee extends Butterfly {
       return 'Rusten';
     }
     if (this.state === 'landing') return 'Landen…';
-    if (this.energy <= 0) return 'Uitgeput: land op een bloem!';
+    if (this.energy <= 0) return 'Uitgeput: je zweeft naar beneden';
     if (this.burning) return 'Moe: je verbruikt je eigen nectar';
     if (this.outOfBounds) return 'Te ver van de tuin';
     if (this.full) return 'Vol! Vlieg naar de bijenkast';

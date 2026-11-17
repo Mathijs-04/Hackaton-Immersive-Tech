@@ -50,12 +50,29 @@ export function honeybeeAbdomen() {
 /** Whole bee as one geometry (for instanced foragers). */
 export function honeybeeBody() { return merge([honeybeeFront(), honeybeeAbdomen()]); }
 
+/** Mirroring flips the triangle order; swap two corners of every triangle so both sides shade alike. */
+function flipWinding(g) {
+  for (const name of ['position', 'normal', 'color']) {
+    const a = g.attributes[name];
+    if (!a) continue;
+    for (let i = 0; i < a.count; i += 3) {
+      for (let k = 0; k < a.itemSize; k++) {
+        const t = a.array[(i + 1) * a.itemSize + k];
+        a.array[(i + 1) * a.itemSize + k] = a.array[(i + 2) * a.itemSize + k];
+        a.array[(i + 2) * a.itemSize + k] = t;
+      }
+    }
+  }
+  return g;
+}
+
 /** Fore + hind wing for one side, hinge along Z. */
 export function honeybeeWing(mirror = false) {
   const fore = new THREE.CircleGeometry(1, 10).rotateX(-Math.PI / 2).scale(0.0047, 1, 0.0016).rotateY(-0.25).translate(0.0045, 0.0021, -0.0012);
   const hind = new THREE.CircleGeometry(1, 8).rotateX(-Math.PI / 2).scale(0.003, 1, 0.0012).rotateY(-0.1).translate(0.0031, 0.002, 0.0012);
   const g = merge([fore, hind]);
-  if (mirror) g.scale(-1, 1, 1);
+  if (mirror) { g.scale(-1, 1, 1); flipWinding(g); }
+  g.computeVertexNormals();
   return g;
 }
 

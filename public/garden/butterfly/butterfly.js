@@ -11,6 +11,8 @@ import { windOffset } from '../plants/archetypes.js';
 import { resolveSphere } from '../plants/collision.js';
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const REST_RATE = 0.07;  // energy per second while resting after exhaustion
+const REST_UNTIL = 0.3;  // rested enough to fly (and climb) again
 const damp = (k, dt) => 1 - Math.exp(-k * dt);
 
 // Flight tuning. The bee (bee/bee.js) reuses this class with its own values.
@@ -80,6 +82,7 @@ export class Butterfly extends EventTarget {
     this.state = 'flying';
     this.flower = null;
     this.energy = Math.max(this.energy, 0.6);
+    this.exhausted = false;
   }
 
   /** World position of a flower head, swaying with the (shader) wind. */
@@ -116,6 +119,7 @@ export class Butterfly extends EventTarget {
   updateFlying(dt, { steer, throttle, ascend, boost, wantsToMove }) {
     const vigor = (0.35 + 0.65 * this.warmth) * (1 - 0.35 * this.rain);
     const tired = this.energy <= 0;
+    if (tired && this.controlled && !this.exhausted) { this.exhausted = true; this.dispatchEvent(new Event('exhausted')); }
 
     if (!this.controlled) {
       // Autopilot when nobody flies: drift to the nearest flower and land.
@@ -162,6 +166,13 @@ export class Butterfly extends EventTarget {
     const effort = 1 + (1 - this.warmth) + this.rain * 0.8 + (ascend > 0 ? 0.4 : 0) + (boost ? 0.8 : 0);
     this.energy = clamp(this.energy - this.cfg.drain * effort * dt, 0, 1);
 
+    // Out of energy and down on the ground (or on a flower): set down and rest, even if steering.
+    if (this.exhausted && this.pos.y <= ground + 0.005) return this.beginLanding(this.nearestFlower(this.cfg.landRadius, true));
+    // …or caught on top of a plant (it can't sink through the leaves): rest right there, on the leaf.
+    if (this.exhausted && this.bumped && this.vel.y > -0.05) {
+      const leaf = { fixed: true, leaf: true, head: { x: this.pos.x, y: this.pos.y - 0.004, z: this.pos.z } };
+      return this.beginLanding(this.nearestFlower(this.cfg.landRadius, true) || leaf);
+    }
     this.idle = (throttle > 0.1 || steer) ? 0 : this.idle + dt;
     if (this.idle > this.cfg.landIdle && this.cooldown <= 0 && ascend <= 0) {
       const f = this.nearestFlower(this.cfg.landRadius + (this.controlled ? 0 : 0.06), true);
@@ -228,9 +239,14 @@ export class Butterfly extends EventTarget {
   }
 
   updateLanded(dt, wantsToMove) {
+    // Exhausted: rest wherever you landed (also on the ground) until you can climb again.
+    if (this.exhausted) {
+      this.energy = clamp(this.energy + REST_RATE * dt, 0, 1);
+      if (this.energy >= REST_UNTIL) { this.exhausted = false; this.dispatchEvent(new Event('rested')); }
+    }
     if (this.flower) this.headPos(this.flower, this.pos); // sway with the flower
     this.refuel(dt);
-    if (this.controlled && wantsToMove && (this.energy > 0.02 || this.input.ascend <= 0)) {
+    if (this.controlled && wantsToMove && !this.exhausted) {
       this.state = 'flying';
       this.ignore = this.flower;
       this.flower = null;
@@ -275,14 +291,17 @@ export class Butterfly extends EventTarget {
     m.tilt.rotation.set(this.pitch, 0, this.roll);
   }
 
+  get restText() { return `Uitgeput: even uitrusten… ${Math.min(99, Math.round((this.energy / REST_UNTIL) * 100))}%`; }
+
   get statusText() {
+    if (this.state === 'landed' && this.exhausted) return this.restText;
     if (this.state === 'landed') {
       if (this.flower?.sensor) return 'Uitrusten op de Plantenluisteraar';
       if (this.flower) return `Nectar drinken op ${this.flower.plant.batch.name}`;
       return (this.atmosphere.state.sunny ?? 0) > 0.05 ? 'Opwarmen in de zon' : 'Rusten';
     }
     if (this.state === 'landing') return 'Landen…';
-    if (this.energy <= 0) return 'Uitgeput: land op een bloem!';
+    if (this.energy <= 0) return 'Uitgeput: je zweeft naar beneden';
     if (this.outOfBounds) return 'Te ver van de tuin';
     if (this.rain > 0.4) return 'Natte vleugels: zoek beschutting';
     if (this.warmth < 0.3) return 'Te koud: vleugels stijf';

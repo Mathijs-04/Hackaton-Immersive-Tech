@@ -305,16 +305,16 @@ kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-
 .meter.honey { background: #f1e2b4; }
 .meter.honey i { background: linear-gradient(90deg, #e9a82a, #f4c84a); }
 .meter.honey.full i { background: #d98a10; }
-.compass { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 52px; height: 44px; border-radius: 12px; background: var(--paper-2); border: 1px solid var(--line); }
-.compass i { font-style: normal; font-size: 16px; line-height: 1; color: var(--accent); transition: transform .15s; }
+.compass { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; width: 56px; height: 48px; border-radius: 12px; background: var(--paper-2); border: 1px solid var(--line); }
+.compass svg { display: block; color: var(--accent); transition: transform .15s; }
 .compass small { font-size: 10px; color: var(--mute); font-variant-numeric: tabular-nums; }
 .compass.urgent { border-color: #d98a10; box-shadow: 0 0 0 2px #f4c84a; }
-.compass.urgent i { color: #b06a00; }
+.compass.urgent svg { color: #b06a00; }
 .hive-art { font-size: 34px; letter-spacing: 2px; margin-bottom: 6px; }
 .bee-value { background: #fdf0c9; color: #3a2e0b; }
 .bee-value .dots i { border-color: #b07a10; }
 .bee-value .dots i.on { background: #b07a10; }
-@media (prefers-reduced-motion: reduce) { .compass i { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .compass svg { transition: none; } }
 @media (max-width: 720px) {
   .chars { grid-template-columns: 1fr; }
   .char { flex-direction: row; flex-wrap: wrap; align-items: center; }
