@@ -242,7 +242,7 @@ export class Butterfly extends EventTarget {
     // Exhausted: rest wherever you landed (also on the ground) until you can climb again.
     if (this.exhausted) {
       this.energy = clamp(this.energy + REST_RATE * dt, 0, 1);
-      if (this.energy >= REST_UNTIL) { this.exhausted = false; this.dispatchEvent(new Event('rested')); }
+      if (this.energy >= REST_UNTIL) { this.exhausted = false; this.restedAt = performance.now(); this.dispatchEvent(new Event('rested')); }
     }
     if (this.flower) this.headPos(this.flower, this.pos); // sway with the flower
     this.refuel(dt);
@@ -292,16 +292,18 @@ export class Butterfly extends EventTarget {
   }
 
   get restText() { return `Uitgeput: even uitrusten… ${Math.min(99, Math.round((this.energy / REST_UNTIL) * 100))}%`; }
+  get justRested() { return this.state === 'landed' && !this.exhausted && performance.now() - (this.restedAt || -1e9) < 6000; }
 
   get statusText() {
     if (this.state === 'landed' && this.exhausted) return this.restText;
+    if (this.justRested) return 'Uitgerust: je kunt weer vliegen';
     if (this.state === 'landed') {
       if (this.flower?.sensor) return 'Uitrusten op de Plantenluisteraar';
       if (this.flower) return `Nectar drinken op ${this.flower.plant.batch.name}`;
       return (this.atmosphere.state.sunny ?? 0) > 0.05 ? 'Opwarmen in de zon' : 'Rusten';
     }
     if (this.state === 'landing') return 'Landen…';
-    if (this.energy <= 0) return 'Uitgeput: je zweeft naar beneden';
+    if (this.energy <= 0) return 'Uitgeput: je zweeft naar beneden om uit te rusten';
     if (this.outOfBounds) return 'Te ver van de tuin';
     if (this.rain > 0.4) return 'Natte vleugels: zoek beschutting';
     if (this.warmth < 0.3) return 'Te koud: vleugels stijf';

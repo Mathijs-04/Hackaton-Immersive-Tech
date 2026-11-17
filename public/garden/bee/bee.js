@@ -139,8 +139,9 @@ export class Bee extends Butterfly {
 
   updateFlying(dt, ctl) {
     super.updateFlying(dt, ctl);
-    // Out of energy but carrying nectar: burn some of the load to keep going.
-    if (this.controlled && this.energy < 0.12 && this.load > 0.01) {
+    // Running low but carrying nectar: burn some of the load to keep going. It starts below 12% and
+    // keeps going until 30% (hysteresis), so the status doesn't flip back and forth every frame.
+    if (this.controlled && this.load > 0.01 && (this.energy < 0.12 || (this.burning && this.energy < 0.3))) {
       const use = Math.min(this.load, 0.05 * dt);
       this.load -= use;
       this.energy = clamp(this.energy + use * 1.6, 0, 1);
@@ -174,6 +175,7 @@ export class Bee extends Butterfly {
 
   get statusText() {
     if (this.state === 'landed' && this.exhausted) return this.restText;
+    if (this.justRested) return 'Uitgerust: je kunt weer vliegen';
     if (this.state === 'landed') {
       if (this.flower?.hive) return 'Thuis in de bijenkast';
       if (this.flower?.sensor) return 'Uitrusten op de Plantenluisteraar';
@@ -187,7 +189,7 @@ export class Bee extends Butterfly {
       return 'Rusten';
     }
     if (this.state === 'landing') return 'Landen…';
-    if (this.energy <= 0) return 'Uitgeput: je zweeft naar beneden';
+    if (this.energy <= 0) return 'Uitgeput: je zweeft naar beneden om uit te rusten';
     if (this.burning) return 'Moe: je verbruikt je eigen nectar';
     if (this.outOfBounds) return 'Te ver van de tuin';
     if (this.full) return 'Vol! Vlieg naar de bijenkast';

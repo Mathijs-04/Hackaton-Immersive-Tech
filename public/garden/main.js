@@ -250,10 +250,7 @@ async function boot() {
     const { gained, load } = e.detail;
     flightHud.toast(`+${Math.round(gained * LOAD_MG)} mg nectar · honingmaag ${Math.round(load * 100)}%${load >= 0.999 ? ' · vol!' : ''}`, 2600);
   });
-  for (const p of [butterfly, bee]) {
-    p.addEventListener('exhausted', () => { if (p === player && flying) flightHud.toast('😮‍💨 Je energie is op. Je zweeft naar beneden en rust even uit; daarna kun je weer vliegen.', 5000); });
-    p.addEventListener('rested', () => { if (p === player && flying) flightHud.toast('💪 Uitgerust! Vlieg naar een bloem om bij te tanken.'); });
-  }
+  // Exhaustion and recovery are explained once, in the status line (no second toast saying the same).
   bee.addEventListener('home', () => { if (bee.controlled) flightHud.toast('🏠 Thuis: even bijtanken. Ga nu nectar zoeken!'); });
   bee.addEventListener('deliver', (e) => {
     if (!bee.controlled || anyDialogOpen()) return;

@@ -321,3 +321,15 @@ kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-
   .char-art { font-size: 30px; }
   .char-line { flex-basis: 100%; }
 }
+
+/* Expandable sections (Besturing, bee tips): a chevron shows they open and close */
+.controls-box summary, .tips-box summary { list-style: none; justify-content: space-between; gap: 12px; border-radius: 8px; }
+.controls-box summary::-webkit-details-marker, .tips-box summary::-webkit-details-marker { display: none; }
+.controls-box summary::after, .tips-box summary::after {
+  content: ""; flex: none; width: 9px; height: 9px; margin: -4px 4px 0 0;
+  border-right: 2.5px solid var(--accent); border-bottom: 2.5px solid var(--accent);
+  transform: rotate(45deg); transition: transform .2s, margin .2s;
+}
+.controls-box[open] summary::after, .tips-box[open] summary::after { transform: rotate(-135deg); margin: 4px 4px 0 0; }
+.controls-box summary:hover, .tips-box summary:hover { color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .controls-box summary::after, .tips-box summary::after { transition: none; } }

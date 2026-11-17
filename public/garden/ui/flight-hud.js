@@ -20,6 +20,8 @@ export class FlightHud {
   setPlayer(p) {
     this.b = p;
     this.last = '';
+    this.shown = undefined; // show the new animal's first status immediately
+    this.pending = null;
     $('fl-name').textContent = `${p.kind === 'bee' ? '🐝' : '🦋'} ${p.name}`;
     $('bee-row').hidden = p.kind !== 'bee';
     this.el.classList.toggle('is-bee', p.kind === 'bee');
@@ -43,6 +45,20 @@ export class FlightHud {
     }, ms);
   }
 
+  /**
+   * One message at a time: a new status must hold for 0.4 s before it replaces the shown one, so a
+   * rule that flips on and off (e.g. around an energy threshold) can never make the text flicker.
+   * Messages that only differ by a counting number ("…61%") count as the same message.
+   */
+  stableStatus(next) {
+    const now = performance.now();
+    const same = (a, b) => a.replace(/\d+%/, '#') === b.replace(/\d+%/, '#'); // ignore counting numbers
+    if (this.shown === undefined || same(next, this.shown)) { this.shown = next; this.pending = null; return this.shown; }
+    if (!this.pending || !same(this.pending.text, next)) this.pending = { text: next, since: now };
+    else if (now - this.pending.since >= 400) { this.shown = next; this.pending = null; }
+    return this.shown;
+  }
+
   /** Direction to the hive relative to where the camera looks: radians, 0 = straight ahead. */
   hiveBearing() {
     const hive = this.b.world.hive, p = this.b.pos;
@@ -59,7 +75,8 @@ export class FlightHud {
     if (this.el.hidden || !this.b) return;
     const b = this.b, bee = b.kind === 'bee';
     const bear = bee ? this.hiveBearing() : null;
-    const key = `${Math.round(b.energy * 50)}|${Math.round(b.warmth * 50)}|${b.visited.size}|${b.statusText}` +
+    const status = this.stableStatus(b.statusText);
+    const key = `${Math.round(b.energy * 50)}|${Math.round(b.warmth * 50)}|${b.visited.size}|${status}` +
       (bee ? `|${Math.round(b.load * 50)}|${b.delivered}|${Math.round(bear.angle * 18)}|${Math.round(bear.dist * 5)}` : '');
     if (key === this.last) return;
     this.last = key;
@@ -71,7 +88,7 @@ export class FlightHud {
     $('m-energy').setAttribute('aria-valuenow', Math.round(b.energy * 100));
     $('m-warmth').setAttribute('aria-valuenow', Math.round(b.warmth * 100));
     $('fl-visits').textContent = `${b.visited.size}/${b.totalSpecies}`;
-    $('fl-status').textContent = b.statusText;
+    $('fl-status').textContent = status;
     if (bee) {
       $('fl-load').style.width = pct(b.load);
       $('m-load').setAttribute('aria-valuenow', Math.round(b.load * 100));
