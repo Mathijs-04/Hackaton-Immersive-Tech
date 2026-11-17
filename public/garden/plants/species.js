@@ -5,7 +5,7 @@
 //
 // archetypes: spike | umbel | daisy | cup | bell | globe | mat | tuft | shrub   (+ seedling for stage "seed")
 
-export const SPECIES = {
+const SPECIES = {
   'Filipendula ulmaria':      { a: 'umbel', h: 1.2,  w: 0.55, bloom: '#f3ecd2' },
   'Verbena bonariensis':      { a: 'umbel', h: 1.4,  w: 0.4,  bloom: '#8b5fc7' },
   'Cichorium intybus':        { a: 'daisy', h: 1.0,  w: 0.45, bloom: '#7fa7e8' },
@@ -59,7 +59,7 @@ export const SPECIES = {
 const FALLBACK = { a: 'daisy', h: 0.6, w: 0.4, bloom: '#c8c8c8' };
 
 /** Splits "Echinops bannaticus 'Blue Globe'" into base name and cultivar. */
-export function parseName(name) {
+function parseName(name) {
   const m = String(name).match(/^(.*?)\s*'([^']+)'\s*$/);
   return m ? { base: m[1].trim(), cultivar: m[2] } : { base: String(name).trim(), cultivar: null };
 }

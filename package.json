@@ -1,10 +1,16 @@
 {
-  "name": "puintuin-dashboard",
+  "name": "biotopia",
   "version": "1.0.0",
+  "description": "Biotopia: a live 3D digital twin of the Puintuin, driven by Bioto's Plantenluisteraar sensor data",
   "private": true,
+  "engines": {
+    "node": ">=20.12"
+  },
   "scripts": {
-    "fetch": "node --env-file=.env fetch-static.js",
-    "start": "node --env-file=.env server.js"
+    "start": "node server.js",
+    "fetch": "node scripts/fetch-static.js",
+    "build:site": "node scripts/build-pages.js",
+    "verify:site": "node scripts/verify-dist.js"
   },
   "dependencies": {
     "three": "^0.170.0"

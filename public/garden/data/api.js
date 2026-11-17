@@ -1,6 +1,6 @@
 // Loads our own copy of the data. The browser never talks to api.bioto.co directly:
 //  - locally, server.js serves /api/*.json from its disk cache (token stays in .env);
-//  - on GitHub Pages, a scheduled workflow writes the same files as static JSON (see PAGES.md).
+//  - on GitHub Pages, a scheduled workflow writes the same files as static JSON (see docs/deployment.md).
 // URLs are relative to /garden/ so both setups (and a /<repo>/ sub-path) work.
 
 async function getJSON(url) {

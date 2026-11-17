@@ -1,4 +1,4 @@
-// Builds the static GitHub Pages site into dist/.  See PAGES.md.
+// Builds the static GitHub Pages site into dist/.  See docs/deployment.md.
 //
 //   node scripts/build-pages.js             no API call: uses the data already published/committed
 //   node scripts/build-pages.js --refresh   one request to the Bioto API (needs BIOTO_TOKEN + GARDEN_UUID)
@@ -17,7 +17,6 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 const STATIC = path.join(ROOT, 'static-data');
-const HOUR = 3600e3;
 const KEEP_READINGS = 21 * 24;       // keep three weeks of hourly readings
 const COOLDOWN_MS = 45 * 60e3;
 const API_BASE = process.env.API_BASE || 'https://api.bioto.co';

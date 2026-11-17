@@ -25,7 +25,7 @@ const BANDS = [
 const FLAT = BANDS.reduce((a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]], [0, 0, 0]);
 const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 
-export function spectrumColor(s, out) {
+function spectrumColor(s, out) {
   let r = 0, g = 0, b = 0;
   for (let i = 0; i < 8; i++) {
     const v = s[`f${i + 1}`];

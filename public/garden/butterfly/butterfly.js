@@ -16,7 +16,7 @@ const REST_UNTIL = 0.3;  // rested enough to fly (and climb) again
 const damp = (k, dt) => 1 - Math.exp(-k * dt);
 
 // Flight tuning. The bee (bee/bee.js) reuses this class with its own values.
-export const CFG = {
+const CFG = {
   speed: 0.65,         // m/s at full warmth (~16 body lengths per second)
   boost: 1.8,
   turnRate: 2.4,       // rad/s

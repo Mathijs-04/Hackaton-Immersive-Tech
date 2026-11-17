@@ -18,7 +18,7 @@ const GOLD = new THREE.Color('#d9a032');
 const EYE = new THREE.Color('#151010');
 
 /** Head, hairy thorax, legs and antennae. */
-export function honeybeeFront() {
+function honeybeeFront() {
   const head = colorize(new THREE.SphereGeometry(1, 10, 8).scale(0.0019, 0.0018, 0.0015).translate(0, 0.0003, -0.0058), () => DARK);
   const eyes = [-1, 1].map((s) => colorize(new THREE.SphereGeometry(0.0009, 6, 5).scale(0.6, 1.1, 1).translate(s * 0.0015, 0.0005, -0.0056), () => EYE));
   const thorax = colorize(new THREE.SphereGeometry(0.0026, 10, 8).translate(0, 0.0004, -0.0026), (v) => (v.y > 0.0012 ? BROWN : DARK));
@@ -38,7 +38,7 @@ export function honeybeeFront() {
 }
 
 /** Abdomen with golden and dark bands; origin at its front so it can swell with nectar. */
-export function honeybeeAbdomen() {
+function honeybeeAbdomen() {
   const g = new THREE.SphereGeometry(1, 12, 10).scale(0.0029, 0.0026, 0.0047).translate(0, -0.0002, 0.0047);
   return colorize(g, (v) => {
     const band = Math.floor((v.z - 0.001) / 0.0016);

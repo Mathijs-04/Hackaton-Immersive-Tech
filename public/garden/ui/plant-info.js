@@ -3,7 +3,7 @@
 import { esc, date, num } from './format.js';
 import { SEED_COUNT_UNKNOWN } from '../plants/placement.js';
 
-export const BIOTO_URL = 'https://bioto.co/';
+const BIOTO_URL = 'https://bioto.co/';
 
 /** Map of API plant name (latin, incl. cultivar) → info entry. Never throws: the 3D garden works without it. */
 export async function loadPlantInfo() {
@@ -24,7 +24,7 @@ export const infoFor = (map, batch) => map.get(batch.raw.plant?.name) || map.get
 export const nameFor = (map, batch) => infoFor(map, batch)?.dutchName || batch.name;
 
 // Roles a plant can play in a butterfly's life (plants.json → butterflyLife.roles).
-export const ROLES = {
+const ROLES = {
   nectar:       { icon: '🍯', label: 'Voedsel (nectar)' },
   waardplant:   { icon: '🥚', label: 'Eitjes en rupsenvoer' },
   schuilplek:   { icon: '🌿', label: 'Schuilen en rusten' },

@@ -158,7 +158,7 @@ export class Bee extends Butterfly {
     return f;
   }
 
-  animate(dt, { steer, ascend, boost }) {
+  animate(dt, { steer }) {
     const m = this.model;
     const flying = this.state !== 'landed';
     // Real bee wings beat ~230×/s: far too fast to see, so we show a blur-like flicker.

@@ -5,8 +5,8 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { wingTexture } from '../world/textures.js';
 
 // Wing outline (right side) in metres. x = outward from the body, z = front (−) to back (+).
-export const FORE = [[0, -0.012], [0.03, -0.05], [0.07, -0.072], [0.1, -0.074], [0.098, -0.05], [0.085, -0.02], [0.05, -0.002], [0, 0.004]];
-export const HIND = [[0, 0.0], [0.045, 0.004], [0.07, 0.022], [0.072, 0.045], [0.055, 0.066], [0.03, 0.074], [0.01, 0.06], [0, 0.03]];
+const FORE = [[0, -0.012], [0.03, -0.05], [0.07, -0.072], [0.1, -0.074], [0.098, -0.05], [0.085, -0.02], [0.05, -0.002], [0, 0.004]];
+const HIND = [[0, 0.0], [0.045, 0.004], [0.07, 0.022], [0.072, 0.045], [0.055, 0.066], [0.03, 0.074], [0.01, 0.06], [0, 0.03]];
 const U = (x) => x / 0.1;
 const V = (z) => (z + 0.08) / 0.16;
 const OUTLINE_UV = [FORE, HIND].map((pts) => pts.map(([x, z]) => [U(x), V(z)]));
@@ -16,11 +16,6 @@ export const PALETTES = {
   boomblauwtje: {
     inner: '#5468c4', base: '#8ea6ec', base2: '#bccbf5', margin: '#262638', marginWidth: 2, fringe: '#fbfbf7',
     spots: [[U(0.06), V(-0.03), 2, 'rgba(30,30,60,0.45)']],
-  },
-  // Icarusblauwtje (common blue, male): violet-blue with a thin dark margin and white fringe.
-  icarus: {
-    inner: '#2c2f7a', base: '#4f7fe0', base2: '#86b2f5', margin: '#23233a', marginWidth: 3, fringe: '#f6f6f2',
-    spots: [[U(0.06), V(-0.03), 3, 'rgba(30,30,60,0.6)']],
   },
   // Generic pattern for background butterflies: white with dark tips and spots, tinted per species.
   generic: {

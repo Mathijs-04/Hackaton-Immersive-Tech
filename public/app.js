@@ -1,3 +1,4 @@
+/* global Chart, L (loaded from a CDN in index.html) */
 const $ = (id) => document.getElementById(id);
 const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const getJSON = async (u) => { const r = await fetch(u, { cache: 'no-cache' }); if (!r.ok) throw new Error(`${u}: HTTP ${r.status}`); return r.json(); };
@@ -37,7 +38,7 @@ function renderReadings(garden) {
   const last = r.at(-1), prev = r.at(-2) || {};
   const labels = r.map((x) => fmtTime(x.datetime));
   $('title').textContent = `Biotopia · ${garden.name}`;
-  $('status').textContent = `Laatste meting: ${fmtTime(last.datetime)} · ${r.length} uurwaarden · data lokaal opgeslagen, max. 1× per uur ververst`;
+  $('status').textContent = `Laatste meting: ${fmtTime(last.datetime)} · ${r.length} uurwaarden · elk uur ververst`;
   $('kpis').innerHTML =
     kpi('Lucht', last.air?.temperature, '°C', prev.air?.temperature) +
     kpi('Luchtvochtigheid', last.air?.humidity, '%', prev.air?.humidity) +

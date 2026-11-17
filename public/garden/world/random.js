@@ -1,5 +1,5 @@
 // Deterministic randomness: the same data always produces the same garden.
-export function hashString(str) {
+function hashString(str) {
   let h = 2166136261;
   for (let i = 0; i < str.length; i++) {
     h ^= str.charCodeAt(i);

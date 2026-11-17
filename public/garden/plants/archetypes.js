@@ -1,4 +1,4 @@
-// Procedural plant shapes, V2: smooth-shaded, curved tapered stems, real leaf blades with a
+// Procedural plant shapes: smooth-shaded, curved tapered stems, real leaf blades with a
 // midrib fold and droop, individual petals and florets, vertex-colour gradients and fake
 // ambient occlusion. Still no model files and ~300–900 triangles per plant.
 //
@@ -393,8 +393,6 @@ const BUILDERS = {
     return { foliage, bloom: [], flowers: [] };
   },
 };
-
-export const ARCHETYPES = Object.keys(BUILDERS);
 
 /** Fake ambient occlusion: darker near the ground, inside clumps. */
 function applyAO(geo, strength = 0.5, top = 0.45) {

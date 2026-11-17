@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { mulberry32 } from './random.js';
 
 /** Tileable value-noise field (size×size), fbm with `octaves`. Returns Float32Array 0..1. */
-export function noiseField(size, { seed = 1, scale = 8, octaves = 4 } = {}) {
+function noiseField(size, { seed = 1, scale = 8, octaves = 4 } = {}) {
   const rnd = mulberry32(seed);
   const out = new Float32Array(size * size);
   let amp = 1, total = 0;

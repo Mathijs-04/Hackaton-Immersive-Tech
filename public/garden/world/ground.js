@@ -1,4 +1,4 @@
-// Ground V2: textured soil bed, mottled lawn with instanced grass, generic undergrowth
+// Ground: textured soil bed, mottled lawn with instanced grass, generic undergrowth
 // (clover, fallen autumn leaves, gravel), rubble rim ("puin") and a hedge/tree backdrop.
 // Everything is instanced: ~8 draw calls for the whole ground layer. All decorative.
 import * as THREE from 'three';
@@ -178,7 +178,6 @@ export class Ground {
   constructor(world) {
     this.world = world;
     this.group = new THREE.Group();
-    const R = world.radius;
 
     // --- Lawn base (fades into fog)
     const lawnTex = lawnTexture();
