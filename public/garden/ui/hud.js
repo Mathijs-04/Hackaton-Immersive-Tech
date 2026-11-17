@@ -11,7 +11,7 @@ export class Hud {
     this.atmosphere = atmosphere;
     this.els = {
       hud: $('hud'), name: $('garden-name'), clock: $('clock'), weather: $('weather'), values: $('values'), age: $('data-age'),
-      bar: $('timebar'), live: $('btn-live'), back: $('btn-back'), fwd: $('btn-fwd'), range: $('time-range'), label: $('time-label'),
+      bar: $('timebar'), live: $('btn-live'), range: $('time-range'), label: $('time-label'),
     };
     const e = this.els;
     e.name.textContent = garden.name;
@@ -21,8 +21,6 @@ export class Hud {
     this.keysEnabled = () => true;
 
     e.live.addEventListener('click', () => store.goLive());
-    e.back.addEventListener('click', () => store.step(-1));
-    e.fwd.addEventListener('click', () => store.step(1));
     // Slider value = whole hours before now (0 = live).
     e.range.addEventListener('input', () => {
       const v = Number(e.range.value);
@@ -72,8 +70,6 @@ export class Hud {
     e.range.setAttribute('aria-valuetext', s.live ? `Live, nu ${time(s.t)}` : short(s.t));
     e.label.textContent = label;
     e.live.setAttribute('aria-pressed', String(s.live));
-    e.fwd.disabled = s.live;
-    e.back.disabled = s.t <= s.start + 1;
 
     const row = (label, value, unit, frac) =>
       `<div><dt>${label}</dt><dd>${value}<small> ${unit}</small></dd><div class="bar"><i style="width:${Math.round(frac * 100)}%"></i></div></div>`;

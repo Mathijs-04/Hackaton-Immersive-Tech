@@ -51,7 +51,7 @@ Illustrative (no data): plant positions (generated deterministically, no overlap
 
 **Live by default:** the garden shows the real current moment. The sun and moon follow the wall clock; sensor values come from the newest hourly reading. If it is dark and raining in the Puintuin, it is dark and raining here. The server refreshes from the Bioto API once per hour (at :05, also when nobody has the page open) and the page reloads the data at :07 and when a sleeping tab becomes visible again.
 
-**Time picker:** the bar at the bottom lets you look back hour by hour (slider, `‹ ›`, or `← →`, `Shift` for ±1 day). **Live** (or `L`) returns to now. Night, rain and fog are deliberately kept readable (raised ambient light), since this is a learning tool.
+**Time picker:** the bar at the bottom lets you look back hour by hour with the slider (or `← →`, `Shift` for ±1 day). **Live** (or `L`) returns to now. Night, rain and fog are deliberately kept readable (raised ambient light), since this is a learning tool.
 
 **Controls:** drag/scroll to orbit/zoom, click a plant or the Plantenluisteraar for info.
 **Debug:** `?stats=1` (fps, draw calls, triangles), `?fly=1` (free-fly camera), `?vlinder=1` (start as the butterfly). In the console, `garden` exposes everything, including `garden.life.census()` and `garden.counts` (overlaps, layout hash).
