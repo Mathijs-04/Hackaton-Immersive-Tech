@@ -122,8 +122,6 @@ async function boot() {
     butterfly.controlled = on;
     input.flightKeys = on;
     atmosphere.smallScale = on;
-    // Viewing: 1 hour per second. Flying: 10x slower, so a flight doesn't race through the day.
-    store.speed = on ? 0.1 : 1;
     document.body.classList.toggle('flying', on);
     modeView.setAttribute('aria-pressed', String(!on));
     modeFly.setAttribute('aria-pressed', String(on));
@@ -198,7 +196,7 @@ async function boot() {
 
   // --- Systems (order matters: input → time → world → creatures → picking → UI)
   engine.addSystem({ update: () => input.update() });
-  engine.addSystem({ update: (dt) => { store.update(dt); if (store.playing) engine.wake(); } });
+  engine.addSystem({ update: () => store.update() }); // live: follows the wall clock
   engine.addSystem({ update: (dt, ctx) => { windUniforms.uTime.value = ctx.elapsed; } });
   engine.addSystem(atmosphere);
   engine.addSystem({ update: (dt) => sensor.update(dt, atmosphere.state.sample, atmosphere.state.night) });
@@ -228,16 +226,30 @@ async function boot() {
     });
   }
 
-  // --- New readings: reload once per hour, a few minutes after the hour (server caches; no API spam).
+  // --- New readings: reload once per hour, a few minutes after the hour. The server fetches from
+  // the Bioto API at most once per clock hour and caches it, so this never spams the API.
+  let lastFetch = Date.now();
+  const refresh = async () => {
+    lastFetch = Date.now();
+    try {
+      const added = store.append((await loadHistory()).readings);
+      if (added) console.info(`[data] ${added} nieuwe uurmeting(en)`);
+    } catch (e) { console.warn('[data] verversen mislukt, volgende poging over een uur:', e.message); }
+  };
+  // Background tabs throttle timers: catch up when the page becomes visible again.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+    const due = new Date(); due.setMinutes(7, 0, 0);
+    if (due > Date.now()) due.setHours(due.getHours() - 1);
+    if (lastFetch < due.getTime()) refresh();
+    if (store.live) store.goLive();
+  });
   const scheduleRefresh = () => {
     const now = new Date(), next = new Date(now);
     next.setMinutes(7, 0, 0);
     if (next <= now) next.setHours(next.getHours() + 1);
     setTimeout(async () => {
-      try {
-        const added = store.append((await loadHistory()).readings);
-        if (added) console.info(`[data] ${added} nieuwe uurmeting(en)`);
-      } catch (e) { console.warn('[data] verversen mislukt, volgende poging over een uur:', e.message); }
+      await refresh();
       scheduleRefresh();
     }, next - now);
   };

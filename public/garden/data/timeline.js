@@ -37,27 +37,29 @@ export class TimeStore extends EventTarget {
     super();
     this.loc = loc;
     this.readings = [];
-    this.playing = false;
-    this.speed = 1; // hours per real second: a full day/night cycle takes ~24 s
-    this.loop = true;
-    this.followNow = true; // stick to the newest reading when new data arrives
+    // Live (default): the garden shows the real current moment. The sun follows the wall clock
+    // and the sensor values come from the newest hourly reading. Manual: a moment someone picked.
+    this.live = true;
     this.append(apiReadings);
-    this.t = this.end;
+    this.t = Date.now();
   }
 
   get start() { return this.readings[0].t; }
   get end() { return this.readings[this.readings.length - 1].t; }
+  /** Latest moment you can look at: now (values after the newest reading stay at that reading). */
+  get latest() { return Math.max(this.end, Date.now()); }
+  /** The newest hourly reading (its hour starts at reading.t − 30 min). */
+  get newest() { return this.readings[this.readings.length - 1]; }
 
   /** Adds readings (dedupes by datetime) and recomputes stats. Returns number of new readings. */
   append(apiReadings) {
     const known = new Set(this.readings.map((r) => r.datetime));
     const fresh = apiReadings.filter((r) => !known.has(r.datetime)).map(flatten);
     if (!fresh.length && this.readings.length) return 0;
-    const wasAtEnd = this.readings.length && this.t >= this.end - 1;
     this.readings = [...this.readings, ...fresh].sort((a, b) => a.t - b.t);
     this.computeDerived();
-    if (wasAtEnd && this.followNow && !this.playing) this.setTime(this.end);
     this.dispatchEvent(new Event('data'));
+    if (this.live && this.t) this.dispatchEvent(new Event('change')); // same moment, newer values
     return fresh.length;
   }
 
@@ -147,29 +149,32 @@ export class TimeStore extends EventTarget {
   }
 
   setTime(t) {
-    const clamped = Math.min(this.end, Math.max(this.start, t));
+    const clamped = Math.min(this.latest, Math.max(this.start, t));
     if (clamped === this.t) return;
     this.t = clamped;
     this.dispatchEvent(new Event('change'));
   }
 
-  step(hours) { this.pause(); this.setTime(this.t + hours * HOUR); }
-  play() {
-    if (this.t >= this.end - 1) this.t = this.start; // replay from the beginning
-    this.playing = true;
-    this.dispatchEvent(new Event('state'));
-  }
-  pause() { if (this.playing) { this.playing = false; this.dispatchEvent(new Event('state')); } }
-  toggle() { this.playing ? this.pause() : this.play(); }
-  goNow() { this.pause(); this.setTime(this.end); }
-
-  update(dt) {
-    if (!this.playing) return;
-    let t = this.t + dt * this.speed * HOUR;
-    if (t >= this.end) {
-      if (this.loop) t = this.start + (t - this.end);
-      else { t = this.end; this.pause(); }
-    }
+  /** Look at a chosen moment. Going to (almost) now switches back to live. */
+  setManual(t) {
+    if (t >= Date.now() - 60e3) return this.goLive();
+    const wasLive = this.live;
+    this.live = false;
     this.setTime(t);
+    if (wasLive) this.dispatchEvent(new Event('state'));
+  }
+
+  step(hours) { this.setManual(this.t + hours * HOUR); }
+
+  goLive() {
+    const was = this.live;
+    this.live = true;
+    this.setTime(Date.now());
+    if (!was) this.dispatchEvent(new Event('state'));
+  }
+
+  /** Live: follow the wall clock. Updating every 20 s is plenty (the sun moves ~0.08° in that time). */
+  update() {
+    if (this.live && Date.now() - this.t > 20e3) this.setTime(Date.now());
   }
 }

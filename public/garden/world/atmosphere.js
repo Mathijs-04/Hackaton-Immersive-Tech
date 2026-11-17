@@ -6,15 +6,15 @@ import { Rain } from './weather.js';
 
 const C = (hex) => new THREE.Color(hex);
 const PAL = {
-  dayTopClear: C('#3f7fca'), dayTopGrey: C('#8994a0'),
-  dayHorClear: C('#bcd6ee'), dayHorGrey: C('#b9bec3'),
-  nightTop: C('#04070f'), nightHor: C('#0e1828'),
+  dayTopClear: C('#3f7fca'), dayTopGrey: C('#9ba5b0'),
+  dayHorClear: C('#bcd6ee'), dayHorGrey: C('#cfd4d8'),
+  nightTop: C('#0d1730'), nightHor: C('#2a3b56'),
   dusk: C('#e8875a'),
   cold: C('#a9c6ea'), warm: C('#f3cf9a'),
-  fogDay: C('#c2c7cb'), fogNight: C('#1a2230'),
+  fogDay: C('#d2d6d9'), fogNight: C('#3b4b63'),
   groundBounce: C('#4a3a2a'),
-  sunWarm: C('#ffb26b'), moon: C('#9db4e8'), moonAmbient: C('#46597f'),
-  cloudLit: C('#f4f4f2'), cloudRain: C('#6f767e'), cloudNight: C('#1b2230'), cloudDark: C('#7d848c'),
+  sunWarm: C('#ffb26b'), moon: C('#b4c6ef'), moonAmbient: C('#8094c2'),
+  cloudLit: C('#f4f4f2'), cloudRain: C('#8e959c'), cloudNight: C('#34405a'), cloudDark: C('#8a9199'),
 };
 
 // Approximate RGB of the light sensor's spectral bands F1..F8 (415–680 nm).
@@ -184,7 +184,7 @@ export class Atmosphere {
     // --- Sky colours
     top.copy(PAL.dayTopGrey).lerp(PAL.dayTopClear, 1 - cover);
     hor.copy(PAL.dayHorGrey).lerp(PAL.dayHorClear, 1 - cover);
-    const dayBright = (0.45 + 0.55 * Math.sqrt(lightN)) * (1 - 0.25 * rain);
+    const dayBright = (0.68 + 0.32 * Math.sqrt(lightN)) * (1 - 0.12 * rain); // never gloomier than a bright overcast day
     top.multiplyScalar(dayBright); hor.multiplyScalar(dayBright);
     top.lerp(PAL.nightTop, 1 - day);
     hor.lerp(PAL.nightHor, 1 - day);
@@ -205,7 +205,7 @@ export class Atmosphere {
     // --- Light intensities: total light from the sensor, split into direct vs diffuse by cloud cover.
     const total = Math.pow(lightN, 0.55);
     const direct = 3.4 * total * (0.12 + 0.88 * (1 - cover)) * sunVis;
-    const moonI = 0.4 * (1 - day) * (1 - 0.6 * cover);
+    const moonI = 0.7 * (1 - day) * (1 - 0.35 * cover); // stylised moonlight: night stays readable
     if (direct >= moonI) {
       lightDir.copy(sunDir);
       this.sun.color.copy(sunCol);
@@ -218,13 +218,15 @@ export class Atmosphere {
     this.sun.position.copy(lightDir).multiplyScalar(20);
     this.sun.target.position.set(0, 0, 0);
     this.hemi.color.copy(top).lerp(hor, 0.5).lerp(PAL.moonAmbient, (1 - day) * 0.7);
-    this.hemi.groundColor.copy(PAL.groundBounce).multiplyScalar(0.3 + 0.7 * day);
-    this.hemi.intensity = 0.35 + 1.5 * total * (1 - 0.4 * (1 - cover)) + 0.25 * (1 - day);
+    this.hemi.groundColor.copy(PAL.groundBounce).multiplyScalar(0.6 + 0.4 * day);
+    // Floor of diffuse light: overcast, rain and night all keep a readable garden.
+    this.hemi.intensity = 0.8 + 1.3 * total * (1 - 0.4 * (1 - cover)) + 0.6 * (1 - day) + 0.35 * cover * day;
+    this.engine.renderer.toneMappingExposure = 1 + 0.3 * (1 - day) + 0.12 * rain;
 
     // --- Fog: humidity, mist and rain
     this.engine.scene.fog.color.copy(hor);
     // Kept moderate: the garden should stay readable even at 100 % humidity.
-    this.engine.scene.fog.density = 0.012 + 0.012 * Math.pow(humN, 3) + 0.016 * fogW + 0.008 * rain;
+    this.engine.scene.fog.density = 0.007 + 0.007 * Math.pow(humN, 3) + 0.011 * fogW + 0.004 * rain;
 
     // --- Ground mist / steam: a thin, even layer (many small faint puffs, not a few big clumps)
     const mu = this.mistUniforms;

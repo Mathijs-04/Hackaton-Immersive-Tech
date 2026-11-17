@@ -5,7 +5,7 @@ Two views on the real Plantenluisteraar data from the Puintuin:
 | URL | What |
 |---|---|
 | `http://localhost:3000/` | 2D dashboard (charts, map, planting list) |
-| `http://localhost:3000/garden/` | **Digitale Puintuin**: 3D garden that plays through the week, plus a butterfly you can fly |
+| `http://localhost:3000/garden/` | **Digitale Puintuin**: 3D garden showing the garden live (current hour), plus a butterfly you can fly |
 
 ## Run
 
@@ -49,7 +49,11 @@ From the API (planting plan and layout): bed shape, sensor position, which speci
 Astronomy: sun and moon position from date, time and GPS.
 Illustrative (no data): plant positions (generated deterministically, no overlapping canopies), plant shapes and colours (`plants/species.js`), grass, undergrowth, hedge, trees, wind, rubble.
 
-**Controls:** drag/scroll to orbit/zoom, click a plant for name, number and planting date. `Space` or ▶ to play/pause (1 hour = 1 second, so a day lasts about 24 s). `← →` ±1 hour.
+**Live by default:** the garden shows the real current moment. The sun and moon follow the wall clock; sensor values come from the newest hourly reading. If it is dark and raining in the Puintuin, it is dark and raining here. The server refreshes from the Bioto API once per hour (at :05, also when nobody has the page open) and the page reloads the data at :07 and when a sleeping tab becomes visible again.
+
+**Time picker:** the bar at the bottom lets you look back hour by hour (slider, `‹ ›`, or `← →`, `Shift` for ±1 day). **Live** (or `L`) returns to now. Night, rain and fog are deliberately kept readable (raised ambient light), since this is a learning tool.
+
+**Controls:** drag/scroll to orbit/zoom, click a plant or the Plantenluisteraar for info.
 **Debug:** `?stats=1` (fps, draw calls, triangles), `?fly=1` (free-fly camera), `?vlinder=1` (start as the butterfly). In the console, `garden` exposes everything, including `garden.life.census()` and `garden.counts` (overlaps, layout hash).
 
 ## Code map (`public/garden/`)
@@ -62,7 +66,7 @@ world/        projection, GardenWorld, ground (soil, grass, undergrowth, hedge, 
 plants/       species table, procedural archetypes + wind shader, placement (+ relaxation), instancing, picking
 life/         wildlife models and behaviour (butterflies, bees, beetles, birds, bee hotel)
 butterfly/    the player's butterfly: model, flight, landing, energy
-ui/           HUD, play/pause, plant list/card, flight HUD
+ui/           HUD, live/time picker, plant info drawer, dialogs, flight HUD
 ```
 
 ### The butterfly 🦋

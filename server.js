@@ -59,3 +59,18 @@ http.createServer(async (req, res) => {
     res.end(JSON.stringify({ error: notFound ? 'not found' : err.message }));
   }
 }).listen(process.env.PORT || 3000, () => console.log(`Dashboard on http://localhost:${process.env.PORT || 3000}`));
+
+// Live data: refresh the cache once per hour at :05, even when no one has the page open, so the
+// garden always opens on the current hour. getHistory() itself never calls the API more than
+// once per clock hour (see lib/bioto.js).
+function scheduleHourly() {
+  const now = new Date(), next = new Date(now);
+  next.setMinutes(5, 30, 0);
+  if (next <= now) next.setHours(next.getHours() + 1);
+  setTimeout(async () => {
+    try { await getHistory(); } catch (err) { console.warn('[bioto] hourly refresh failed:', err.message); }
+    scheduleHourly();
+  }, next - now);
+}
+getHistory().catch((err) => console.warn('[bioto] startup refresh failed:', err.message));
+scheduleHourly();
