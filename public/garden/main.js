@@ -18,6 +18,7 @@ import { Picking } from './plants/picking.js';
 import { Butterfly } from './butterfly/butterfly.js';
 import { Bee, LOAD_MG } from './bee/bee.js';
 import { Hive } from './life/hive.js';
+import { Music } from './ui/music.js';
 import { Life } from './life/life.js';
 import { Hud } from './ui/hud.js';
 import { Panels } from './ui/panels.js';
@@ -145,6 +146,7 @@ async function boot() {
   const LENS = { butterfly: { near: 0.004, fov: 62 }, bee: { near: 0.0025, fov: 68 } };
   let player = butterfly;
   const flightHud = new FlightHud(input, camera);
+  const music = new Music({ onError: () => flightHud.toast('🔇 De muziek kon niet worden afgespeeld') });
   flightHud.setPlayer(player);
   const modeView = $('mode-view'), modeFly = $('mode-fly');
 
@@ -345,7 +347,7 @@ async function boot() {
     ...overlapReport(plants),
     ...layer.stats(),
   };
-  window.garden = { engine, store, world, plants, batches, layer, atmosphere, ground, life, quality, input, orbit, butterfly, bee, hive, rigs, setFlying, getPlayer: () => player, panels, plantInfo, counts, THREE };
+  window.garden = { engine, store, world, plants, batches, layer, atmosphere, ground, life, quality, input, orbit, butterfly, bee, hive, rigs, music, setFlying, getPlayer: () => player, panels, plantInfo, counts, THREE };
   console.info('[garden] geladen', counts);
 
   engine.start();

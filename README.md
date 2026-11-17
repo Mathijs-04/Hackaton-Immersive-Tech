@@ -63,6 +63,8 @@ Illustrative (no data): plant positions (generated deterministically, no overlap
 
 **Time picker:** the bar at the bottom lets you look back hour by hour with the slider (or `← →`, `Shift` for ±1 day). **Live** (or `L`) returns to now. Night, rain and fog are deliberately kept readable (raised ambient light), since this is a learning tool.
 
+**Music:** the speaker button (top right, or the `M` key) switches the background music on and off. It is off by default (browsers only allow sound after a click), plays softly (22 % volume, fades in/out), loops until switched off and pauses while the tab is hidden. The file is `public/audio/music.mp3` (an MP3; the server supports byte ranges so looping works).
+
 **Controls:** drag/scroll to orbit/zoom, click a plant or the Plantenluisteraar for info.
 **Debug:** `?stats=1` (fps, draw calls, triangles), `?fly=1` (free-fly camera), `?vlinder=1` (start as the butterfly). In the console, `garden` exposes everything, including `garden.life.census()` and `garden.counts` (overlaps, layout hash).
 

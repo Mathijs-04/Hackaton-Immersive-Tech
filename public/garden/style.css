@@ -103,11 +103,18 @@ a { color: var(--accent); text-underline-offset: 2px; }
 .bar i { display: block; height: 100%; background: var(--leaf); }
 
 /* ---------- Toolbar + mode switch ---------- */
-.toolbar { position: absolute; top: 16px; right: 16px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.toolbar { position: absolute; top: 16px; right: 68px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
 .segmented { display: inline-flex; padding: 4px; gap: 2px; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); box-shadow: var(--shadow); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .seg { font: inherit; font-weight: 600; min-height: 38px; padding: 0 14px; border: 0; border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; }
 .seg:hover { background: var(--accent-soft); }
 .seg[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+
+/* Sound button: top right corner, the toolbar sits to its left */
+.sound-btn { position: absolute; top: 16px; right: 16px; z-index: 2; }
+.sound-btn .sound-on { display: none; }
+.sound-btn[aria-pressed="true"] .sound-on { display: inline; }
+.sound-btn[aria-pressed="true"] .sound-off { display: none; }
+.sound-btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
 
 /* ---------- Drawer (plant list / info) ---------- */
 .drawer { top: 76px; right: 16px; bottom: 84px; width: 380px; display: flex; flex-direction: column; overflow: hidden; }
@@ -258,7 +265,8 @@ kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-
 }
 @media (max-width: 720px) {
   body { font-size: 14px; }
-  .hud { left: 8px; right: 8px; top: 8px; width: auto; padding: 8px 12px; }
+  .sound-btn { top: 8px; right: 8px; }
+  .hud { left: 8px; right: 60px; top: 8px; width: auto; padding: 8px 12px; }
   .hud h1 { font-size: 18px; }
   .values { grid-template-columns: repeat(3, 1fr); gap: 4px 8px; margin-top: 6px; }
   .values dd { font-size: 14px; }
@@ -272,7 +280,7 @@ kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-
   .live-btn { padding: 0 8px; }
   .drawer-open .timebar, .drawer-open .toolbar { display: none; }
   .flying .hud { display: none; }
-  .flying .toolbar { top: 8px; bottom: auto; }
+  .flying .toolbar { top: 8px; bottom: auto; right: 60px; }
   .flight { top: 64px; bottom: auto; left: 8px; right: 8px; width: auto; transform: none; padding: 8px 12px; }
   .toast { top: 150px; }
   .dialog { padding: 18px 18px; }

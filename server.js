@@ -16,6 +16,7 @@ const STATIC = [
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml',
+  '.mp3': 'audio/mpeg',
 };
 
 const routes = {
@@ -27,7 +28,7 @@ const routes = {
 // Same files as on GitHub Pages (api/*.json), so the front end uses one set of URLs everywhere.
 for (const name of ['garden', 'history', 'layout', 'planting']) routes[`/api/${name}.json`] = routes[`/api/${name}`];
 
-async function serveStatic(pathname, res) {
+async function serveStatic(pathname, req, res) {
   for (const [prefix, dir] of STATIC) {
     if (!pathname.startsWith(prefix)) continue;
     let rel = decodeURIComponent(pathname.slice(prefix.length));
@@ -40,8 +41,19 @@ async function serveStatic(pathname, res) {
       res.writeHead(301, { Location: pathname + '/' });
       return res.end();
     }
-    res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream' });
-    return res.end(await fs.readFile(file));
+    const type = TYPES[path.extname(file)] || 'application/octet-stream';
+    const buf = await fs.readFile(file);
+    // Byte ranges (like GitHub Pages): audio needs them to seek back to the start when it loops.
+    const m = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+    if (m && (m[1] || m[2])) {
+      const start = m[1] ? Number(m[1]) : Math.max(0, buf.length - Number(m[2]));
+      const end = m[1] && m[2] ? Math.min(Number(m[2]), buf.length - 1) : buf.length - 1;
+      if (start > end || start >= buf.length) { res.writeHead(416, { 'Content-Range': `bytes */${buf.length}` }); return res.end(); }
+      res.writeHead(206, { 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Content-Range': `bytes ${start}-${end}/${buf.length}`, 'Content-Length': end - start + 1 });
+      return res.end(buf.subarray(start, end + 1));
+    }
+    res.writeHead(200, { 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Content-Length': buf.length });
+    return res.end(buf);
   }
 }
 
@@ -53,7 +65,7 @@ http.createServer(async (req, res) => {
       res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
       return res.end(JSON.stringify(data));
     }
-    await serveStatic(url.pathname, res);
+    await serveStatic(url.pathname, req, res);
   } catch (err) {
     const notFound = err.code === 'ENOENT';
     if (!notFound) console.error(err);

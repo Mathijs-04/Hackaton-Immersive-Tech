@@ -21,6 +21,16 @@
 <div id="app">
   <canvas id="scene" aria-label="3D-weergave van de Puintuin. Klik op een plant voor informatie, of gebruik de plantenlijst."></canvas>
 
+  <!-- Background music: off by default (browsers need a click before any sound anyway) -->
+  <button class="btn icon sound-btn" id="btn-sound" type="button" aria-pressed="false" aria-label="Achtergrondmuziek" title="Muziek aan (M)">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3.5 9.5v5h3.8l5.2 4.2V5.3L7.3 9.5z" fill="currentColor"/>
+      <g class="sound-on"><path d="M16.2 8.8a4.6 4.6 0 010 6.4"/><path d="M18.8 6.2a8.3 8.3 0 010 11.6"/></g>
+      <path class="sound-off" d="M16.5 9.5l5 5M21.5 9.5l-5 5"/>
+    </svg>
+  </button>
+  <audio id="bg-music" src="../audio/music.mp3" loop preload="none"></audio>
+
   <!-- Live data -->
   <section class="panel hud" id="hud" aria-labelledby="app-title" hidden>
     <div class="hud-head">
