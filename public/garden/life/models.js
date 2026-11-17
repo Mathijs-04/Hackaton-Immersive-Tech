@@ -90,6 +90,66 @@ export function beeHotel() {
   return merge(parts);
 }
 
+/** Dragonfly (~6 cm): big eyes, thorax, long thin abdomen. White parts take the instance tint. Forward −Z. */
+export function dragonflyBody() {
+  const white = new THREE.Color('#ffffff'), dark = new THREE.Color('#1e2224');
+  const eyes = colorize(new THREE.SphereGeometry(0.0045, 8, 6).scale(1.3, 0.9, 0.9).translate(0, 0.001, -0.016), () => white);
+  const thorax = colorize(new THREE.SphereGeometry(0.0045, 8, 6).scale(0.9, 1, 1.5).translate(0, 0, -0.008), (v) => (v.y > 0.002 ? white : dark));
+  const abdomen = colorize(new THREE.CylinderGeometry(0.0016, 0.0022, 0.044, 6, 6).rotateX(Math.PI / 2).translate(0, 0, 0.018),
+    (v) => (Math.floor((v.z + 0.01) / 0.0055) % 2 === 0 ? white : dark));
+  return merge([eyes, thorax, abdomen]);
+}
+
+/** Two clear wings (fore + hind) on one side, spread flat. */
+export function dragonflyWing(mirror = false) {
+  const fore = new THREE.CircleGeometry(1, 8).rotateX(-Math.PI / 2).scale(0.034, 1, 0.0045).translate(0.034, 0.002, -0.011);
+  const hind = new THREE.CircleGeometry(1, 8).rotateX(-Math.PI / 2).scale(0.032, 1, 0.0055).translate(0.032, 0.002, -0.003);
+  const g = merge([fore, hind]);
+  if (mirror) g.scale(-1, 1, 1);
+  return g;
+}
+
+/** Garden snail (~3 cm): banded shell on a soft body with two eye stalks. */
+export function snailBody() {
+  const shellA = new THREE.Color('#b08a5a'), shellB = new THREE.Color('#5a3f26'), body = new THREE.Color('#8a8072');
+  const shell = colorize(new THREE.SphereGeometry(0.009, 10, 8).scale(1, 1, 0.85).translate(0, 0.009, 0.003),
+    (v) => (Math.floor(Math.atan2(v.y - 0.009, v.z - 0.003) * 3 + Math.hypot(v.y - 0.009, v.z - 0.003) * 900) % 2 === 0 ? shellA : shellB));
+  const foot = colorize(new THREE.CapsuleGeometry(0.0035, 0.024, 3, 6).rotateX(Math.PI / 2).scale(1, 0.6, 1).translate(0, 0.002, -0.002), () => body);
+  const parts = [shell, foot];
+  for (const s of [-1, 1]) parts.push(colorize(new THREE.CylinderGeometry(0.0006, 0.0008, 0.008, 4).rotateX(-0.5).rotateZ(s * 0.3).translate(s * 0.0015, 0.006, -0.015), () => body));
+  return merge(parts);
+}
+
+/** Wood mouse (bosmuis, ~8 cm + tail): brown back, pale belly, big ears, long tail. */
+export function mouseBody() {
+  const brown = new THREE.Color('#8a6646'), belly = new THREE.Color('#d8c8b0'), pink = new THREE.Color('#d9a0a0'), black = new THREE.Color('#111111');
+  const body = colorize(new THREE.SphereGeometry(1, 10, 8).scale(0.017, 0.015, 0.03).translate(0, 0.015, 0), (v) => (v.y < 0.008 ? belly : brown));
+  const head = colorize(new THREE.ConeGeometry(0.011, 0.028, 8).rotateX(-Math.PI / 2).translate(0, 0.017, -0.038), () => brown);
+  const ears = [-1, 1].map((s) => colorize(new THREE.CircleGeometry(0.0055, 8).rotateY(s * 0.4).translate(s * 0.007, 0.027, -0.031), () => pink));
+  const eyes = [-1, 1].map((s) => colorize(new THREE.SphereGeometry(0.0022, 5, 4).translate(s * 0.0065, 0.021, -0.039), () => black));
+  const tail = colorize(new THREE.CylinderGeometry(0.0012, 0.0022, 0.075, 4).rotateX(Math.PI / 2 - 0.15).translate(0, 0.01, 0.065), () => pink);
+  return merge([body, head, ...ears, ...eyes, tail]);
+}
+
+/** Pipistrelle bat body (~4 cm). */
+export function batBody() {
+  const fur = new THREE.Color('#3a2a22');
+  const body = colorize(new THREE.SphereGeometry(1, 8, 6).scale(0.009, 0.008, 0.02), () => fur);
+  const head = colorize(new THREE.SphereGeometry(0.007, 6, 5).translate(0, 0.002, -0.02), () => fur);
+  const ears = [-1, 1].map((s) => colorize(new THREE.ConeGeometry(0.003, 0.008, 4).translate(s * 0.004, 0.009, -0.02), () => fur));
+  return merge([body, head, ...ears]);
+}
+
+/** Bat wing (one side): membrane with finger-like scallops, ~10 cm. */
+export function batWing(mirror = false) {
+  const pts = [[0, -0.012], [0.04, -0.02], [0.1, -0.012], [0.085, 0.004], [0.065, 0.0], [0.05, 0.016], [0.03, 0.01], [0.012, 0.02], [0, 0.016]];
+  const g = new THREE.ShapeGeometry(new THREE.Shape(pts.map(([x, z]) => new THREE.Vector2(x, z)))).rotateX(Math.PI / 2);
+  g.deleteAttribute('uv');
+  colorize(g, () => new THREE.Color('#2a1e1a'));
+  if (mirror) g.scale(-1, 1, 1);
+  return g;
+}
+
 /**
  * Renders many identical critters with 1 body + 2 wing InstancedMeshes.
  * Call set(i, agent) per agent each frame, then commit().

@@ -45,6 +45,18 @@ function lifeHTML(life, { player = false } = {}) {
     </section>`;
 }
 
+/** For the player's bee: how good is this plant for you, and why. */
+function beeHTML(pv) {
+  if (!pv) return '';
+  const v = Math.round(pv.bees ?? 0);
+  const verdict = v >= 4 ? 'Een topbloem voor jou: veel nectar of stuifmeel.' : v >= 2 ? 'Hier is wel wat te halen.' : 'Voor een bij is hier weinig te halen.';
+  return `<section class="pollinators bee-value" aria-labelledby="bee-h">
+      <h3 id="bee-h">🐝 Wat heb jij als bij hieraan?</h3>
+      ${rating('Waarde voor bijen', pv.bees)}
+      <p><strong>${verdict}</strong>${pv.note ? ` ${esc(pv.note)}` : ''}</p>
+    </section>`;
+}
+
 function rating(label, n) {
   const v = Math.max(0, Math.min(5, Math.round(n ?? 0)));
   const dots = Array.from({ length: 5 }, (_, i) => `<i class="${i < v ? 'on' : ''}"></i>`).join('');
@@ -66,9 +78,10 @@ function photo(img, name) {
  * Info for one planting batch.
  * opts.headingId: id for the <h2> (dialogs label themselves with it).
  * opts.funFact: show the "Wist je dat?" box (immersive mode).
- * opts.visit: { isNew, count, total } from the butterfly's collection.
+ * opts.visit: { isNew, count, total } from the player's collection.
+ * opts.player: 'butterfly' | 'bee' | null (view mode). Decides which "what does this mean for me" section shows.
  */
-export function plantHTML(batch, info, { headingId = '', funFact = false, visit = null } = {}) {
+export function plantHTML(batch, info, { headingId = '', funFact = false, visit = null, player = null } = {}) {
   const name = info?.dutchName || batch.name;
   const latin = info?.latinName || batch.raw.plant?.name || '';
   const count = batch.amountKnown ? `${batch.count} ${batch.count === 1 ? 'plant' : 'planten'}` : `gezaaid (± ${SEED_COUNT_UNKNOWN} kiemplantjes)`;
@@ -82,9 +95,9 @@ export function plantHTML(batch, info, { headingId = '', funFact = false, visit 
     <h2 id="${esc(headingId)}" class="info-title" tabindex="-1"><span class="swatch" style="background:${batch.info.bloom}" aria-hidden="true"></span>${esc(name)}</h2>
     ${latin ? `<p class="latin"><i lang="la">${esc(latin)}</i></p>` : ''}
     ${info?.description ? `<p>${esc(info.description)}</p>` : '<p>Over deze plant hebben we nog geen beschrijving.</p>'}
-    ${lifeHTML(info?.butterflyLife, { player: funFact })}
+    ${player === 'bee' ? beeHTML(pv) : lifeHTML(info?.butterflyLife, { player: player === 'butterfly' })}
     ${funFact && info?.funFact ? `<div class="funfact"><h3>💡 Wist je dat?</h3><p>${esc(info.funFact)}</p></div>` : ''}
-    ${pv ? `<section class="pollinators" aria-label="Waarde voor bestuivers">
+    ${pv && player !== 'bee' ? `<section class="pollinators" aria-label="Waarde voor bestuivers">
       <h3>Waarde voor insecten</h3>
       ${rating('🦋 Vlinders', pv.butterflies)}
       ${rating('🐝 Bijen', pv.bees)}
@@ -125,4 +138,33 @@ export function sensorHTML({ headingId = '', now = null, immersive = false } = {
     <p>Deze app gebruikt precies die metingen. Het weer, de zon, de mist en zelfs hoeveel energie jouw vlinder heeft, komen allemaal uit de echte tuin.</p>
     ${live ? `<h3>Wat hij nu meet</h3>${live}` : ''}
     <p><a class="btn small" href="${BIOTO_URL}" target="_blank" rel="noopener">Meer over Bioto ↗</a></p>`;
+}
+
+// Short facts shown one by one after each delivery at the hive (the bee's reward: learning).
+const HIVE_FACTS = [
+  'Terug in de kast doe je de <strong>kwispeldans</strong>. Met die dans vertel je andere bijen in welke richting en hoe ver de bloemen zijn.',
+  'Jonge bijen in de kast nemen je nectar over. Ze <strong>wapperen met hun vleugels</strong> zodat het water verdampt: zo wordt nectar langzaam honing.',
+  'Voor één pot honing van 500 gram zijn <strong>tienduizenden vluchten</strong> nodig. Elke vlucht telt!',
+  'Een bijenvolk heeft in de zomer zo\'n <strong>30.000 tot 50.000 bijen</strong>, maar maar één koningin. Zij legt alle eitjes.',
+  'Bijen zien geen rood, maar wel <strong>ultraviolet</strong>. Veel bloemen hebben UV-strepen die als landingsbaan naar de nectar werken.',
+  'Een werkster leeft in de zomer maar <strong>zo\'n 5 à 6 weken</strong>. Pas in haar laatste weken vliegt ze uit om te verzamelen, zoals jij nu.',
+  'Bijen bestuiven terwijl ze verzamelen: stuifmeel blijft aan hun harige lijf plakken en gaat mee naar de volgende bloem. Zo kunnen planten zaad maken.',
+];
+
+/** The hive card after a delivery. Honey ≈ 35% of the nectar mass (nectar is mostly water). */
+export function hiveHTML({ headingId = '', mg, trips, total }) {
+  const fact = HIVE_FACTS[(trips - 1) % HIVE_FACTS.length];
+  const honey = Math.max(1, Math.round(total * 0.35));
+  return `
+    <p class="badge new">🍯 +${mg} mg nectar afgeleverd</p>
+    <div class="hive-art" aria-hidden="true">🏠🐝🐝🐝</div>
+    <h2 id="${esc(headingId)}" class="info-title" tabindex="-1">Thuis in de bijenkast</h2>
+    <p class="latin">Je volk is blij met je!</p>
+    <dl class="facts-list live">
+      <dt>Vluchten</dt><dd>${trips}</dd>
+      <dt>Nectar in totaal</dt><dd>${total} mg</dd>
+      <dt>Wordt ongeveer</dt><dd>${honey} mg honing</dd>
+    </dl>
+    <div class="funfact"><h3>💡 Wist je dat?</h3><p>${fact}</p></div>
+    <p class="fine">Je energie is weer vol: je hebt thuis een slokje honing genomen.</p>`;
 }

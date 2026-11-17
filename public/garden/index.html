@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Digitale Puintuin</title>
-<meta name="description" content="Ontdek de Puintuin: een digitale kopie van een echte tuin, gevoed met live data van de Plantenluisteraar van Bioto.">
+<title>Biotopia · De Puintuin, live</title>
+<meta name="description" content="Biotopia: ontdek de Puintuin, een digitale kopie van een echte tuin, gevoed met live data van de Plantenluisteraar van Bioto. Vlieg als vlinder of bij.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
 <link rel="stylesheet" href="style.css">
 <script type="importmap">
 {
@@ -21,11 +22,11 @@
   <canvas id="scene" aria-label="3D-weergave van de Puintuin. Klik op een plant voor informatie, of gebruik de plantenlijst."></canvas>
 
   <!-- Live data -->
-  <section class="panel hud" id="hud" aria-labelledby="garden-name" hidden>
+  <section class="panel hud" id="hud" aria-labelledby="app-title" hidden>
     <div class="hud-head">
       <div>
-        <p class="eyebrow" id="hud-eyebrow">Live uit de echte tuin</p>
-        <h1 id="garden-name">Puintuin</h1>
+        <h1 class="brand" id="app-title"><span aria-hidden="true">🌿</span> Biotopia</h1>
+        <p class="garden-line"><span id="garden-name">Puintuin</span> · <span class="eyebrow-inline" id="hud-eyebrow">Live uit de echte tuin</span></p>
       </div>
       <a class="link" href="/" title="Naar het 2D-dashboard">2D</a>
     </div>
@@ -39,7 +40,7 @@
   <nav class="toolbar" id="toolbar" aria-label="Weergave" hidden>
     <div class="segmented" role="group" aria-label="Kies een modus">
       <button class="seg" id="mode-view" type="button" aria-pressed="true">🌿 Bekijken</button>
-      <button class="seg" id="mode-fly" type="button" aria-pressed="false" title="Vlieg als vlinder (V)">🦋 Vlinder</button>
+      <button class="seg" id="mode-fly" type="button" aria-pressed="false" title="Vlieg als vlinder of bij (V)">🦋🐝 Beleef</button>
     </div>
     <button class="btn" id="btn-plants" type="button" aria-expanded="false" aria-controls="drawer">📖 Alle planten</button>
     <button class="btn icon" id="btn-help" type="button" aria-label="Uitleg en besturing">?</button>
@@ -67,8 +68,8 @@
     <span class="time-label" id="time-label" aria-hidden="true"></span>
   </section>
 
-  <!-- Butterfly flight -->
-  <section class="panel flight" id="flight" aria-label="Vlinderstatus" hidden>
+  <!-- Flight status (butterfly or bee) -->
+  <section class="panel flight" id="flight" aria-label="Status van je dier" hidden>
     <div class="flight-head">
       <b id="fl-name">🦋</b>
       <span class="fl-status" id="fl-status" aria-live="polite"></span>
@@ -77,6 +78,11 @@
       <div><span id="lbl-energy">Energie</span><div class="meter" role="meter" aria-labelledby="lbl-energy" aria-valuemin="0" aria-valuemax="100" id="m-energy"><i id="fl-energy"></i></div></div>
       <div><span id="lbl-warmth" title="Uit luchttemperatuur en zonlicht van dit moment">Warmte</span><div class="meter warm" role="meter" aria-labelledby="lbl-warmth" aria-valuemin="0" aria-valuemax="100" id="m-warmth"><i id="fl-warmth"></i></div></div>
       <div class="visits"><span>Soorten</span><b id="fl-visits">0/0</b></div>
+    </div>
+    <div class="meters bee-row" id="bee-row" hidden>
+      <div><span id="lbl-load">Honingmaag</span><div class="meter honey" role="meter" aria-labelledby="lbl-load" aria-valuemin="0" aria-valuemax="100" id="m-load"><i id="fl-load"></i></div></div>
+      <div class="visits"><span>Naar de kast</span><b id="fl-delivered">0 mg</b></div>
+      <div class="compass" id="fl-compass" role="img" aria-label="Bijenkast"><i id="fl-arrow" aria-hidden="true">▲</i><small id="fl-dist"></small></div>
     </div>
   </section>
   <div class="toast" id="toast" role="status" hidden></div>
@@ -91,16 +97,16 @@
   <!-- Welcome -->
   <dialog class="dialog" id="dlg-intro" aria-labelledby="intro-title">
     <div class="dialog-art" aria-hidden="true">🌼🌿🐝</div>
-    <p class="eyebrow">Welkom</p>
-    <h2 id="intro-title">Dit is de Digitale Puintuin</h2>
-    <p>Deze tuin bestaat echt. Wat je hier ziet is een <strong>digitale kopie van de Puintuin</strong>: een bloemrijke tuin vol inheemse planten voor bijen, vlinders en andere insecten.</p>
+    <p class="eyebrow">Welkom bij</p>
+    <h2 id="intro-title" class="brand-title">Biotopia</h2>
+    <p>Deze tuin bestaat echt. In Biotopia zie je een <strong>digitale kopie van de Puintuin</strong>: een bloemrijke tuin vol inheemse planten voor bijen, vlinders en andere insecten.</p>
     <p>In de tuin staat de <strong>Plantenluisteraar</strong> van Bioto. Dit meetstation meet elk uur de temperatuur, de luchtvochtigheid, het bodemvocht en het licht, en deelt die data met deze app. Het weer, de zon en de tijd die je hier ziet komen dus uit de echte tuin.</p>
     <h3>Zo ontdek je de tuin</h3>
     <ul class="steps">
       <li><span aria-hidden="true">👆</span> <span><strong>Klik op een plant</strong> om te zien welke het is en waarom insecten hem nodig hebben.</span></li>
       <li><span aria-hidden="true">🖱️</span> <span>Sleep om rond te kijken, scroll om in te zoomen.</span></li>
       <li><span aria-hidden="true">🕒</span> <span>Je ziet de tuin <strong>zoals hij nu is</strong>: is het daar donker of regent het, dan hier ook. Met de tijdbalk onderaan kijk je terug naar eerdere uren.</span></li>
-      <li><span aria-hidden="true">🦋</span> <span>Kies <strong>Vlinder</strong> om de tuin te beleven als vlinder.</span></li>
+      <li><span aria-hidden="true">🦋</span> <span>Kies <strong>Beleef</strong> om de tuin te beleven als vlinder of als bij.</span></li>
     </ul>
     <p class="fine">De soorten en aantallen kloppen met de echte tuin. De precieze plek van elke plant is nagebootst.</p>
     <div class="dialog-actions">
@@ -108,46 +114,94 @@
     </div>
   </dialog>
 
-  <!-- Butterfly intro + controls -->
-  <dialog class="dialog" id="dlg-fly" aria-labelledby="fly-title">
-    <div class="dialog-art" aria-hidden="true">🦋</div>
+  <!-- Choose a character: short on purpose; the details follow after choosing -->
+  <dialog class="dialog" id="dlg-choose" aria-labelledby="choose-title">
     <p class="eyebrow">Immersieve modus</p>
-    <h2 id="fly-title">Kijk door de ogen van een vlinder</h2>
-    <p>Je bent een <strong>boomblauwtje</strong>, een klein lichtblauw vlindertje van zo'n 3 centimeter. Je naam komt van je gewoonte om hoog rond struiken en bomen te fladderen. Voor jou is de tuin ineens een enorm bos van bloemen.</p>
-    <p>Elke plant speelt een eigen rol in jouw leven: de ene geeft <strong>voedsel</strong>, op de andere leg je <strong>eitjes</strong> zodat je rupsen te eten hebben, weer een andere is een <strong>schuilplek</strong> of een plek om op te warmen. Ontdek welke rol elke plant heeft!</p>
-    <p>Vlinders zijn koudbloedig: ze hebben warmte en zon nodig om te vliegen. <strong>Je energie is dus niet oneindig</strong>, en hoe snel je moe wordt hangt af van het echte weer in de tuin.</p>
+    <h2 id="choose-title">Door wiens ogen kijk jij?</h2>
+    <p>Je wordt zo groot als een insect. De tuin is ineens een enorm bos van bloemen.</p>
+    <div class="chars">
+      <button class="char" type="button" data-char="butterfly">
+        <span class="char-art" aria-hidden="true">🦋</span>
+        <span class="char-name">Boomblauwtje</span>
+        <span class="char-line">Zweef rond en ontdek wat elke plant betekent voor een vlinder.</span>
+        <span class="char-tags"><span>Ontdekken</span><span>± 3 cm</span><span>Rustig</span></span>
+      </button>
+      <button class="char" type="button" data-char="bee">
+        <span class="char-art" aria-hidden="true">🐝</span>
+        <span class="char-name">Honingbij</span>
+        <span class="char-line">Je hebt een taak: verzamel nectar en breng het naar de bijenkast.</span>
+        <span class="char-tags"><span>Verzamelen</span><span>± 1,3 cm</span><span>Snel</span></span>
+      </button>
+    </div>
+    <div class="dialog-actions">
+      <button class="btn" type="button" data-close>Annuleren</button>
+    </div>
+  </dialog>
+
+  <!-- Butterfly intro -->
+  <dialog class="dialog char-dialog" id="dlg-fly" aria-labelledby="fly-title">
+    <div class="dialog-art" aria-hidden="true">🦋</div>
+    <p class="eyebrow">Jij bent een vlinder</p>
+    <h2 id="fly-title">Het boomblauwtje</h2>
+    <p>Een klein lichtblauw vlindertje dat graag hoog rond struiken en bomen fladdert. Elke plant speelt een rol in jouw leven: <strong>voedsel</strong>, een plek voor je <strong>eitjes</strong>, of een <strong>schuilplek</strong>.</p>
     <ul class="facts">
-      <li><span aria-hidden="true">☀️</span> Zon en warmte: je vliegt makkelijk.</li>
-      <li><span aria-hidden="true">🥶</span> Kou: je vleugels worden stijf en traag.</li>
-      <li><span aria-hidden="true">🌧️</span> Regen: natte, zware vleugels; je wordt sneller moe.</li>
-      <li><span aria-hidden="true">🌼</span> Land op een bloem om nectar te drinken, energie te tanken en te ontdekken wat die plant voor jou betekent.</li>
+      <li><span aria-hidden="true">⚡</span> Je energie is niet oneindig. Vlinders zijn koudbloedig: zon en warmte helpen, kou en regen maken je vleugels zwaar.</li>
+      <li><span aria-hidden="true">🌼</span> Land op een bloem om nectar te drinken en te ontdekken wat die plant voor jou betekent.</li>
       <li><span aria-hidden="true">🥚</span> Kun je de struiken vinden waarop een boomblauwtje zijn eitjes legt?</li>
     </ul>
-    <p class="now" id="fly-now"></p>
-    <h3>Besturing</h3>
-    <dl class="controls" id="fly-controls">
+    <p class="now" data-now></p>
+    <details class="controls-box"><summary>Besturing</summary><div data-controls></div></details>
+    <div class="dialog-actions">
+      <button class="btn" type="button" data-back>Andere keuze</button>
+      <button class="btn primary" type="button" data-start>Start met vliegen</button>
+    </div>
+  </dialog>
+
+  <!-- Bee intro -->
+  <dialog class="dialog char-dialog" id="dlg-bee" aria-labelledby="bee-title">
+    <div class="dialog-art" aria-hidden="true">🐝</div>
+    <p class="eyebrow">Jij bent een bij</p>
+    <h2 id="bee-title">De honingbij</h2>
+    <p>Je bent een <strong>werkster</strong> uit de bijenkast naast de tuin. Je volk rekent op je: <strong>verzamel nectar</strong> in je honingmaag en breng het naar huis, zodat er honing van gemaakt kan worden.</p>
+    <ul class="facts">
+      <li><span aria-hidden="true">🌼</span> Land op bloemen om nectar te zuigen. Na 5 à 6 bloemen is je honingmaag vol.</li>
+      <li><span aria-hidden="true">🏠</span> Vlieg dan terug naar de kast. Het kompas wijst de weg.</li>
+      <li><span aria-hidden="true">⚡</span> Vliegen kost veel energie. Raak je op, dan verbruik je je eigen nectar.</li>
+    </ul>
+    <details class="tips-box"><summary>Slimme bijentips</summary>
+      <ul class="facts">
+        <li><span aria-hidden="true">🌸</span> <span><strong>Bloemvast:</strong> blijf tijdens één vlucht bij dezelfde soort. Dat gaat sneller (×1,3) en zo bestuif je de bloemen echt.</span></li>
+        <li><span aria-hidden="true">👃</span> <span><strong>Geurmerk:</strong> een bloem die je net leeggedronken hebt, ruikt naar bij. Die is een tijdje leeg.</span></li>
+        <li><span aria-hidden="true">🌧️</span> <span><strong>Weer:</strong> onder zo'n 12 °C of in de regen blijven bijen meestal thuis. Vlieg je toch, dan word je snel moe.</span></li>
+      </ul>
+    </details>
+    <p class="now" data-now></p>
+    <details class="controls-box"><summary>Besturing</summary><div data-controls></div></details>
+    <div class="dialog-actions">
+      <button class="btn" type="button" data-back>Andere keuze</button>
+      <button class="btn primary" type="button" data-start>Start met vliegen</button>
+    </div>
+  </dialog>
+
+  <template id="tpl-controls">
+    <dl class="controls keys">
       <div><dt><kbd>W</kbd> <kbd>↑</kbd></dt><dd>vooruit</dd></div>
       <div><dt><kbd>A</kbd> <kbd>D</kbd> <kbd>←</kbd> <kbd>→</kbd></dt><dd>draaien</dd></div>
       <div><dt><kbd>S</kbd> <kbd>↓</kbd></dt><dd>afremmen</dd></div>
       <div><dt><kbd>Spatie</kbd> <kbd>E</kbd></dt><dd>omhoog</dd></div>
       <div><dt><kbd>Q</kbd></dt><dd>omlaag</dd></div>
-      <div><dt><kbd>Shift</kbd></dt><dd>sneller (kost meer energie)</dd></div>
+      <div><dt><kbd>Shift</kbd></dt><dd>sneller (kost energie)</dd></div>
       <div><dt>Loslaten</dt><dd>boven een bloem: landen</dd></div>
       <div><dt>Slepen / scrollen</dt><dd>rondkijken / zoomen</dd></div>
-      <div><dt><kbd>Esc</kbd></dt><dd>stoppen met vliegen</dd></div>
+      <div><dt><kbd>Esc</kbd></dt><dd>stoppen</dd></div>
     </dl>
-    <dl class="controls" id="fly-controls-touch" hidden>
+    <dl class="controls touch-keys">
       <div><dt>Joystick</dt><dd>vliegen en draaien</dd></div>
       <div><dt>▲ ▼</dt><dd>omhoog en omlaag</dd></div>
       <div><dt>Loslaten</dt><dd>boven een bloem: landen</dd></div>
       <div><dt>Slepen</dt><dd>rondkijken</dd></div>
     </dl>
-    <p class="fine">Tip: ook de Plantenluisteraar, de witte bol op een paal, is een landingsplek.</p>
-    <div class="dialog-actions">
-      <button class="btn" type="button" id="fly-cancel">Terug</button>
-      <button class="btn primary" type="button" id="fly-start">Start met vliegen</button>
-    </div>
-  </dialog>
+  </template>
 
   <!-- Landed on a plant or on the sensor -->
   <dialog class="dialog side-dialog" id="dlg-land" aria-labelledby="land-title">
@@ -160,6 +214,7 @@
   <div class="overlay" id="overlay">
     <div class="loader" id="loader" role="status">
       <div class="sprout" aria-hidden="true">🌱</div>
+      <div class="loader-brand">Biotopia</div>
       <div id="loader-text">De tuin wordt geladen…</div>
     </div>
   </div>

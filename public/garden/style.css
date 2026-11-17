@@ -1,4 +1,4 @@
-/* Digitale Puintuin: garden-journal look. Cream paper, moss green, terracotta, a serif for headings.
+/* Biotopia: garden-journal look. Cream paper, moss green, terracotta, a serif for headings.
    Contrast: --ink and --mute on --paper meet WCAG AA (≥ 4.5:1) in both themes. */
 :root {
   --paper: rgba(250, 246, 235, 0.95);
@@ -85,7 +85,13 @@ a { color: var(--accent); text-underline-offset: 2px; }
 /* ---------- HUD ---------- */
 .hud { top: 16px; left: 16px; width: 290px; padding: 12px 16px; }
 .hud-head { display: flex; justify-content: space-between; align-items: start; gap: 8px; }
-.hud h1 { margin: 0; font-size: 20px; }
+.hud h1 { margin: 0; font-size: 22px; letter-spacing: .01em; }
+.brand { color: var(--accent); }
+.garden-line { margin: 0; font-size: 13px; font-weight: 600; }
+.eyebrow-inline { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.hud.past .eyebrow-inline { color: #b06a00; }
+.brand-title { font-size: 34px !important; color: var(--accent); }
+.loader-brand { font-family: var(--serif); font-size: 30px; font-weight: 700; color: #9fcf7c; margin: 4px 0; }
 .link { color: var(--accent); font-weight: 600; text-decoration: none; font-size: 13px; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; }
 .clock { color: var(--mute); font-size: 13px; font-variant-numeric: tabular-nums; margin-top: 2px; }
 .values { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; margin: 10px 0 0; }
@@ -221,6 +227,9 @@ kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-
 .visits b { font-size: 18px; font-variant-numeric: tabular-nums; }
 .toast { position: absolute; top: 118px; left: 50%; transform: translateX(-50%); background: var(--paper-solid); color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: 8px 18px; box-shadow: var(--shadow); font-size: 14px; transition: opacity .4s, transform .4s; text-align: center; width: max-content; max-width: calc(100% - 32px); }
 .toast.out { opacity: 0; transform: translate(-50%, -8px); }
+.flying .toast { top: 186px; } /* below the flight panel */
+@media (max-width: 1100px) { .flying .toast { top: 118px; } }
+@media (max-width: 720px) { .flying .toast { top: 236px; } }
 .touch { position: absolute; left: 0; right: 0; bottom: 24px; height: 0; }
 .stick { position: absolute; left: 20px; bottom: 0; width: 120px; height: 120px; border-radius: 50%; background: var(--paper); border: 1px solid var(--line); backdrop-filter: blur(8px); touch-action: none; }
 .knob { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: var(--accent); opacity: .85; transition: transform .08s; }
@@ -250,7 +259,7 @@ kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-
 @media (max-width: 720px) {
   body { font-size: 14px; }
   .hud { left: 8px; right: 8px; top: 8px; width: auto; padding: 8px 12px; }
-  .hud h1 { font-size: 17px; }
+  .hud h1 { font-size: 18px; }
   .values { grid-template-columns: repeat(3, 1fr); gap: 4px 8px; margin-top: 6px; }
   .values dd { font-size: 14px; }
   .toolbar { top: auto; bottom: 68px; right: 8px; left: 8px; justify-content: center; flex-wrap: nowrap; gap: 6px; }
@@ -270,4 +279,45 @@ kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-
   .dialog h2 { font-size: 22px; }
   .controls { grid-template-columns: 1fr; }
   .side-dialog { margin: auto; }
+}
+
+/* ---------- Character choice (butterfly / bee) ---------- */
+.chars { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0 4px; }
+.char {
+  font: inherit; color: var(--ink); text-align: left; cursor: pointer;
+  display: flex; flex-direction: column; gap: 6px; padding: 16px; border-radius: 18px;
+  border: 2px solid var(--line); background: var(--paper-2);
+}
+.char:hover { border-color: var(--accent); }
+.char[aria-current="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.char-art { font-size: 40px; line-height: 1; }
+.char-name { font-family: var(--serif); font-size: 20px; font-weight: 700; }
+.char-line { font-size: 14px; color: var(--mute); }
+.char-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.char-tags span { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--paper-solid); border: 1px solid var(--line); }
+.controls-box, .tips-box { margin: 10px 0; border: 1px solid var(--line); border-radius: 12px; padding: 0 14px; }
+.controls-box summary, .tips-box summary { cursor: pointer; font-weight: 700; padding: 10px 0; min-height: 44px; display: flex; align-items: center; }
+.controls-box[open], .tips-box[open] { padding-bottom: 10px; }
+.tips-box .facts { margin: 0; }
+
+/* ---------- Bee HUD ---------- */
+.bee-row { grid-template-columns: 1fr auto auto; margin-top: 10px; }
+.meter.honey { background: #f1e2b4; }
+.meter.honey i { background: linear-gradient(90deg, #e9a82a, #f4c84a); }
+.meter.honey.full i { background: #d98a10; }
+.compass { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 52px; height: 44px; border-radius: 12px; background: var(--paper-2); border: 1px solid var(--line); }
+.compass i { font-style: normal; font-size: 16px; line-height: 1; color: var(--accent); transition: transform .15s; }
+.compass small { font-size: 10px; color: var(--mute); font-variant-numeric: tabular-nums; }
+.compass.urgent { border-color: #d98a10; box-shadow: 0 0 0 2px #f4c84a; }
+.compass.urgent i { color: #b06a00; }
+.hive-art { font-size: 34px; letter-spacing: 2px; margin-bottom: 6px; }
+.bee-value { background: #fdf0c9; color: #3a2e0b; }
+.bee-value .dots i { border-color: #b07a10; }
+.bee-value .dots i.on { background: #b07a10; }
+@media (prefers-reduced-motion: reduce) { .compass i { transition: none; } }
+@media (max-width: 720px) {
+  .chars { grid-template-columns: 1fr; }
+  .char { flex-direction: row; flex-wrap: wrap; align-items: center; }
+  .char-art { font-size: 30px; }
+  .char-line { flex-basis: 100%; }
 }

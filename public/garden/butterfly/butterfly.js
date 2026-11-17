@@ -13,7 +13,8 @@ import { resolveSphere } from '../plants/collision.js';
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const damp = (k, dt) => 1 - Math.exp(-k * dt);
 
-const CFG = {
+// Flight tuning. The bee (bee/bee.js) reuses this class with its own values.
+export const CFG = {
   speed: 0.65,         // m/s at full warmth (~16 body lengths per second)
   boost: 1.8,
   turnRate: 2.4,       // rad/s
@@ -28,15 +29,17 @@ const CFG = {
 };
 
 export class Butterfly extends EventTarget {
-  constructor({ engine, world, store, atmosphere, input }) {
+  constructor({ engine, world, store, atmosphere, input, name = 'Boomblauwtje', model = null, cfg = {} }) {
     super();
+    this.kind = 'butterfly';
+    this.cfg = { ...CFG, ...cfg };
     this.engine = engine;
     this.world = world;
     this.store = store;
     this.atmosphere = atmosphere;
     this.input = input;
-    this.name = 'Boomblauwtje';
-    this.model = new ButterflyModel({ palette: PALETTES.boomblauwtje, scale: 0.2 });
+    this.name = name;
+    this.model = model || new ButterflyModel({ palette: PALETTES.boomblauwtje, scale: 0.2 });
     engine.scene.add(this.model.group);
 
     this.pos = new THREE.Vector3();
@@ -61,7 +64,8 @@ export class Butterfly extends EventTarget {
     this.sway = new THREE.Vector3();
     // The Plantenluisteraar's orb is a landing spot too (no nectar, but a good lookout).
     const sn = world.sensor;
-    this.sensorSpot = { sensor: true, head: { x: sn.x, y: sn.top ?? 1, z: sn.z } };
+    this.sensorSpot = { sensor: true, fixed: true, head: { x: sn.x, y: sn.top ?? 1, z: sn.z } };
+    this.extraSpots = [this.sensorSpot]; // fixed landing spots besides flowers (subclasses add more)
     this.reset();
   }
 
@@ -80,7 +84,7 @@ export class Butterfly extends EventTarget {
 
   /** World position of a flower head, swaying with the (shader) wind. */
   headPos(f, out) {
-    if (f.sensor) return out.set(f.head.x, f.head.y + 0.004, f.head.z);
+    if (f.fixed) return out.set(f.head.x, f.head.y + 0.004, f.head.z);
     windOffset(f.plant, f.head.ly ?? 0.9, this.sway);
     return out.set(f.head.x + this.sway.x, f.head.y + 0.006, f.head.z + this.sway.z);
   }
@@ -121,17 +125,17 @@ export class Butterfly extends EventTarget {
         const dx = a.x - this.pos.x, dz = a.z - this.pos.z;
         let d = Math.atan2(-dx, -dz) - this.yaw;
         d = Math.atan2(Math.sin(d), Math.cos(d));
-        this.yaw += clamp(d, -1, 1) * CFG.turnRate * 0.6 * dt;
+        this.yaw += clamp(d, -1, 1) * this.cfg.turnRate * 0.6 * dt;
         throttle = Math.hypot(dx, dz) > 0.05 ? 0.5 : 0;
         ascend = clamp((a.y + 0.04 - this.pos.y) * 6, -1, 1);
       } else ascend = 0;
     }
 
-    this.yaw -= steer * CFG.turnRate * dt;
+    this.yaw -= steer * this.cfg.turnRate * dt;
     const fwd = this.forward(this.tmp);
-    const speed = throttle > 0 ? throttle * CFG.speed * (boost ? CFG.boost : 1) : throttle * 0.2;
+    const speed = throttle > 0 ? throttle * this.cfg.speed * (boost ? this.cfg.boost : 1) : throttle * 0.2;
     const tx = fwd.x * speed * vigor, tz = fwd.z * speed * vigor;
-    let ty = tired ? -0.15 : ascend > 0 ? ascend * CFG.climb * vigor : ascend * 0.4 - CFG.sink;
+    let ty = tired ? -0.15 : ascend > 0 ? ascend * this.cfg.climb * vigor : ascend * 0.4 - this.cfg.sink;
     if (!this.controlled && !tired) ty = ascend * 0.3;
     this.vel.x += (tx - this.vel.x) * damp(3, dt);
     this.vel.z += (tz - this.vel.z) * damp(3, dt);
@@ -142,25 +146,25 @@ export class Butterfly extends EventTarget {
     this.bumped = false;
     const near = this.world.nearestPlants(this.pos, 1.2);
     for (let it = 0; it < 2; it++) {
-      for (const { plant } of near) if (resolveSphere(this.pos, this.vel, CFG.bodyRadius, plant.colliders)) this.bumped = true;
-      if (resolveSphere(this.pos, this.vel, CFG.bodyRadius, this.world.staticColliders)) this.bumped = true;
+      for (const { plant } of near) if (resolveSphere(this.pos, this.vel, this.cfg.bodyRadius, plant.colliders)) this.bumped = true;
+      if (resolveSphere(this.pos, this.vel, this.cfg.bodyRadius, this.world.staticColliders)) this.bumped = true;
     }
     if (this.bumped) this.vel.multiplyScalar(Math.exp(-dt * 6)); // friction: a bump stops you, you don't glide around it
 
-    const ground = this.world.groundHeight(this.pos.x, this.pos.z) + CFG.hoverHeight;
+    const ground = this.world.groundHeight(this.pos.x, this.pos.z) + this.cfg.hoverHeight;
     if (this.pos.y < ground) { this.pos.y = ground; this.vel.y = Math.max(0, this.vel.y); }
-    this.pos.y = Math.min(CFG.ceiling, this.pos.y);
+    this.pos.y = Math.min(this.cfg.ceiling, this.pos.y);
     const b = this.world.bounds;
     const r = Math.hypot(this.pos.x, this.pos.z);
     this.outOfBounds = r > b.radius;
     if (r > b.radius) { this.pos.x *= b.radius / r; this.pos.z *= b.radius / r; }
 
     const effort = 1 + (1 - this.warmth) + this.rain * 0.8 + (ascend > 0 ? 0.4 : 0) + (boost ? 0.8 : 0);
-    this.energy = clamp(this.energy - CFG.drain * effort * dt, 0, 1);
+    this.energy = clamp(this.energy - this.cfg.drain * effort * dt, 0, 1);
 
     this.idle = (throttle > 0.1 || steer) ? 0 : this.idle + dt;
-    if (this.idle > CFG.landIdle && this.cooldown <= 0 && ascend <= 0) {
-      const f = this.nearestFlower(CFG.landRadius + (this.controlled ? 0 : 0.06), true);
+    if (this.idle > this.cfg.landIdle && this.cooldown <= 0 && ascend <= 0) {
+      const f = this.nearestFlower(this.cfg.landRadius + (this.controlled ? 0 : 0.06), true);
       if (f) return this.beginLanding(f);
       if (this.pos.y <= ground + 0.005 && !wantsToMove) return this.beginLanding(null);
     }
@@ -177,10 +181,14 @@ export class Butterfly extends EventTarget {
         if (d < radius && d < bestD) { best = { plant, head }; bestD = d; }
       }
     }
-    if (in3d && this.ignore !== this.sensorSpot) {
-      const h = this.sensorSpot.head;
-      const d = Math.hypot(h.x - this.pos.x, h.y - this.pos.y, h.z - this.pos.z);
-      if (d < radius * 1.6 && d < bestD) best = this.sensorSpot; // the orb is big: a bit more forgiving
+    if (in3d) {
+      for (const spot of this.extraSpots) {
+        if (this.ignore === spot) continue;
+        const h = spot.head;
+        const d = Math.hypot(h.x - this.pos.x, h.y - this.pos.y, h.z - this.pos.z);
+        const r = radius * (spot.reach ?? 1.6); // fixed spots are big: a bit more forgiving
+        if (d < r && d < bestD) { best = spot; bestD = d; }
+      }
     }
     return best;
   }
@@ -214,16 +222,14 @@ export class Butterfly extends EventTarget {
         visit = { isNew, count: this.visited.size, total: this.totalSpecies };
         if (isNew) this.dispatchEvent(new CustomEvent('visit', { detail: { plant: p, ...visit } }));
       }
-      this.dispatchEvent(new CustomEvent('land', { detail: { plant: p, sensor: !!this.flower?.sensor, visit, controlled: this.controlled } }));
+      this.onLand(this.flower);
+      this.dispatchEvent(new CustomEvent('land', { detail: { plant: p, spot: this.flower, sensor: !!this.flower?.sensor, visit, controlled: this.controlled } }));
     }
   }
 
   updateLanded(dt, wantsToMove) {
     if (this.flower) this.headPos(this.flower, this.pos); // sway with the flower
-    const st = this.atmosphere.state;
-    const sunBask = (st.sunny ?? 0) * 0.06;
-    const nectar = this.flower?.plant ? this.flower.plant.nectarValue * 0.22 : 0;
-    this.energy = clamp(this.energy + (nectar + sunBask + 0.005) * dt, 0, 1);
+    this.refuel(dt);
     if (this.controlled && wantsToMove && (this.energy > 0.02 || this.input.ascend <= 0)) {
       this.state = 'flying';
       this.ignore = this.flower;
@@ -231,9 +237,21 @@ export class Butterfly extends EventTarget {
       this.cooldown = 1.0;
       this.idle = 0;
       this.vel.y = 0.25;
+      this.onTakeoff();
       this.dispatchEvent(new Event('takeoff'));
     }
   }
+
+  /** Butterflies drink nectar for themselves and bask in the sun. */
+  refuel(dt) {
+    const st = this.atmosphere.state;
+    const sunBask = (st.sunny ?? 0) * 0.06;
+    const nectar = this.flower?.plant ? this.flower.plant.nectarValue * 0.22 : 0;
+    this.energy = clamp(this.energy + (nectar + sunBask + 0.005) * dt, 0, 1);
+  }
+
+  onLand() {}
+  onTakeoff() {}
 
   animate(dt, { steer, ascend, boost }) {
     const m = this.model;

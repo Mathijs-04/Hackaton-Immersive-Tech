@@ -14,7 +14,7 @@ export class Hud {
       bar: $('timebar'), live: $('btn-live'), range: $('time-range'), label: $('time-label'),
     };
     const e = this.els;
-    e.name.textContent = garden.name;
+    e.name.textContent = garden.name; // the real garden; the app itself is Biotopia
     e.hud.hidden = false;
     e.bar.hidden = false;
     this.sample = {};

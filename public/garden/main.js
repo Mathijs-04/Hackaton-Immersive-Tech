@@ -1,4 +1,4 @@
-// Digitale Puintuin V2: bootstraps the world from our cached Bioto data.
+// Biotopia: bootstraps the digital Puintuin from our cached Bioto data.
 import * as THREE from 'three';
 import { loadAll, loadHistory } from './data/api.js';
 import { TimeStore } from './data/timeline.js';
@@ -16,19 +16,21 @@ import { PlantLayer } from './plants/plant-layer.js';
 import { windUniforms } from './plants/archetypes.js';
 import { Picking } from './plants/picking.js';
 import { Butterfly } from './butterfly/butterfly.js';
+import { Bee, LOAD_MG } from './bee/bee.js';
+import { Hive } from './life/hive.js';
 import { Life } from './life/life.js';
 import { Hud } from './ui/hud.js';
 import { Panels } from './ui/panels.js';
 import { FlightHud } from './ui/flight-hud.js';
 import { esc, num } from './ui/format.js';
-import { loadPlantInfo, infoFor, plantHTML, sensorHTML } from './ui/plant-info.js';
+import { loadPlantInfo, infoFor, nameFor, plantHTML, sensorHTML, hiveHTML } from './ui/plant-info.js';
 
 const params = new URLSearchParams(location.search);
 const overlay = document.getElementById('overlay');
 
 function fail(message) {
   document.getElementById('loader').innerHTML =
-    `<div class="sprout">🥀</div><p><b>De tuin kon niet laden.</b></p><p>${esc(message)}</p>` +
+    `<div class="sprout">🥀</div><div class="loader-brand">Biotopia</div><p><b>De tuin kon niet laden.</b></p><p>${esc(message)}</p>` +
     '<p><a href="/">Naar het 2D-dashboard</a></p>';
   console.error(message);
 }
@@ -61,11 +63,14 @@ async function boot() {
   const layer = new PlantLayer(plants);
   scene.add(layer.group);
 
+  const hive = new Hive(world);
+  scene.add(hive.mesh);
   const atmosphere = new Atmosphere(engine, store, world, sky, ground);
   const life = new Life({ engine, world, atmosphere });
   const input = new Input();
   const orbit = new OrbitRig(engine, { limitRadius: world.radius });
   camera.position.set(7.5, 5.5, 10).multiplyScalar(world.radius / 4.6 * Math.max(1, 1 / camera.aspect) ** 0.75);
+  if (camera.position.length() > 18.5) camera.position.setLength(18.5); // stay inside the forest ring
   engine.setRig(params.has('fly') ? new FreeFlyRig(engine, input, world) : orbit);
   windUniforms.uWind.value = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1;
 
@@ -109,38 +114,54 @@ async function boot() {
     // A click on the backdrop closes it too.
     dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
   }
-  const introDlg = $('dlg-intro'), flyDlg = $('dlg-fly'), landDlg = $('dlg-land');
+  const introDlg = $('dlg-intro'), chooseDlg = $('dlg-choose'), landDlg = $('dlg-land');
+  const charDlg = { butterfly: $('dlg-fly'), bee: $('dlg-bee') };
+  // One controls table, shown in both character dialogs (keyboard or touch).
+  for (const box of document.querySelectorAll('[data-controls]')) box.append($('tpl-controls').content.cloneNode(true));
 
-  // --- Butterfly (player)
+  // --- Players: the butterfly explores, the bee has a job. Same flight core, own camera lens.
   const butterfly = new Butterfly({ engine, world, store, atmosphere, input });
-  const follow = new FollowRig(engine, butterfly, world);
-  const flightHud = new FlightHud(butterfly, input);
+  const bee = new Bee({ engine, world, store, atmosphere, input });
+  const players = { butterfly, bee };
+  const rigs = { butterfly: new FollowRig(engine, butterfly, world), bee: new FollowRig(engine, bee, world) };
+  Object.assign(rigs.bee, { distance: 0.075, minDist: 0.03, maxDist: 1.2, pitch: 0.25 }); // a smaller animal: closer camera
+  const LENS = { butterfly: { near: 0.004, fov: 62 }, bee: { near: 0.0025, fov: 68 } };
+  let player = butterfly;
+  const flightHud = new FlightHud(input, camera);
+  flightHud.setPlayer(player);
   const modeView = $('mode-view'), modeFly = $('mode-fly');
-  const setFlying = (on) => {
+
+  const setFlying = (on, kind = player.kind) => {
+    if (on && flying && kind !== player.kind) setFlying(false); // switch character
     if (on === flying) return;
     flying = on;
-    butterfly.controlled = on;
+    if (on) { player = players[kind]; flightHud.setPlayer(player); }
+    player.controlled = on;
     input.flightKeys = on;
     atmosphere.smallScale = on;
     document.body.classList.toggle('flying', on);
+    document.body.dataset.player = on ? player.kind : '';
     modeView.setAttribute('aria-pressed', String(!on));
     modeFly.setAttribute('aria-pressed', String(on));
     panels.setEnabled(!on);
     flightHud.show(on);
-    // Butterfly-eye lens: tiny near plane and a wider view make the flowers tower overhead.
-    camera.near = on ? 0.004 : 0.05;
-    camera.fov = on ? 62 : 45;
+    // Insect-eye lens: tiny near plane and a wider view make the flowers tower overhead.
+    const lens = LENS[player.kind];
+    camera.near = on ? lens.near : 0.05;
+    camera.fov = on ? lens.fov : 45;
     camera.updateProjectionMatrix();
     if (on) {
       orbit.controls.autoRotate = false;
       clearSelection();
       layer.setHover(null);
-      if (butterfly.state !== 'landed') butterfly.reset();
-      engine.setRig(follow);
-      flightHud.toast(`Zoek bloemen en land erop om nectar te drinken · nog ${butterfly.totalSpecies - butterfly.visited.size} soorten te ontdekken`);
+      if (player.state !== 'landed') player.reset();
+      engine.setRig(rigs[player.kind]);
+      flightHud.toast(player.kind === 'bee'
+        ? 'Vlieg naar de bloemen, zuig nectar en breng het naar de bijenkast'
+        : `Zoek bloemen en land erop · nog ${player.totalSpecies - player.visited.size} soorten te ontdekken`);
     } else {
       if (landDlg.open) landDlg.close();
-      orbit.controls.target.copy(butterfly.position).setY(Math.max(0.4, butterfly.position.y));
+      orbit.controls.target.copy(player.position).setY(Math.max(0.4, player.position.y));
       camera.position.copy(orbit.controls.target).add(new THREE.Vector3(2.2, 1.6, 2.2));
       engine.setRig(orbit);
     }
@@ -149,48 +170,88 @@ async function boot() {
   };
   hud.keysEnabled = () => !flying && !anyDialogOpen();
 
-  /** How the garden's current (real) weather feels to a butterfly, in one sentence. */
-  const flyingWeather = () => {
+  /** How the garden's current (real) weather feels to this animal, in one sentence. */
+  const flyingWeather = (kind) => {
     const st = atmosphere.state, v = getReading();
     const w = st.weather ? `${st.weather.icon} ${st.weather.text.toLowerCase()}` : '';
     const warmth = st.warmth ?? 1, rain = st.rain ?? 0;
+    const beeNote = kind === 'bee' && (rain > 0.2 || v.airT < 12) ? ' Bij dit weer blijven de meeste bijen in de kast: jij bent een dappere uitzondering.' : '';
     const verdict = rain > 0.4 ? 'Het regent: je vleugels worden zwaar en je raakt sneller moe.'
-      : warmth < 0.35 ? 'Het is koud: je vleugels zijn stijf. Land vaak om op te warmen en bij te tanken.'
+      : warmth < 0.35 ? 'Het is koud: vliegen kost veel energie. Land vaak om bij te tanken.'
       : warmth < 0.7 ? 'Een beetje fris: je vliegt, maar je energie raakt sneller op.'
       : 'Prima vliegweer!';
-    return `<strong>Nu in de tuin:</strong> ${esc(num(v.airT))} °C${w ? `, ${esc(w)}` : ''}. ${verdict}`;
+    return `<strong>Nu in de tuin:</strong> ${esc(num(v.airT))} °C${w ? `, ${esc(w)}` : ''}. ${verdict}${beeNote}`;
   };
 
-  const openFlyDialog = () => {
-    $('fly-now').innerHTML = flyingWeather();
-    $('fly-start').textContent = flying ? 'Verder vliegen' : 'Start met vliegen';
-    $('fly-cancel').textContent = flying ? 'Stop met vliegen' : 'Terug';
-    $('fly-controls').hidden = flightHud.touch;
-    $('fly-controls-touch').hidden = !flightHud.touch;
-    showDialog(flyDlg);
+  const openChooser = () => {
+    for (const b of chooseDlg.querySelectorAll('[data-char]')) b.setAttribute('aria-current', String(flying && b.dataset.char === player.kind));
+    showDialog(chooseDlg, chooseDlg.querySelector(`[data-char="${player.kind}"]`));
   };
-  $('fly-start').addEventListener('click', () => { flyDlg.close(); setFlying(true); });
-  $('fly-cancel').addEventListener('click', () => { flyDlg.close(); setFlying(false); });
-  modeFly.addEventListener('click', () => { if (!flying) openFlyDialog(); });
+  const openCharDialog = (kind) => {
+    const dlg = charDlg[kind];
+    dlg.querySelector('[data-now]').innerHTML = flyingWeather(kind);
+    const current = flying && kind === player.kind;
+    dlg.querySelector('[data-start]').textContent = current ? 'Verder vliegen' : 'Start met vliegen';
+    dlg.querySelector('[data-back]').textContent = current ? 'Stop met vliegen' : 'Andere keuze';
+    dlg.dataset.current = String(current);
+    dlg.querySelectorAll('.keys').forEach((el) => { el.hidden = flightHud.touch; });
+    dlg.querySelectorAll('.touch-keys').forEach((el) => { el.hidden = !flightHud.touch; });
+    showDialog(dlg);
+  };
+  for (const btn of chooseDlg.querySelectorAll('[data-char]')) {
+    btn.addEventListener('click', () => { chooseDlg.close(); openCharDialog(btn.dataset.char); });
+  }
+  for (const [kind, dlg] of Object.entries(charDlg)) {
+    dlg.querySelector('[data-start]').addEventListener('click', () => { dlg.close(); setFlying(true, kind); });
+    dlg.querySelector('[data-back]').addEventListener('click', () => {
+      dlg.close();
+      if (dlg.dataset.current === 'true') setFlying(false); else openChooser();
+    });
+  }
+  modeFly.addEventListener('click', openChooser);
   modeView.addEventListener('click', () => setFlying(false));
-  $('btn-help').addEventListener('click', () => (flying ? openFlyDialog() : showDialog(introDlg)));
+  $('btn-help').addEventListener('click', () => (flying ? openCharDialog(player.kind) : showDialog(introDlg)));
 
-  // Landing: the same info as the view mode, plus a fun fact.
-  butterfly.addEventListener('land', (e) => {
-    const { plant, sensor: onSensor, visit, controlled } = e.detail;
-    if (!flying || !controlled || anyDialogOpen()) return;
-    let html;
-    if (plant) html = plantHTML(plant.batch, infoFor(plantInfo, plant.batch), { headingId: 'land-title', funFact: true, visit });
-    else if (onSensor) html = sensorHTML({ headingId: 'land-title', now: getReading(), immersive: true });
-    else return;
+  const showLandDialog = (html, button = 'Verder vliegen') => {
     $('land-body').innerHTML = html;
+    landDlg.querySelector('.btn.primary').textContent = button;
     landDlg.scrollTop = 0;
     showDialog(landDlg);
+  };
+
+  // Landing: the same info as the view mode, plus a fun fact and what the plant means for you.
+  // The bee visits many flowers, so she only gets the full card for a species she hasn't seen yet.
+  for (const p of [butterfly, bee]) {
+    p.addEventListener('land', (e) => {
+      const { plant, sensor: onSensor, visit, controlled } = e.detail;
+      if (!flying || p !== player || !controlled || anyDialogOpen()) return;
+      if (plant && (p.kind === 'butterfly' || visit?.isNew)) {
+        showLandDialog(plantHTML(plant.batch, infoFor(plantInfo, plant.batch), { headingId: 'land-title', funFact: true, visit, player: p.kind }));
+      } else if (onSensor) showLandDialog(sensorHTML({ headingId: 'land-title', now: getReading(), immersive: true }));
+    });
+  }
+  bee.addEventListener('flower', (e) => {
+    if (!bee.controlled) return;
+    const { plant, empty, full, constant } = e.detail;
+    const name = esc(nameFor(plantInfo, plant.batch));
+    if (full) flightHud.toast('🍯 Je honingmaag is vol. Volg het kompas naar de bijenkast!');
+    else if (empty) flightHud.toast(`👃 Deze ${name} ruikt naar bij: net leeggedronken. Probeer een andere bloem.`);
+    else if (constant) flightHud.toast(`🌸 Bloemvast! Weer ${name}: je verzamelt sneller en bestuift de bloemen echt.`);
+  });
+  bee.addEventListener('collected', (e) => {
+    if (!bee.controlled) return;
+    const { gained, load } = e.detail;
+    flightHud.toast(`+${Math.round(gained * LOAD_MG)} mg nectar · honingmaag ${Math.round(load * 100)}%${load >= 0.999 ? ' · vol!' : ''}`, 2600);
+  });
+  bee.addEventListener('home', () => { if (bee.controlled) flightHud.toast('🏠 Thuis: even bijtanken. Ga nu nectar zoeken!'); });
+  bee.addEventListener('deliver', (e) => {
+    if (!bee.controlled || anyDialogOpen()) return;
+    showLandDialog(hiveHTML({ ...e.detail, headingId: 'land-title' }), 'Volgende vlucht');
   });
 
   window.addEventListener('keydown', (e) => {
     if (e.target.closest?.('input, select, textarea') || anyDialogOpen()) return;
-    if (e.code === 'KeyV') (flying ? setFlying(false) : openFlyDialog());
+    if (e.code === 'KeyV') (flying ? setFlying(false) : openChooser());
     if (e.key === 'Escape' && flying) setFlying(false);
   }, true);
 
@@ -201,6 +262,7 @@ async function boot() {
   engine.addSystem(atmosphere);
   engine.addSystem({ update: (dt) => sensor.update(dt, atmosphere.state.sample, atmosphere.state.night) });
   engine.addSystem(butterfly);
+  engine.addSystem(bee);
   engine.addSystem({ update: (dt) => { life.update(dt); engine.wake(); } }); // wildlife is always moving
   engine.addSystem(picking);
   engine.addSystem({ update: () => { hud.render(); flightHud.render(); } });
@@ -263,13 +325,14 @@ async function boot() {
     ...overlapReport(plants),
     ...layer.stats(),
   };
-  window.garden = { engine, store, world, plants, batches, layer, atmosphere, ground, life, quality, input, orbit, butterfly, follow, setFlying, panels, plantInfo, counts, THREE };
+  window.garden = { engine, store, world, plants, batches, layer, atmosphere, ground, life, quality, input, orbit, butterfly, bee, hive, rigs, setFlying, getPlayer: () => player, panels, plantInfo, counts, THREE };
   console.info('[garden] geladen', counts);
 
   engine.start();
   overlay.classList.add('gone');
   setTimeout(() => overlay.remove(), 700);
-  if (params.has('vlinder')) setFlying(true);
+  if (params.has('vlinder')) setFlying(true, 'butterfly');
+  else if (params.has('bij')) setFlying(true, 'bee');
   else if (params.get('intro') !== '0') setTimeout(() => showDialog(introDlg), 350);
 }
 

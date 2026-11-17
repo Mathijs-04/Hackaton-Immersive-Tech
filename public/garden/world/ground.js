@@ -93,11 +93,11 @@ function cloverGeometry() {
   return mergeGeometries(parts, false);
 }
 
-function blobGeometry(seed, n, colorFn) {
+function blobGeometry(seed, n, colorFn, detail = 1) {
   const rnd = seeded(seed);
   const parts = [];
   for (let i = 0; i < n; i++) {
-    let g = new THREE.IcosahedronGeometry(1, 1);
+    let g = new THREE.IcosahedronGeometry(1, detail);
     g.deleteAttribute('uv'); g.deleteAttribute('normal');
     g = mergeVertices(g);
     const p = g.attributes.position;
@@ -111,15 +111,15 @@ function blobGeometry(seed, n, colorFn) {
   return mergeGeometries(parts, false);
 }
 
-function treeGeometry() {
-  const rnd = seeded('tree');
+function treeGeometry(seed = 'tree', detail = 1) {
+  const rnd = seeded(seed);
   const bark = new THREE.Color('#4a3a2e');
   const trunk = new THREE.CylinderGeometry(0.025, 0.045, 0.55, 6, 1, true).translate(0, 0.275, 0);
   trunk.deleteAttribute('uv');
   const parts = [vColors(trunk, () => bark)];
   const lo = new THREE.Color('#3c5a2c'), hi = new THREE.Color('#7d9a48');
   for (let i = 0; i < 7; i++) {
-    let g = new THREE.IcosahedronGeometry(1, 1);
+    let g = new THREE.IcosahedronGeometry(1, detail);
     g.deleteAttribute('uv'); g.deleteAttribute('normal');
     g = mergeVertices(g);
     const p = g.attributes.position;
@@ -132,6 +132,48 @@ function treeGeometry() {
   return mergeGeometries(parts.map((g) => (g.index ? g.toNonIndexed() : g)), false);
 }
 
+/**
+ * Background scenery must never block the view: pixels closer than `dist` metres to the camera are
+ * dropped with a soft dither, so the orbit camera can sit among the trees and still see the garden.
+ */
+function fadeNearCamera(mat, dist = 4) {
+  mat.onBeforeCompile = (shader) => {
+    shader.fragmentShader = shader.fragmentShader.replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
+      float camD = length(vViewPosition);
+      float keep = smoothstep(${(dist * 0.6).toFixed(2)}, ${dist.toFixed(2)}, camD);
+      if (keep < fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453)) discard;`);
+  };
+  mat.customProgramCacheKey = () => `fadeNear${dist}`;
+  return mat;
+}
+
+/** Spruce-like conifer in a unit box: trunk plus three stacked cones. */
+function coniferGeometry() {
+  const bark = new THREE.Color('#4a3a2e'), lo = new THREE.Color('#1f3a22'), hi = new THREE.Color('#3f6a3a');
+  const parts = [vColors(new THREE.CylinderGeometry(0.03, 0.05, 0.3, 5, 1, true).translate(0, 0.15, 0), () => bark)];
+  [[0.5, 0.45, 0.2], [0.4, 0.4, 0.45], [0.28, 0.36, 0.68]].forEach(([r, h, y]) => {
+    const g = new THREE.ConeGeometry(r, h, 8, 1, true).translate(0, y + h / 2, 0);
+    parts.push(vColors(g, (v) => lo.clone().lerp(hi, Math.min(1, Math.max(0, (v.y - y) / h)) * 0.8)));
+  });
+  return mergeGeometries(parts.map((g) => { g.deleteAttribute('uv'); return g.index ? g.toNonIndexed() : g; }), false);
+}
+
+/** Fern: 7 arching fronds (unit size). */
+function fernGeometry() {
+  const rnd = seeded('fern');
+  const base = new THREE.Color('#2f5a24'), tip = new THREE.Color('#7fa650');
+  const parts = [];
+  for (let k = 0; k < 7; k++) {
+    const g = flatLeaf(1, 0.26, 0.05);
+    const p = g.attributes.position;
+    for (let i = 0; i < p.count; i++) { const x = p.getX(i); p.setY(i, p.getY(i) + 0.9 * x - 0.75 * x * x); } // arch up, then droop
+    g.computeVertexNormals();
+    g.applyMatrix4(new THREE.Matrix4().makeRotationY((k / 7) * Math.PI * 2 + rnd() * 0.4));
+    parts.push(vColors(g, (v) => base.clone().lerp(tip, Math.min(1, Math.hypot(v.x, v.z)))));
+  }
+  return mergeGeometries(parts, false);
+}
+
 export class Ground {
   constructor(world) {
     this.world = world;
@@ -141,11 +183,7 @@ export class Ground {
     // --- Lawn base (fades into fog)
     const lawnTex = lawnTexture();
     lawnTex.repeat.set(110, 110);
-    const lawnGeo = new THREE.CircleGeometry(160, 64).rotateX(-Math.PI / 2);
-    this.lawnMat = new THREE.MeshLambertMaterial({ map: lawnTex });
-    const lawn = new THREE.Mesh(lawnGeo, this.lawnMat);
-    lawn.receiveShadow = true;
-    this.group.add(lawn);
+    this.group.add(this.makeLawn(lawnTex));
 
     // --- Soil bed in the polygon shape
     const shape = new THREE.Shape(world.polygon.map(([x, z]) => new THREE.Vector2(x, -z)));
@@ -163,7 +201,7 @@ export class Ground {
     this.group.add(this.makeRubble());
     this.grass = this.makeGrass();
     this.group.add(this.grass);
-    this.group.add(this.makeClover(), this.makeFallenLeaves(), this.makeGravel(), this.makeHedge(), this.makeTrees());
+    this.group.add(this.makeClover(), this.makeFallenLeaves(), this.makeGravel(), this.makeHedge(), this.makeForest(), this.makeUndergrowth());
   }
 
   makeRubble() {
@@ -307,19 +345,101 @@ export class Ground {
     return mesh;
   }
 
-  makeTrees() {
-    const rnd = seeded('trees');
-    const mat = new THREE.MeshLambertMaterial({ vertexColors: true });
-    const n = 16;
-    const mesh = new THREE.InstancedMesh(treeGeometry(), mat, n);
-    const tints = ['#ffffff', '#f6e6a8', '#f0c890', '#e9f0d8', '#ffd9a0']; // some autumn colour
-    for (let i = 0; i < n; i++) {
-      const a = (i / n) * Math.PI * 2 + rnd() * 0.3, r = rnd.range(19, 34);
-      const h = rnd.range(6, 9.5);
-      setInstance(mesh, i, Math.cos(a) * r, 0, Math.sin(a) * r, 0, rnd() * 6.3, 0, h * 0.9, h, h * 0.9, rnd.pick(tints));
+  // ------------------------------------------------------------------ forest around the garden
+  // Instanced and shadow-free: ~6 draw calls and ~70k triangles for ~200 trees and ~500 plants.
+
+  /** Lawn → mossy forest floor: a ring mesh with more rings near the garden, coloured per vertex. */
+  makeLawn(lawnTex) {
+    const geo = new THREE.RingGeometry(0.01, 1, 72, 26);
+    const p = geo.attributes.position, uv = geo.attributes.uv, col = new Float32Array(p.count * 3);
+    const lawn = new THREE.Color('#ffffff'), moss = new THREE.Color('#9fae7a'), litter = new THREE.Color('#8c8660'), c = new THREE.Color();
+    for (let i = 0; i < p.count; i++) {
+      const x = p.getX(i), y = p.getY(i), t = Math.hypot(x, y);
+      const r = 160 * t * t; // squeeze rings towards the centre, where detail matters
+      const k = r / (t || 1);
+      p.setXY(i, x * k, y * k);
+      uv.setXY(i, 0.5 + (x * k) / 320, 0.5 + (y * k) / 320);
+      c.copy(lawn).lerp(moss, Math.min(1, Math.max(0, (r - 12) / 6))).lerp(litter, Math.min(1, Math.max(0, (r - 22) / 14)) * 0.7);
+      col.set([c.r, c.g, c.b], i * 3);
     }
-    mesh.computeBoundingSphere();
+    geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    geo.rotateX(-Math.PI / 2);
+    this.lawnMat = new THREE.MeshLambertMaterial({ map: lawnTex, vertexColors: true });
+    const mesh = new THREE.Mesh(geo, this.lawnMat);
+    mesh.receiveShadow = true;
     return mesh;
+  }
+
+  /** Random spots in a ring, kept apart from each other and away from the hedge gap's sightline. */
+  forestSpots(rnd, n, r0, r1, minGap, taken) {
+    const out = [];
+    for (let tries = 0; out.length < n && tries < n * 30; tries++) {
+      const a = rnd() * Math.PI * 2, r = r0 + (r1 - r0) * Math.sqrt(rnd());
+      const x = Math.cos(a) * r, z = Math.sin(a) * r;
+      if (taken.some(([tx, tz, g]) => Math.hypot(tx - x, tz - z) < Math.max(g, minGap))) continue;
+      taken.push([x, z, minGap]);
+      out.push([x, z, a, r]);
+    }
+    return out;
+  }
+
+  makeForest() {
+    const rnd = seeded('forest');
+    const group = new THREE.Group();
+    const taken = [];
+    const mat = fadeNearCamera(new THREE.MeshLambertMaterial({ vertexColors: true }), 5);
+    // November in the Netherlands: mostly green with plenty of autumn colour.
+    const tints = ['#ffffff', '#ffffff', '#eef3dc', '#f6e6a8', '#f0c890', '#ffd9a0', '#e3b06a', '#dfe9c8'];
+    const deciduous = (detail, n, r0, r1, gap, hMin, hMax) => {
+      const spots = this.forestSpots(rnd, n, r0, r1, gap, taken);
+      const mesh = new THREE.InstancedMesh(treeGeometry(`tree${detail}`, detail), mat, spots.length);
+      spots.forEach(([x, z], i) => {
+        const h = rnd.range(hMin, hMax), w = h * rnd.range(0.75, 1.05);
+        setInstance(mesh, i, x, 0, z, 0, rnd() * 6.3, 0, w, h, w, rnd.pick(tints));
+      });
+      mesh.computeBoundingSphere();
+      return mesh;
+    };
+    // The forest starts beyond the orbit camera's reach (OrbitRig maxDistance), so it frames the garden
+    // without ever standing between the camera and the plants.
+    group.add(deciduous(1, 50, 20.5, 32, 2.6, 6, 10));   // close: more detail
+    group.add(deciduous(0, 110, 30, 66, 3.2, 7, 13));    // far: cheap
+    // Conifers mixed in (dark evergreen silhouettes give the forest depth).
+    const cSpots = this.forestSpots(rnd, 70, 21, 64, 2.6, taken);
+    const conifers = new THREE.InstancedMesh(coniferGeometry(), mat, cSpots.length);
+    cSpots.forEach(([x, z], i) => {
+      const h = rnd.range(7, 14);
+      setInstance(conifers, i, x, 0, z, 0, rnd() * 6.3, 0, h * rnd.range(0.35, 0.45), h, h * rnd.range(0.35, 0.45), rnd() < 0.3 ? '#dfe8d6' : '#ffffff');
+    });
+    conifers.computeBoundingSphere();
+    group.add(conifers);
+    return group;
+  }
+
+  makeUndergrowth() {
+    const rnd = seeded('undergrowth');
+    const group = new THREE.Group();
+    const mat = fadeNearCamera(new THREE.MeshLambertMaterial({ vertexColors: true }), 3);
+    // Shrubs: low, rounded, in loose clumps just outside the hedge and between the trees.
+    const lo = new THREE.Color('#2f4f26'), hi = new THREE.Color('#6f9244');
+    const shrubs = new THREE.InstancedMesh(blobGeometry('shrubblob', 4, (v) => lo.clone().lerp(hi, Math.min(1, v.y)), 0), mat, 170);
+    for (let i = 0; i < shrubs.count; i++) {
+      const a = rnd() * Math.PI * 2, r = 13.3 + Math.pow(rnd(), 1.3) * 26;
+      const s = rnd.range(0.6, 1.5) * (r < 16 ? 0.9 : 1.2);
+      setInstance(shrubs, i, Math.cos(a) * r, -0.05, Math.sin(a) * r, 0, rnd() * 6.3, 0, s * rnd.range(1, 1.6), s * rnd.range(0.6, 1), s, rnd() < 0.25 ? '#e8dfae' : '#ffffff');
+    }
+    shrubs.computeBoundingSphere();
+    // Ferns: arching fronds along the forest edge and inside it.
+    const fernMat = fadeNearCamera(new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide }), 2);
+    const ferns = new THREE.InstancedMesh(fernGeometry(), fernMat, 420);
+    for (let i = 0; i < ferns.count; i++) {
+      const a = rnd() * Math.PI * 2, r = 11.6 + Math.pow(rnd(), 1.2) * 20;
+      const s = rnd.range(0.35, 0.8);
+      setInstance(ferns, i, Math.cos(a) * r, 0, Math.sin(a) * r, 0, rnd() * 6.3, 0, s, s * rnd.range(0.8, 1.2), s, rnd.pick(['#ffffff', '#f2f6e2', '#e8d9a0', '#d8c080']));
+    }
+    ferns.computeBoundingSphere();
+    group.add(shrubs, ferns);
+    return group;
   }
 
   /** Fraction of grass tufts drawn (adaptive quality). */

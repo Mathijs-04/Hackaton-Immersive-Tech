@@ -1,8 +1,10 @@
-// Wildlife: background butterflies, bumblebees, beetles and birds.
+// Wildlife: butterflies, bumblebees, honeybee foragers, dragonflies, ladybirds and beetles, snails,
+// mice, bats and birds.
 // Behaviour follows the data through atmosphere.state:
 //   warmth (air temperature + direct sun), day, rain → whether insects fly, how fast, how many birds.
 import * as THREE from 'three';
-import { Swarm, beeBody, beeWing, beetleBody, birdBody, birdWing, beeHotel } from './models.js';
+import { Swarm, beeBody, beeWing, beetleBody, birdBody, birdWing, beeHotel, dragonflyBody, dragonflyWing, snailBody, mouseBody, batBody, batWing } from './models.js';
+import { honeybeeBody, honeybeeWing, wingMat as beeWingMat } from '../bee/model.js';
 import { wingGeometry, bodyGeometry, wingMaterial, PALETTES } from '../butterfly/model.js';
 import { windOffset } from '../plants/archetypes.js';
 import { mulberry32 } from '../world/random.js';
@@ -47,6 +49,32 @@ export class Life {
     this.makeBees();
     this.makeBeetles();
     this.makeBirds();
+    this.makeHoneybees();
+    this.makeDragonflies();
+    this.makeSnails();
+    this.makeMice();
+    this.makeBats();
+  }
+
+  /** Steer a small flyer towards `goal` (shared by foragers). Returns the remaining distance. */
+  steer(a, goal, dt, isBee) {
+    const to = _w.copy(goal).sub(a.pos);
+    const dist = to.length();
+    const speed = a.speed * (0.5 + 0.5 * this.warmth);
+    to.normalize().multiplyScalar(speed);
+    const wf = isBee ? 3 : 1.3, wobble = Math.min(1, dist);
+    to.x += Math.sin(a.phase * wf * 1.7) * speed * 0.35 * wobble;
+    to.z += Math.cos(a.phase * wf * 1.3) * speed * 0.35 * wobble;
+    to.y += Math.sin(a.phase * wf * 2.3) * speed * 0.3 * wobble + (dist > 1 ? 0.12 : 0);
+    a.vel.lerp(to, damp(isBee ? 4 : 2.5, dt));
+    a.pos.addScaledVector(a.vel, dt);
+    const ground = this.world.groundHeight(a.pos.x, a.pos.z) + 0.03;
+    if (a.pos.y < ground) { a.pos.y = ground; a.vel.y = Math.abs(a.vel.y); }
+    if (Math.hypot(a.vel.x, a.vel.z) > 0.02) a.yaw = Math.atan2(-a.vel.x, -a.vel.z);
+    a.pitch = clamp(-a.vel.y * 0.8, -0.5, 0.5);
+    a.roll = Math.sin(a.phase * 2) * 0.15;
+    a.wing = 0.2 + 0.5 * Math.abs(Math.sin(a.phase * 90));
+    return dist;
   }
 
   /** Point just outside the bed edge in direction `ang`. */
@@ -166,6 +194,230 @@ export class Life {
     if (active) a.settling = false;
   }
 
+  // ------------------------------------------------------------------ honeybee foragers (from the hive)
+  // They fly out in good weather, visit a few flowers (leaving scent marks the player's bee can
+  // notice), then fly home. Honeybees need more warmth than bumblebees (~12 °C and dry).
+
+  makeHoneybees() {
+    const hive = this.world.hive;
+    this.foragers = [];
+    if (!hive) return;
+    const rnd = mulberry32(11);
+    this.foragers = Array.from({ length: 10 }, () => ({
+      pos: hive.inside.clone(), vel: new THREE.Vector3(), yaw: 0, pitch: 0, roll: 0, wing: 0, phase: rnd() * 10,
+      scale: 0, state: 'home', timer: rnd() * 10, visits: 0, trip: 0, target: null, speed: 0.7, threshold: 0.38 + rnd() * 0.12,
+    }));
+    this.fSwarm = new Swarm({
+      count: this.foragers.length, body: honeybeeBody(), bodyMat: new THREE.MeshLambertMaterial({ vertexColors: true }),
+      wingL: honeybeeWing(true), wingR: honeybeeWing(false), wingMat: beeWingMat(), hingeY: 0.0004, shadows: false,
+    });
+    this.group.add(this.fSwarm.group);
+  }
+
+  /** Random flower head without a fresh scent mark (bees avoid flowers another bee just emptied). */
+  freshHead(near, maxDist) {
+    const now = performance.now();
+    for (let i = 0; i < 16; i++) {
+      const h = this.randomHead(near, maxDist);
+      if ((h.head.scentUntil ?? 0) < now) return h;
+    }
+    return this.randomHead(near, maxDist);
+  }
+
+  updateForager(a, dt, active) {
+    const hive = this.world.hive;
+    a.phase += dt;
+    if (a.state === 'home') {
+      a.scale = 0;
+      a.timer -= dt;
+      if (a.timer <= 0 && active) {
+        a.state = 'fly'; a.scale = 1; a.visits = 0; a.trip = 3 + Math.floor(this.rnd() * 3);
+        a.pos.copy(hive.inside); a.vel.set(0, 0.1, 0);
+        a.target = this.freshHead(hive.entrance, 6);
+      }
+      return;
+    }
+    if (a.state === 'sit') {
+      this.headPos(a.target, a.pos);
+      a.timer -= dt;
+      a.wing = 0.05;
+      a.pitch = 0.15; a.roll = 0;
+      if (a.timer <= 0) {
+        a.target.head.scentUntil = performance.now() + 20e3; // scent mark
+        a.visits++;
+        a.state = 'fly';
+        a.target = !active || a.visits >= a.trip ? { home: true } : this.freshHead(a.pos, 2);
+        a.vel.set(0, 0.2, 0);
+      }
+      return;
+    }
+    const dist = this.steer(a, a.target.home ? hive.inside : this.headPos(a.target, _v), dt, true);
+    if (dist < 0.02) {
+      if (a.target.home) { a.state = 'home'; a.timer = 4 + this.rnd() * 8; return; }
+      a.state = 'sit'; a.timer = 1.2 + this.rnd() * 2;
+    }
+    if (!active && !a.target.home) a.target = { home: true };
+  }
+
+  // ------------------------------------------------------------------ dragonflies
+  // Warm, sunny, dry days only. Hover, dart, hover; when it cools down they perch on a tall plant.
+
+  makeDragonflies() {
+    const rnd = mulberry32(12);
+    const tall = this.heads.filter((h) => h.head.y > 0.7);
+    this.perches = tall.length ? tall : this.heads;
+    const tints = ['#3f8fd8', '#6ab04c', '#d0482c'];
+    this.dragonflies = tints.map((tint) => ({
+      tint, pos: new THREE.Vector3(), goal: new THREE.Vector3(), vel: new THREE.Vector3(),
+      yaw: rnd() * 6.3, pitch: 0, roll: 0, wing: 0, phase: rnd() * 10, scale: 1,
+      state: 'perch', timer: rnd() * 3, perch: this.perches[Math.floor(rnd() * this.perches.length)],
+    }));
+    this.dSwarm = new Swarm({
+      count: this.dragonflies.length, body: dragonflyBody(), bodyMat: new THREE.MeshLambertMaterial({ vertexColors: true }),
+      wingL: dragonflyWing(true), wingR: dragonflyWing(false),
+      wingMat: new THREE.MeshLambertMaterial({ color: '#e8f2ff', transparent: true, opacity: 0.35, side: THREE.DoubleSide, depthWrite: false }),
+      hingeY: 0.002, shadows: false,
+    });
+    this.dragonflies.forEach((d, i) => this.dSwarm.setColor(i, d.tint));
+    this.group.add(this.dSwarm.group);
+  }
+
+  updateDragonfly(d, dt, active) {
+    d.phase += dt;
+    if (d.state === 'perch') {
+      this.headPos(d.perch, d.pos);
+      d.pos.y += 0.01;
+      d.wing = 0; d.pitch = 0; d.roll = 0;
+      d.timer -= dt;
+      if (active && d.timer <= 0) { d.state = 'hover'; d.timer = 0.3; d.goal.copy(d.pos).setY(d.pos.y + 0.3); }
+      return;
+    }
+    if (!active) { d.state = 'return'; }
+    const goal = d.state === 'return' ? this.headPos(d.perch, _v).setY(_v.y + 0.01) : d.goal;
+    const to = _w.copy(goal).sub(d.pos), dist = to.length();
+    const dart = d.state === 'dart' || d.state === 'return';
+    // Darting: fast and straight. Hovering: tiny drift on the spot.
+    if (dart) d.vel.lerp(to.normalize().multiplyScalar(Math.min(2.4, dist * 5)), damp(6, dt));
+    else d.vel.set(Math.sin(d.phase * 3) * 0.02, Math.sin(d.phase * 2.2) * 0.015, Math.cos(d.phase * 2.7) * 0.02);
+    d.pos.addScaledVector(d.vel, dt);
+    if (dart && Math.hypot(d.vel.x, d.vel.z) > 0.1) d.yaw = Math.atan2(-d.vel.x, -d.vel.z);
+    d.pitch = 0; d.roll = dart ? Math.sin(d.phase * 5) * 0.1 : 0;
+    d.wing = 0.1 + 0.25 * Math.sin(d.phase * 70);
+    if (d.state === 'return' && dist < 0.02) { d.state = 'perch'; d.timer = 2 + this.rnd() * 3; return; }
+    if (d.state === 'dart' && dist < 0.05) { d.state = 'hover'; d.timer = 0.6 + this.rnd() * 2; }
+    if (d.state === 'hover' && (d.timer -= dt) <= 0) {
+      const a = this.rnd() * Math.PI * 2, r = Math.sqrt(this.rnd()) * this.world.radius * 0.9;
+      d.goal.set(Math.cos(a) * r, BED_HEIGHT + 0.5 + this.rnd() * 1.1, Math.sin(a) * r);
+      d.state = 'dart';
+    }
+  }
+
+  // ------------------------------------------------------------------ snails
+  // They love damp weather and the night; in dry sunny weather they stay in their shells.
+
+  makeSnails() {
+    const rnd = mulberry32(13);
+    this.snails = Array.from({ length: 7 }, (_, i) => {
+      let x, z;
+      do { const a = rnd() * 6.3, r = this.world.radius * (i < 4 ? Math.sqrt(rnd()) : 1 + rnd() * 0.15); x = Math.cos(a) * r; z = Math.sin(a) * r; }
+      while (i < 4 && !this.world.isInside(x, z, 0.15));
+      return { pos: new THREE.Vector3(x, this.world.groundHeight(x, z), z), yaw: rnd() * 6.3, phase: rnd() * 10, turn: 0, scale: 0.8 + rnd() * 0.5, pitch: 0, roll: 0, wing: 0 };
+    });
+    this.snailSwarm = new Swarm({ count: this.snails.length, body: snailBody(), bodyMat: new THREE.MeshLambertMaterial({ vertexColors: true }) });
+    this.snails.forEach((s, i) => this.snailSwarm.setColor(i, '#ffffff'));
+    this.group.add(this.snailSwarm.group);
+  }
+
+  updateSnail(s, dt, wet) {
+    s.phase += dt;
+    if (wet < 0.3) return; // tucked into its shell
+    const speed = 0.0035 * wet; // ~3 mm/s at best: real snail pace
+    s.turn += (Math.sin(s.phase * 0.21) * 0.5 - s.turn) * damp(0.5, dt);
+    s.yaw += s.turn * dt;
+    const nx = s.pos.x - Math.sin(s.yaw) * speed * dt, nz = s.pos.z - Math.cos(s.yaw) * speed * dt;
+    if (Math.hypot(nx, nz) > this.world.radius + 1.2) s.yaw += Math.PI * 0.5 * dt * 4;
+    else { s.pos.x = nx; s.pos.z = nz; }
+    s.pos.y = this.world.groundHeight(s.pos.x, s.pos.z);
+  }
+
+  // ------------------------------------------------------------------ mice
+  // Wood mice come out at dusk and at night: dash, freeze, sniff, dash. By day they're in their holes.
+
+  makeMice() {
+    const rnd = mulberry32(14);
+    this.mice = Array.from({ length: 3 }, (_, i) => {
+      const hole = this.edgePoint((i / 3) * Math.PI * 2 + 1.1, 0.25);
+      return { hole, pos: new THREE.Vector3(hole.x, 0, hole.z), goal: new THREE.Vector3(), yaw: 0, pitch: 0, roll: 0, wing: 0, phase: rnd() * 10,
+        scale: 0, state: 'hole', timer: rnd() * 6 };
+    });
+    this.mouseSwarm = new Swarm({ count: this.mice.length, body: mouseBody(), bodyMat: new THREE.MeshLambertMaterial({ vertexColors: true }) });
+    this.group.add(this.mouseSwarm.group);
+  }
+
+  updateMouse(m, dt, active) {
+    m.phase += dt;
+    m.timer -= dt;
+    if (m.state === 'hole') {
+      m.scale += (0 - m.scale) * damp(8, dt);
+      if (active && m.timer <= 0) { m.state = 'pause'; m.timer = 1; m.pos.set(m.hole.x, 0, m.hole.z); }
+      return;
+    }
+    m.scale += (1 - m.scale) * damp(8, dt);
+    if (m.state === 'pause') {
+      m.pitch = Math.sin(m.phase * 14) * 0.06; // sniffing
+      if (m.timer > 0) return;
+      const home = !active || this.rnd() < 0.15;
+      if (home) m.goal.set(m.hole.x, 0, m.hole.z);
+      else {
+        const a = this.rnd() * Math.PI * 2, r = this.world.radius * (0.4 + this.rnd() * 0.75);
+        m.goal.set(Math.cos(a) * r, 0, Math.sin(a) * r);
+      }
+      m.home = home;
+      m.state = 'run';
+    }
+    const dx = m.goal.x - m.pos.x, dz = m.goal.z - m.pos.z, dist = Math.hypot(dx, dz);
+    const step = Math.min(dist, 0.55 * dt); // short sprints
+    m.pos.x += (dx / (dist || 1)) * step; m.pos.z += (dz / (dist || 1)) * step;
+    m.pos.y = this.world.groundHeight(m.pos.x, m.pos.z) + Math.abs(Math.sin(m.phase * 22)) * 0.004;
+    m.yaw = Math.atan2(-dx, -dz);
+    m.pitch = 0;
+    // Mice run in short bursts: stop now and then, even halfway.
+    if (dist < 0.02 || this.rnd() < dt * 0.4) {
+      if (m.home && dist < 0.02) { m.state = 'hole'; m.timer = 3 + this.rnd() * 8; return; }
+      m.state = 'pause'; m.timer = 0.4 + this.rnd() * 2.5;
+    }
+  }
+
+  // ------------------------------------------------------------------ bats
+  // Pipistrelles hunt insects at night when it's dry and not too cold: fast, jinking loops.
+
+  makeBats() {
+    const rnd = mulberry32(15);
+    this.bats = Array.from({ length: 3 }, (_, i) => ({
+      pos: new THREE.Vector3(), yaw: 0, pitch: 0, roll: 0, wing: 0, phase: rnd() * 10, scale: 0,
+      angle: rnd() * 6.3, radius: 2.5 + rnd() * 4, height: 1.8 + rnd() * 2.5, dir: i % 2 ? 1 : -1, order: i / 3,
+    }));
+    this.batSwarm = new Swarm({
+      count: this.bats.length, body: batBody(), bodyMat: new THREE.MeshLambertMaterial({ vertexColors: true }),
+      wingL: batWing(true), wingR: batWing(false), wingMat: new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide }), hingeY: 0.002,
+    });
+    this.group.add(this.batSwarm.group);
+  }
+
+  updateBat(b, dt, presence) {
+    b.phase += dt;
+    b.angle += (4 / b.radius) * b.dir * dt;
+    const jx = Math.sin(b.phase * 2.3) * 0.8, jz = Math.cos(b.phase * 1.9) * 0.8; // jinks after insects
+    const cx = Math.sin(b.phase * 0.07) * 2, cz = Math.cos(b.phase * 0.05) * 2;
+    b.pos.set(cx + Math.cos(b.angle) * b.radius + jx, b.height + Math.sin(b.phase * 1.7) * 0.6, cz + Math.sin(b.angle) * b.radius + jz);
+    const tx = -Math.sin(b.angle) * b.dir, tz = Math.cos(b.angle) * b.dir;
+    b.yaw = Math.atan2(-tx, -tz);
+    b.roll = -0.4 * b.dir + Math.sin(b.phase * 3) * 0.2;
+    b.wing = Math.sin(b.phase * 50) * 0.8;
+    const target = b.order < presence ? 1 : 0;
+    b.scale += (target - b.scale) * damp(1.2, dt);
+  }
+
   // ------------------------------------------------------------------ beetles
 
   makeBeetles() {
@@ -175,6 +427,10 @@ export class Life {
       { tint: '#d8261c', scale: 0.9, speed: 0.025 },
       { tint: '#e8a020', scale: 0.9, speed: 0.022 }, // yellow-orange ladybird
       { tint: '#d8261c', scale: 1.1, speed: 0.025 },
+      { tint: '#d8261c', scale: 0.95, speed: 0.028 },
+      { tint: '#c81e18', scale: 1.0, speed: 0.024 },
+      { tint: '#e8a020', scale: 0.85, speed: 0.026 },
+      { tint: '#d8261c', scale: 1.05, speed: 0.025 },
       { tint: '#1e2a24', scale: 1.8, speed: 0.04 },  // loopkever (ground beetle)
       { tint: '#232028', scale: 1.6, speed: 0.04 },
       { tint: '#2a3a2a', scale: 1.7, speed: 0.035 },
@@ -262,6 +518,27 @@ export class Life {
     const presence = clamp((st.day ?? 1) * 1.2 - 0.2, 0, 1) * (1 - 0.6 * (st.rain ?? 0));
     this.birds.forEach((b, i) => { this.updateBird(b, dt, presence); this.birdSwarm.set(i, b); });
     this.birdSwarm.commit();
+
+    // Honeybees need it warmer than bumblebees (~12 °C plus some sun) and dry.
+    if (this.fSwarm) {
+      this.foragers.forEach((a, i) => { this.updateForager(a, dt, flying && this.warmth > a.threshold); this.fSwarm.set(i, a); });
+      this.fSwarm.commit();
+    }
+    const day = st.day ?? 1, rain = st.rain ?? 0, airT = st.sample.airT;
+    const dragonWeather = day > 0.5 && this.warmth > 0.5 && rain < 0.15;
+    this.dragonflies.forEach((d, i) => { this.updateDragonfly(d, dt, dragonWeather); this.dSwarm.set(i, d); });
+    this.dSwarm.commit();
+    // Snails: damp air, rain or night bring them out.
+    const wet = clamp(Math.max((st.humN ?? 0) * 0.8, rain * 1.5, (1 - day) * 0.8, (st.wetN ?? 0) * 0.6), 0, 1);
+    this.snails.forEach((s, i) => { this.updateSnail(s, dt, wet); this.snailSwarm.set(i, s); });
+    this.snailSwarm.commit();
+    const mouseTime = day < 0.55 && rain < 0.6;
+    this.mice.forEach((m, i) => { this.updateMouse(m, dt, mouseTime); this.mouseSwarm.set(i, m); });
+    this.mouseSwarm.commit();
+    // Bats: dark, above ~6 °C (their insects fly), not in real rain.
+    const batPresence = day < 0.2 && airT > 6 && rain < 0.35 ? 1 : 0;
+    this.bats.forEach((b, i) => { this.updateBat(b, dt, batPresence); this.batSwarm.set(i, b); });
+    this.batSwarm.commit();
   }
 
   /** How many critters are out and about (for diagnostics). */
@@ -271,6 +548,11 @@ export class Life {
       beesOut: this.bees.filter((a) => a.state !== 'home').length,
       beetles: this.beetles.length,
       birdsVisible: this.birds.filter((b) => b.scale > 0.5).length,
+      honeybeesOut: this.foragers.filter((a) => a.state !== 'home').length,
+      dragonfliesFlying: this.dragonflies.filter((d) => d.state !== 'perch').length,
+      snails: this.snails.length,
+      miceOut: this.mice.filter((m) => m.state !== 'hole').length,
+      batsOut: this.bats.filter((b) => b.scale > 0.5).length,
     };
   }
 }

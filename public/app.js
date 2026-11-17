@@ -36,7 +36,7 @@ function renderReadings(garden) {
   const r = [...garden.readings].sort((a, b) => a.datetime.localeCompare(b.datetime));
   const last = r.at(-1), prev = r.at(-2) || {};
   const labels = r.map((x) => fmtTime(x.datetime));
-  $('title').textContent = `${garden.name} · Plantenluisteraar`;
+  $('title').textContent = `Biotopia · ${garden.name}`;
   $('status').textContent = `Laatste meting: ${fmtTime(last.datetime)} · ${r.length} uurwaarden · data lokaal opgeslagen, max. 1× per uur ververst`;
   $('kpis').innerHTML =
     kpi('Lucht', last.air?.temperature, '°C', prev.air?.temperature) +

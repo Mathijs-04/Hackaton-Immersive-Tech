@@ -15,7 +15,7 @@ export class OrbitRig {
     c.enableDamping = true;
     c.dampingFactor = 0.08;
     c.minDistance = 1.2;
-    c.maxDistance = 28;
+    c.maxDistance = 19; // the forest starts at ~20 m (world/ground.js)
     c.maxPolarAngle = 1.48; // never look from below the ground
     c.autoRotate = !matchMedia('(prefers-reduced-motion: reduce)').matches;
     c.autoRotateSpeed = 0.35;

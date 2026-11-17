@@ -1,18 +1,28 @@
-// Flight HUD: energy, warmth, species collection, status, toasts, and touch controls.
+// Flight HUD for the current character (butterfly or bee): energy, warmth, species collection,
+// status, toasts, touch controls. The bee also gets a honey-stomach meter, the delivered total
+// and a compass that points to the hive.
 const $ = (id) => document.getElementById(id);
 
 export class FlightHud {
-  constructor(butterfly, input) {
-    this.b = butterfly;
+  constructor(input, camera) {
     this.input = input;
+    this.camera = camera;
+    this.b = null;
     this.el = $('flight');
     this.toastEl = $('toast');
     this.touchEl = $('touch-controls');
     this.touch = matchMedia('(pointer: coarse)').matches;
     this.last = '';
-    $('fl-name').textContent = `🦋 ${butterfly.name}`;
-    // New species are celebrated in the landing popup (see main.js), not in a toast.
+    this.fwd = { x: 0, z: 0 };
     this.setupTouch();
+  }
+
+  setPlayer(p) {
+    this.b = p;
+    this.last = '';
+    $('fl-name').textContent = `${p.kind === 'bee' ? '🐝' : '🦋'} ${p.name}`;
+    $('bee-row').hidden = p.kind !== 'bee';
+    this.el.classList.toggle('is-bee', p.kind === 'bee');
   }
 
   show(on) {
@@ -21,7 +31,7 @@ export class FlightHud {
     if (!on) this.resetTouch();
   }
 
-  toast(html) {
+  toast(html, ms = 4200) {
     const t = this.toastEl;
     t.innerHTML = html;
     t.hidden = false;
@@ -30,14 +40,27 @@ export class FlightHud {
     this.toastTimer = setTimeout(() => {
       t.classList.add('out');
       setTimeout(() => { t.hidden = true; }, 400);
-    }, 4200);
+    }, ms);
+  }
+
+  /** Direction to the hive relative to where the camera looks: radians, 0 = straight ahead. */
+  hiveBearing() {
+    const hive = this.b.world.hive, p = this.b.pos;
+    const v = this.camera.getWorldDirection(this._d || (this._d = this.camera.position.clone()));
+    const camAng = Math.atan2(v.x, -v.z);
+    const toAng = Math.atan2(hive.entrance.x - p.x, -(hive.entrance.z - p.z));
+    let d = toAng - camAng;
+    d = Math.atan2(Math.sin(d), Math.cos(d));
+    return { angle: d, dist: Math.hypot(hive.entrance.x - p.x, hive.entrance.z - p.z) };
   }
 
   /** Called every frame; only touches the DOM when something visible changed. */
   render() {
-    if (this.el.hidden) return;
-    const b = this.b;
-    const key = `${Math.round(b.energy * 50)}|${Math.round(b.warmth * 50)}|${b.visited.size}|${b.statusText}`;
+    if (this.el.hidden || !this.b) return;
+    const b = this.b, bee = b.kind === 'bee';
+    const bear = bee ? this.hiveBearing() : null;
+    const key = `${Math.round(b.energy * 50)}|${Math.round(b.warmth * 50)}|${b.visited.size}|${b.statusText}` +
+      (bee ? `|${Math.round(b.load * 50)}|${b.delivered}|${Math.round(bear.angle * 18)}|${Math.round(bear.dist * 5)}` : '');
     if (key === this.last) return;
     this.last = key;
     const pct = (v) => `${Math.round(v * 100)}%`;
@@ -49,6 +72,18 @@ export class FlightHud {
     $('m-warmth').setAttribute('aria-valuenow', Math.round(b.warmth * 100));
     $('fl-visits').textContent = `${b.visited.size}/${b.totalSpecies}`;
     $('fl-status').textContent = b.statusText;
+    if (bee) {
+      $('fl-load').style.width = pct(b.load);
+      $('m-load').setAttribute('aria-valuenow', Math.round(b.load * 100));
+      $('m-load').classList.toggle('full', b.full);
+      $('fl-delivered').textContent = `${b.delivered} mg`;
+      const deg = Math.round(bear.angle * 180 / Math.PI);
+      $('fl-arrow').style.transform = `rotate(${deg}deg)`;
+      const side = Math.abs(deg) < 30 ? 'recht vooruit' : Math.abs(deg) > 150 ? 'achter je' : deg > 0 ? 'rechts' : 'links';
+      $('fl-compass').setAttribute('aria-label', `Bijenkast: ${side}, ${bear.dist.toFixed(1).replace('.', ',')} meter`);
+      $('fl-dist').textContent = `${bear.dist < 1 ? Math.round(bear.dist * 100) + ' cm' : bear.dist.toFixed(1).replace('.', ',') + ' m'}`;
+      $('fl-compass').classList.toggle('urgent', b.full);
+    }
   }
 
   setupTouch() {
