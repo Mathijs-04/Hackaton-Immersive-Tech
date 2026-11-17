@@ -1,4 +1,4 @@
-// The player butterfly: an Icarusblauwtje (common blue, ~4 cm wingspan) at real scale,
+// The player butterfly: a Boomblauwtje (holly blue, ~3 cm wingspan) at real scale,
 // so the 9 m garden becomes a big world. Arcade flight, landing on real flower heads
 // (swaying with the wind), nectar, and a species collection.
 //
@@ -35,8 +35,8 @@ export class Butterfly extends EventTarget {
     this.store = store;
     this.atmosphere = atmosphere;
     this.input = input;
-    this.name = 'Icarusblauwtje';
-    this.model = new ButterflyModel({ palette: PALETTES.icarus, scale: 0.2 });
+    this.name = 'Boomblauwtje';
+    this.model = new ButterflyModel({ palette: PALETTES.boomblauwtje, scale: 0.2 });
     engine.scene.add(this.model.group);
 
     this.pos = new THREE.Vector3();
@@ -59,6 +59,9 @@ export class Butterfly extends EventTarget {
     this.landFrom = new THREE.Vector3();
     this.landT = 0;
     this.sway = new THREE.Vector3();
+    // The Plantenluisteraar's orb is a landing spot too (no nectar, but a good lookout).
+    const sn = world.sensor;
+    this.sensorSpot = { sensor: true, head: { x: sn.x, y: sn.top ?? 1, z: sn.z } };
     this.reset();
   }
 
@@ -77,6 +80,7 @@ export class Butterfly extends EventTarget {
 
   /** World position of a flower head, swaying with the (shader) wind. */
   headPos(f, out) {
+    if (f.sensor) return out.set(f.head.x, f.head.y + 0.004, f.head.z);
     windOffset(f.plant, f.head.ly ?? 0.9, this.sway);
     return out.set(f.head.x + this.sway.x, f.head.y + 0.006, f.head.z + this.sway.z);
   }
@@ -173,6 +177,11 @@ export class Butterfly extends EventTarget {
         if (d < radius && d < bestD) { best = { plant, head }; bestD = d; }
       }
     }
+    if (in3d && this.ignore !== this.sensorSpot) {
+      const h = this.sensorSpot.head;
+      const d = Math.hypot(h.x - this.pos.x, h.y - this.pos.y, h.z - this.pos.z);
+      if (d < radius * 1.6 && d < bestD) best = this.sensorSpot; // the orb is big: a bit more forgiving
+    }
     return best;
   }
 
@@ -196,13 +205,16 @@ export class Butterfly extends EventTarget {
     this.pos.lerpVectors(this.landFrom, a, k);
     if (this.landT >= 1) {
       this.state = 'landed';
-      this.dispatchEvent(new CustomEvent('land', { detail: { plant: this.flower?.plant } }));
       const p = this.flower?.plant;
       // Only the player's own landings count towards the collection.
-      if (p && this.controlled && !this.visited.has(p.batch.id)) {
-        this.visited.add(p.batch.id);
-        this.dispatchEvent(new CustomEvent('visit', { detail: { plant: p, count: this.visited.size, total: this.totalSpecies } }));
+      let visit = null;
+      if (p && this.controlled) {
+        const isNew = !this.visited.has(p.batch.id);
+        if (isNew) this.visited.add(p.batch.id);
+        visit = { isNew, count: this.visited.size, total: this.totalSpecies };
+        if (isNew) this.dispatchEvent(new CustomEvent('visit', { detail: { plant: p, ...visit } }));
       }
+      this.dispatchEvent(new CustomEvent('land', { detail: { plant: p, sensor: !!this.flower?.sensor, visit, controlled: this.controlled } }));
     }
   }
 
@@ -210,7 +222,7 @@ export class Butterfly extends EventTarget {
     if (this.flower) this.headPos(this.flower, this.pos); // sway with the flower
     const st = this.atmosphere.state;
     const sunBask = (st.sunny ?? 0) * 0.06;
-    const nectar = this.flower ? this.flower.plant.nectarValue * 0.22 : 0;
+    const nectar = this.flower?.plant ? this.flower.plant.nectarValue * 0.22 : 0;
     this.energy = clamp(this.energy + (nectar + sunBask + 0.005) * dt, 0, 1);
     if (this.controlled && wantsToMove && (this.energy > 0.02 || this.input.ascend <= 0)) {
       this.state = 'flying';
@@ -247,6 +259,7 @@ export class Butterfly extends EventTarget {
 
   get statusText() {
     if (this.state === 'landed') {
+      if (this.flower?.sensor) return 'Uitrusten op de Plantenluisteraar';
       if (this.flower) return `Nectar drinken op ${this.flower.plant.batch.name}`;
       return (this.atmosphere.state.sunny ?? 0) > 0.05 ? 'Opwarmen in de zon' : 'Rusten';
     }

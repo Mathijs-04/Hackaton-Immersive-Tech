@@ -20,7 +20,8 @@ import { Life } from './life/life.js';
 import { Hud } from './ui/hud.js';
 import { Panels } from './ui/panels.js';
 import { FlightHud } from './ui/flight-hud.js';
-import { esc } from './ui/format.js';
+import { esc, num } from './ui/format.js';
+import { loadPlantInfo, infoFor, plantHTML, sensorHTML } from './ui/plant-info.js';
 
 const params = new URLSearchParams(location.search);
 const overlay = document.getElementById('overlay');
@@ -39,7 +40,8 @@ function webglAvailable() {
 async function boot() {
   if (!webglAvailable()) return fail('Deze browser ondersteunt geen WebGL2. Probeer een recente Chrome, Edge, Firefox of Safari.');
   let data;
-  try { data = await loadAll(); } catch (e) { return fail(e.message); }
+  let plantInfo;
+  try { [data, plantInfo] = await Promise.all([loadAll(), loadPlantInfo()]); } catch (e) { return fail(e.message); }
   const { history, layout, planting } = data;
 
   const engine = new Engine(document.getElementById('scene'));
@@ -68,8 +70,10 @@ async function boot() {
   windUniforms.uWind.value = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1;
 
   // --- UI
+  const $ = (id) => document.getElementById(id);
   const hud = new Hud(store, history, atmosphere);
   let flying = false;
+  const anyDialogOpen = () => !!document.querySelector('dialog[open]');
   const focusBatch = (batch) => {
     const list = layer.setSelectedBatch(batch.id);
     if (!list.length || engine.rig !== orbit) return;
@@ -78,36 +82,52 @@ async function boot() {
     orbit.flyTo(c, 2.2 + spread * 1.6 + Math.max(...list.map((p) => p.sy)));
   };
   const clearSelection = () => { layer.setSelectedBatch(null); engine.wake(); };
-  const panels = new Panels({ store, batches, garden: history, onFocusBatch: focusBatch, onClear: clearSelection });
+  const getReading = () => store.sample(store.t, {});
+  const panels = new Panels({ batches, plantInfo, onFocusBatch: focusBatch, onClear: clearSelection, getReading });
 
   const picking = new Picking(engine, layer, sensor, {
     onHover: (h) => layer.setHover(!flying && h && h !== 'sensor' ? h : null),
     onSelect: (h) => {
       if (flying) return; // in flight, clicks/drags are for looking around
-      if (h === 'sensor') { layer.setSelectedBatch(null); panels.showSensor(); }
+      if (h === 'sensor') panels.showSensor();
       else if (h) { layer.setSelectedBatch(h.batch.id); panels.showBatch(h.batch); }
-      else { panels.closeCard(); clearSelection(); }
+      else if (panels.current) panels.close();
       engine.wake();
     },
   });
+
+  // --- Dialogs (native <dialog>: focus trap, Esc to close, inert background)
+  const showDialog = (dlg, focusEl) => {
+    if (!dlg.open) dlg.showModal();
+    input.enabled = false;
+    (focusEl || dlg.querySelector('.btn.primary'))?.focus();
+    engine.wake();
+  };
+  for (const dlg of document.querySelectorAll('dialog')) {
+    dlg.addEventListener('close', () => { input.enabled = !anyDialogOpen(); engine.wake(); });
+    dlg.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => dlg.close()));
+    // A click on the backdrop closes it too.
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+  }
+  const introDlg = $('dlg-intro'), flyDlg = $('dlg-fly'), landDlg = $('dlg-land');
 
   // --- Butterfly (player)
   const butterfly = new Butterfly({ engine, world, store, atmosphere, input });
   const follow = new FollowRig(engine, butterfly, world);
   const flightHud = new FlightHud(butterfly, input);
-  const flyBtn = document.getElementById('btn-fly');
+  const modeView = $('mode-view'), modeFly = $('mode-fly');
   const setFlying = (on) => {
     if (on === flying) return;
     flying = on;
     butterfly.controlled = on;
     input.flightKeys = on;
-    hud.keysEnabled = () => !flying;
     atmosphere.smallScale = on;
-    // Viewing: 1 hour per second. Flying: 10× slower, so a flight doesn't race through the day.
+    // Viewing: 1 hour per second. Flying: 10x slower, so a flight doesn't race through the day.
     store.speed = on ? 0.1 : 1;
     document.body.classList.toggle('flying', on);
-    flyBtn.setAttribute('aria-pressed', String(on));
-    flyBtn.textContent = on ? '✕ Stop vliegen' : '🦋 Vliegen';
+    modeView.setAttribute('aria-pressed', String(!on));
+    modeFly.setAttribute('aria-pressed', String(on));
+    panels.setEnabled(!on);
     flightHud.show(on);
     // Butterfly-eye lens: tiny near plane and a wider view make the flowers tower overhead.
     camera.near = on ? 0.004 : 0.05;
@@ -115,26 +135,64 @@ async function boot() {
     camera.updateProjectionMatrix();
     if (on) {
       orbit.controls.autoRotate = false;
-      panels.closeCard();
       clearSelection();
       layer.setHover(null);
       if (butterfly.state !== 'landed') butterfly.reset();
       engine.setRig(follow);
-      flightHud.toast(flightHud.touch
-        ? 'Bezoek zoveel mogelijk soorten · laat los boven een bloem om te landen'
-        : '<kbd>WASD</kbd> vliegen · <kbd>Spatie</kbd> omhoog · <kbd>Q</kbd> omlaag · <kbd>Shift</kbd> sneller · laat los boven een bloem om te landen');
+      flightHud.toast(`Zoek bloemen en land erop om nectar te drinken · nog ${butterfly.totalSpecies - butterfly.visited.size} soorten te ontdekken`);
     } else {
+      if (landDlg.open) landDlg.close();
       orbit.controls.target.copy(butterfly.position).setY(Math.max(0.4, butterfly.position.y));
       camera.position.copy(orbit.controls.target).add(new THREE.Vector3(2.2, 1.6, 2.2));
       engine.setRig(orbit);
     }
-    document.activeElement?.blur?.();
+    if (document.activeElement && !document.activeElement.closest('nav')) document.activeElement.blur?.();
     engine.wake();
   };
-  flyBtn.addEventListener('click', () => setFlying(!flying));
+  hud.keysEnabled = () => !flying && !anyDialogOpen();
+
+  /** How the garden's current (real) weather feels to a butterfly, in one sentence. */
+  const flyingWeather = () => {
+    const st = atmosphere.state, v = getReading();
+    const w = st.weather ? `${st.weather.icon} ${st.weather.text.toLowerCase()}` : '';
+    const warmth = st.warmth ?? 1, rain = st.rain ?? 0;
+    const verdict = rain > 0.4 ? 'Het regent: je vleugels worden zwaar en je raakt sneller moe.'
+      : warmth < 0.35 ? 'Het is koud: je vleugels zijn stijf. Land vaak om op te warmen en bij te tanken.'
+      : warmth < 0.7 ? 'Een beetje fris: je vliegt, maar je energie raakt sneller op.'
+      : 'Prima vliegweer!';
+    return `<strong>Nu in de tuin:</strong> ${esc(num(v.airT))} °C${w ? `, ${esc(w)}` : ''}. ${verdict}`;
+  };
+
+  const openFlyDialog = () => {
+    $('fly-now').innerHTML = flyingWeather();
+    $('fly-start').textContent = flying ? 'Verder vliegen' : 'Start met vliegen';
+    $('fly-cancel').textContent = flying ? 'Stop met vliegen' : 'Terug';
+    $('fly-controls').hidden = flightHud.touch;
+    $('fly-controls-touch').hidden = !flightHud.touch;
+    showDialog(flyDlg);
+  };
+  $('fly-start').addEventListener('click', () => { flyDlg.close(); setFlying(true); });
+  $('fly-cancel').addEventListener('click', () => { flyDlg.close(); setFlying(false); });
+  modeFly.addEventListener('click', () => { if (!flying) openFlyDialog(); });
+  modeView.addEventListener('click', () => setFlying(false));
+  $('btn-help').addEventListener('click', () => (flying ? openFlyDialog() : showDialog(introDlg)));
+
+  // Landing: the same info as the view mode, plus a fun fact.
+  butterfly.addEventListener('land', (e) => {
+    const { plant, sensor: onSensor, visit, controlled } = e.detail;
+    if (!flying || !controlled || anyDialogOpen()) return;
+    let html;
+    if (plant) html = plantHTML(plant.batch, infoFor(plantInfo, plant.batch), { headingId: 'land-title', funFact: true, visit });
+    else if (onSensor) html = sensorHTML({ headingId: 'land-title', now: getReading(), immersive: true });
+    else return;
+    $('land-body').innerHTML = html;
+    landDlg.scrollTop = 0;
+    showDialog(landDlg);
+  });
+
   window.addEventListener('keydown', (e) => {
-    if (e.target.closest?.('input, select, textarea')) return;
-    if (e.code === 'KeyV') setFlying(!flying);
+    if (e.target.closest?.('input, select, textarea') || anyDialogOpen()) return;
+    if (e.code === 'KeyV') (flying ? setFlying(false) : openFlyDialog());
     if (e.key === 'Escape' && flying) setFlying(false);
   }, true);
 
@@ -193,13 +251,14 @@ async function boot() {
     ...overlapReport(plants),
     ...layer.stats(),
   };
-  window.garden = { engine, store, world, plants, batches, layer, atmosphere, ground, life, quality, input, orbit, butterfly, follow, setFlying, counts, THREE };
+  window.garden = { engine, store, world, plants, batches, layer, atmosphere, ground, life, quality, input, orbit, butterfly, follow, setFlying, panels, plantInfo, counts, THREE };
   console.info('[garden] geladen', counts);
 
   engine.start();
   overlay.classList.add('gone');
   setTimeout(() => overlay.remove(), 700);
   if (params.has('vlinder')) setFlying(true);
+  else if (params.get('intro') !== '0') setTimeout(() => showDialog(introDlg), 350);
 }
 
 boot();

@@ -12,6 +12,8 @@ export class Input {
     this.virtual = { x: 0, y: 0, ascend: 0 };
     // Arrow keys and Space belong to the timeline unless a flight mode claims them.
     this.flightKeys = false;
+    // False while a dialog is open: reading about a plant should not make the butterfly take off.
+    this.enabled = true;
     window.addEventListener('keydown', (e) => {
       if (e.target.closest?.('input, select, textarea')) return;
       this.keys.add(e.code);
@@ -21,6 +23,11 @@ export class Input {
   }
 
   update() {
+    if (!this.enabled) {
+      this.move.x = this.move.y = this.ascend = 0;
+      this.boost = false;
+      return;
+    }
     const k = this.keys;
     const on = (...codes) => codes.some((c) => k.has(c));
     const f = this.flightKeys;

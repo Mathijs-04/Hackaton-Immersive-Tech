@@ -3,7 +3,8 @@
     "description": "Aanvullende informatie per plant in de Puintuin, één entry per planting batch uit planting.json.",
     "pollinatorScale": "0 (geen waarde) tot 5 (uitstekend). Redactionele inschatting op basis van algemene kennis, niet gemeten.",
     "sources": "Namen en volgorde: Bioto-API (planting.json). Foto's: Wikimedia Commons via Wikipedia, zie image.author en image.license. dutchNameSource \"added\" = Nederlandse naam ontbrak in de API en is aangevuld.",
-    "count": 48
+    "count": 48,
+    "butterflyLife": "Rol van de plant in het leven van een vlinder. roles: nectar (voedsel voor de vlinder), waardplant (eitjes leggen, voedsel voor rupsen), schuilplek (rusten, beschutting), zonnen (opwarmplek), uitkijkpost (partners zoeken), overwinteren. boomblauwtje: optionele tekst voor de speler, een boomblauwtje. Redactioneel, op basis van algemene kennis over Nederlandse dag- en nachtvlinders."
   },
   "plants": [
     {
@@ -27,7 +28,14 @@
         "bees": 3,
         "note": "Geeft geen nectar maar veel stuifmeel: een buffet voor bijen en zweefvliegen. De geur trekt ook vlinders aan."
       },
-      "funFact": "Uit deze plant (vroeger Spiraea genoemd) werd salicylzuur gewonnen, en daar komt de naam aspirine vandaan."
+      "funFact": "Uit deze plant (vroeger Spiraea genoemd) werd salicylzuur gewonnen, en daar komt de naam aspirine vandaan.",
+      "butterflyLife": {
+        "roles": [
+          "waardplant",
+          "schuilplek"
+        ],
+        "text": "Waardplant van de purperstreepparelmoervlinder: de rupsen eten de bladeren. In de dichte pluimen schuilen vlinders bij regen en wind."
+      }
     },
     {
       "id": "verbena-bonariensis",
@@ -50,7 +58,15 @@
         "bees": 3,
         "note": "Absolute vlindermagneet: dagpauwoog, atalanta, kleine vos en koolwitjes zitten er in het late seizoen massaal op."
       },
-      "funFact": "Komt oorspronkelijk uit Zuid-Amerika; de soortnaam bonariensis verwijst naar Buenos Aires."
+      "funFact": "Komt oorspronkelijk uit Zuid-Amerika; de soortnaam bonariensis verwijst naar Buenos Aires.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "uitkijkpost"
+        ],
+        "text": "Een tankstation tot in de herfst: elk bloemetje is een slokje nectar. De hoge, kale stengels zijn ideale uitkijkposten om partners te spotten.",
+        "boomblauwtje": "Perfect om bij te tanken voordat je weer hoog rond de struiken fladdert."
+      }
     },
     {
       "id": "cichorium-intybus",
@@ -73,7 +89,13 @@
         "bees": 4,
         "note": "Vooral wilde bijen en zweefvliegen bezoeken de bloemen; vlinders komen er af en toe op af."
       },
-      "funFact": "De bloemen openen in de ochtend en sluiten al rond het middaguur. De gedroogde wortel werd gebruikt als koffiesurrogaat."
+      "funFact": "De bloemen openen in de ochtend en sluiten al rond het middaguur. De gedroogde wortel werd gebruikt als koffiesurrogaat.",
+      "butterflyLife": {
+        "roles": [
+          "nectar"
+        ],
+        "text": "De blauwe bloemen geven 's ochtends nectar en pollen; tegen de middag gaan ze alweer dicht. Vroege vogels, en vroege vlinders, hebben dus voordeel."
+      }
     },
     {
       "id": "helianthus-annuus",
@@ -96,7 +118,15 @@
         "bees": 5,
         "note": "Een hoofd bestaat uit honderden buisbloemetjes vol nectar en stuifmeel; hommels en honingbijen zijn er dol op. Kies ongevulde variëteiten."
       },
-      "funFact": "Jonge bloemknoppen draaien mee met de zon (heliotropisme); volgroeide bloemen kijken vrijwel altijd naar het oosten."
+      "funFact": "Jonge bloemknoppen draaien mee met de zon (heliotropisme); volgroeide bloemen kijken vrijwel altijd naar het oosten.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "uitkijkpost",
+          "zonnen"
+        ],
+        "text": "Het grote bloemhoofd is een landingsplatform vol nectar. Hoog boven de tuin is het ook een warme zonneplek en een uitkijkpost."
+      }
     },
     {
       "id": "verbascum-nigrum",
@@ -119,7 +149,14 @@
         "bees": 4,
         "note": "Bijen verzamelen het stuifmeel; de plant geeft weinig nectar. Rupsen van de helmkruidmonnik (nachtvlinder) eten van de bladeren."
       },
-      "funFact": "De meeldraden dragen paarse haartjes, die insecten houvast geven op de bloem."
+      "funFact": "De meeldraden dragen paarse haartjes, die insecten houvast geven op de bloem.",
+      "butterflyLife": {
+        "roles": [
+          "waardplant",
+          "nectar"
+        ],
+        "text": "Waardplant voor de rupsen van de toortsvlinder, een nachtvlinder. De bloemen geven vooral stuifmeel, maar soms ook wat nectar."
+      }
     },
     {
       "id": "lythrum-salicaria",
@@ -142,7 +179,15 @@
         "bees": 4,
         "note": "Rijke nectarbron laat in de zomer, favoriet bij hommels, honingbijen en vlinders zoals het dagpauwoog."
       },
-      "funFact": "De plant heeft drie typen bloemen (met korte, middellange en lange stijlen). Charles Darwin bestudeerde dit uitgebreid."
+      "funFact": "De plant heeft drie typen bloemen (met korte, middellange en lange stijlen). Charles Darwin bestudeerde dit uitgebreid.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "uitkijkpost"
+        ],
+        "text": "Een van de beste nectarplanten van de zomer: de lange paarse aren worden druk bezocht door dagvlinders. De hoge aren zijn ook handige uitkijkposten.",
+        "boomblauwtje": "Een heerlijke plek om nectar te drinken en de tuin te overzien."
+      }
     },
     {
       "id": "malva-sylvestris",
@@ -165,7 +210,14 @@
         "bees": 4,
         "note": "Bijen en hommels zijn de belangrijkste bezoekers; rupsen van sommige dikkopjes en de distelvlinder kunnen de bladeren eten."
       },
-      "funFact": "De platte, ronde vruchtjes lijken op kaasjes, vandaar de naam kaasjeskruid."
+      "funFact": "De platte, ronde vruchtjes lijken op kaasjes, vandaar de naam kaasjeskruid.",
+      "butterflyLife": {
+        "roles": [
+          "waardplant",
+          "nectar"
+        ],
+        "text": "Waardplant van de distelvlinder: die legt hier eitjes en de rupsen eten de bladeren. De grote bloemen geven ook nectar."
+      }
     },
     {
       "id": "dipsacus-fullonum",
@@ -188,7 +240,15 @@
         "bees": 4,
         "note": "Zomers bezoeken bijen, hommels en vlinders de bloemen; in de winter eten putters de zaden."
       },
-      "funFact": "De paarsgewijs gegroeide bladeren vormen een bekertje dat regenwater vasthoudt. De droge koppen werden gebruikt om wol te kaarden."
+      "funFact": "De paarsgewijs gegroeide bladeren vormen een bekertje dat regenwater vasthoudt. De droge koppen werden gebruikt om wol te kaarden.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "overwinteren",
+          "uitkijkpost"
+        ],
+        "text": "In de zomer zit de bol vol kleine bloemetjes met nectar. In de winter bieden de stevige, dode stengels beschutting aan overwinterende insecten."
+      }
     },
     {
       "id": "thymus-serpyllum",
@@ -211,7 +271,14 @@
         "bees": 5,
         "note": "Een van de beste nectarplanten voor bijen en dagvlinders op droge grond; ook voor zweefvliegen."
       },
-      "funFact": "Het tijmblauwtje begint zijn leven als rups op tijm en leeft daarna in mierennesten. In Nederland was het uitgestorven en is het opnieuw uitgezet."
+      "funFact": "Het tijmblauwtje begint zijn leven als rups op tijm en leeft daarna in mierennesten. In Nederland was het uitgestorven en is het opnieuw uitgezet.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "zonnen"
+        ],
+        "text": "Een laag, geurend tapijt vol nectar. Omdat het tussen warme stenen groeit, is het ook een prima plek om op te warmen in de zon."
+      }
     },
     {
       "id": "echium-vulgare",
@@ -234,7 +301,14 @@
         "bees": 5,
         "note": "Top voor wilde bijen: de slangenkruidbij is zelfs afhankelijk van deze plant. Ook veel vlinders en hommels."
       },
-      "funFact": "De bloemknoppen zijn roze en de geopende bloemen blauw, dus één plant heeft twee kleuren tegelijk."
+      "funFact": "De bloemknoppen zijn roze en de geopende bloemen blauw, dus één plant heeft twee kleuren tegelijk.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "waardplant"
+        ],
+        "text": "Topnectarplant die wekenlang bloeit. Ook de distelvlinder gebruikt slangenkruid als waardplant voor zijn rupsen."
+      }
     },
     {
       "id": "geranium-pratense",
@@ -257,7 +331,14 @@
         "bees": 4,
         "note": "Veel hommels en wilde bijen bezoeken de open bloemen; voor vlinders minder belangrijk."
       },
-      "funFact": "De vrucht lijkt op een ooievaarssnavel en slingert bij het openspringen de zaden weg."
+      "funFact": "De vrucht lijkt op een ooievaarssnavel en slingert bij het openspringen de zaden weg.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "waardplant"
+        ],
+        "text": "De open bloemen zijn makkelijk bereikbaar voor vlinders. Verwante ooievaarsbekken zijn waardplant voor het bruin blauwtje."
+      }
     },
     {
       "id": "aster-ageratoides-asran",
@@ -280,7 +361,13 @@
         "bees": 4,
         "note": "Door de late bloei een belangrijke nectarbron als bijna niets anders meer bloeit; vooral voor de laatste vlinders en bijen."
       },
-      "funFact": "Het is een cultivar (Asran), geselecteerd door kwekers. Daarom staat de soort als onzeker (Doubtful) in de lijst."
+      "funFact": "Het is een cultivar (Asran), geselecteerd door kwekers. Daarom staat de soort als onzeker (Doubtful) in de lijst.",
+      "butterflyLife": {
+        "roles": [
+          "nectar"
+        ],
+        "text": "Bloeit laat in het jaar, als er weinig meer te halen is. Vlinders zoals de atalanta en dagpauwoog tanken hier bij voor de winter."
+      }
     },
     {
       "id": "tanacetum-vulgare",
@@ -303,7 +390,14 @@
         "bees": 3,
         "note": "Een late, makkelijke stuifmeelbron voor zweefvliegen, wilde bijen en kleine vlinders; ook bladluisetende insecten komen op de plant af."
       },
-      "funFact": "De sterke geur werd vroeger gebruikt om vliegen en insecten te weren; de plant is licht giftig voor mensen."
+      "funFact": "De sterke geur werd vroeger gebruikt om vliegen en insecten te weren; de plant is licht giftig voor mensen.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "waardplant"
+        ],
+        "text": "De platte, gele knopen zijn makkelijke landingsplekken met nectar. Verschillende nachtvlinders gebruiken boerenwormkruid als waardplant."
+      }
     },
     {
       "id": "viburnum-opulus",
@@ -326,7 +420,15 @@
         "bees": 3,
         "note": "Zweefvliegen, kevers en bijen bezoeken de bloemen; de bessen zijn voedsel voor vogels."
       },
-      "funFact": "De grote steriele randbloemen dienen alleen als uithangbord voor insecten; de kleine binnenbloemetjes doen het eigenlijke werk."
+      "funFact": "De grote steriele randbloemen dienen alleen als uithangbord voor insecten; de kleine binnenbloemetjes doen het eigenlijke werk.",
+      "butterflyLife": {
+        "roles": [
+          "schuilplek",
+          "nectar"
+        ],
+        "text": "Een struik waarin vlinders 's nachts en bij regen beschut zitten. In het voorjaar geven de witte schermen nectar.",
+        "boomblauwtje": "Als boomblauwtje voel je je thuis rond struiken: hier rust en schuil je."
+      }
     },
     {
       "id": "tropaeolum-majus",
@@ -349,7 +451,14 @@
         "bees": 3,
         "note": "Hommels bezoeken de nectarrijke bloemen; koolwitjes leggen eitjes op de bladeren, dus de plant is ook een kraamkamer."
       },
-      "funFact": "Bloemen en bladeren zijn eetbaar en smaken peperig, vergelijkbaar met waterkers."
+      "funFact": "Bloemen en bladeren zijn eetbaar en smaken peperig, vergelijkbaar met waterkers.",
+      "butterflyLife": {
+        "roles": [
+          "waardplant",
+          "nectar"
+        ],
+        "text": "Waardplant van het groot koolwitje: die legt hier gele groepjes eitjes en de rupsen smullen van het blad."
+      }
     },
     {
       "id": "leucanthemum-vulgare",
@@ -372,7 +481,14 @@
         "bees": 4,
         "note": "Open bloemen met makkelijk bereikbare nectar voor bijen, zweefvliegen en kleine vlinders."
       },
-      "funFact": "Wat op één bloem lijkt, is een bloemhoofd van honderden kleine bloemetjes: gele buisbloemen in het midden, witte lintbloemen aan de rand."
+      "funFact": "Wat op één bloem lijkt, is een bloemhoofd van honderden kleine bloemetjes: gele buisbloemen in het midden, witte lintbloemen aan de rand.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "zonnen"
+        ],
+        "text": "Het open, witte bloemhoofd is een makkelijk landingsplatform met nectar in het gele hart. Vlinders zonnen er graag op."
+      }
     },
     {
       "id": "papaver-rhoeas",
@@ -395,7 +511,13 @@
         "bees": 3,
         "note": "Geen nectar, wel veel stuifmeel voor bijen, hommels en zweefvliegen."
       },
-      "funFact": "De zaden kunnen tientallen jaren slapen in de bodem en ontkiemen pas als de grond wordt omgewoeld. De klaproos is een symbool van herdenking."
+      "funFact": "De zaden kunnen tientallen jaren slapen in de bodem en ontkiemen pas als de grond wordt omgewoeld. De klaproos is een symbool van herdenking.",
+      "butterflyLife": {
+        "roles": [
+          "zonnen"
+        ],
+        "text": "Klaprozen geven geen nectar, alleen stuifmeel voor bijen. Voor een vlinder is de bloem vooral een kleurrijke plek om even te zitten."
+      }
     },
     {
       "id": "centaurea-scabiosa",
@@ -418,7 +540,13 @@
         "bees": 4,
         "note": "Een van de beste vlinderplanten: veel nectar, goed bereikbaar voor dagvlinders, dikkopjes en pijlstaartjes."
       },
-      "funFact": "Raak je de meeldraden aan, dan krommen ze en pompen ze stuifmeel uit de bloem: een gevoelige plant."
+      "funFact": "Raak je de meeldraden aan, dan krommen ze en pompen ze stuifmeel uit de bloem: een gevoelige plant.",
+      "butterflyLife": {
+        "roles": [
+          "nectar"
+        ],
+        "text": "Een vlindermagneet: de grote, paarse bloemhoofden zitten vol nectar en worden de hele zomer bezocht."
+      }
     },
     {
       "id": "limonium-vulgare",
@@ -441,7 +569,13 @@
         "bees": 3,
         "note": "Biedt in de late zomer nectar aan bijen, zweefvliegen en kleine vlinders."
       },
-      "funFact": "Kan zout water verdragen: het zout wordt via kliertjes op de bladeren uitgescheiden."
+      "funFact": "Kan zout water verdragen: het zout wordt via kliertjes op de bladeren uitgescheiden.",
+      "butterflyLife": {
+        "roles": [
+          "nectar"
+        ],
+        "text": "Zoutminnende plant met veel kleine bloemetjes. Aan de kust is lamsoor in de nazomer een belangrijke nectarbron voor vlinders."
+      }
     },
     {
       "id": "veronica-longifolia",
@@ -464,7 +598,13 @@
         "bees": 4,
         "note": "De lange bloeitijd maakt hem waardevol voor bijen, zweefvliegen en vlinders."
       },
-      "funFact": "De bloempjes bloeien onderaan de aar eerst, dus de aar blijft wekenlang in bloei terwijl elk bloempje kort leeft."
+      "funFact": "De bloempjes bloeien onderaan de aar eerst, dus de aar blijft wekenlang in bloei terwijl elk bloempje kort leeft.",
+      "butterflyLife": {
+        "roles": [
+          "nectar"
+        ],
+        "text": "De lange, blauwe aren bloeien van onder naar boven, zodat er weken lang nectar te halen is."
+      }
     },
     {
       "id": "dianthus-carthusianorum",
@@ -487,7 +627,13 @@
         "bees": 2,
         "note": "De lange buisbloemen zijn vooral bereikbaar voor vlinders met een lange tong, zoals dagvlinders, pijlstaarten en uiltjes."
       },
-      "funFact": "De soortnaam verwijst naar de Kartuizer monniken."
+      "funFact": "De soortnaam verwijst naar de Kartuizer monniken.",
+      "butterflyLife": {
+        "roles": [
+          "nectar"
+        ],
+        "text": "De nectar zit diep in een smalle bloembuis. Alleen insecten met een lange tong, zoals vlinders, kunnen erbij."
+      }
     },
     {
       "id": "juncus-inflexus",
@@ -510,7 +656,14 @@
         "bees": 0,
         "note": "Windbestuiver: geen nectar of stuifmeel voor insecten, maar de pollen bieden schuilplaatsen en overwinteringsplekken."
       },
-      "funFact": null
+      "funFact": null,
+      "butterflyLife": {
+        "roles": [
+          "schuilplek",
+          "overwinteren"
+        ],
+        "text": "Geen nectar, wel bescherming: tussen de stevige stengels schuilen insecten bij wind en regen, en sommige overwinteren erin."
+      }
     },
     {
       "id": "saponaria-officinalis",
@@ -533,7 +686,13 @@
         "bees": 3,
         "note": "De buisbloemen geuren 's avonds sterk en trekken nachtvlinders (zoals pijlstaarten) aan; overdag ook dagvlinders en hommels."
       },
-      "funFact": "Bladeren en wortels bevatten saponinen, waarmee je in water schuimt: vroeger werd de plant als zeep gebruikt."
+      "funFact": "Bladeren en wortels bevatten saponinen, waarmee je in water schuimt: vroeger werd de plant als zeep gebruikt.",
+      "butterflyLife": {
+        "roles": [
+          "nectar"
+        ],
+        "text": "De bloemen geuren vooral 's avonds. Daarmee lokken ze nachtvlinders zoals pijlstaarten, die met hun lange tong de nectar drinken."
+      }
     },
     {
       "id": "echinops-bannaticus-blue-globe",
@@ -556,7 +715,14 @@
         "bees": 5,
         "note": "Een magneet voor hommels, bijen en zweefvliegen; later in het zaad vinden vinken voedsel."
       },
-      "funFact": "Elke bol is een verzameling van honderden bloemetjes, die elk een eigen minibloemhoofdje vormen."
+      "funFact": "Elke bol is een verzameling van honderden bloemetjes, die elk een eigen minibloemhoofdje vormen.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "uitkijkpost"
+        ],
+        "text": "De blauwe bollen zitten vol nectar en zijn een favoriete landingsplek. Hoog boven de rest is het ook een goede uitkijkpost."
+      }
     },
     {
       "id": "foeniculum-vulgare",
@@ -579,7 +745,14 @@
         "bees": 3,
         "note": "Open schermen zijn makkelijk bereikbaar voor zweefvliegen, kleine wespen en vlinders. De rupsen van de koninginnenpage eten het blad."
       },
-      "funFact": "Komt uit het Middellandse Zeegebied en werd door de Romeinen als medicijn en kruid gebruikt."
+      "funFact": "Komt uit het Middellandse Zeegebied en werd door de Romeinen als medicijn en kruid gebruikt.",
+      "butterflyLife": {
+        "roles": [
+          "waardplant",
+          "nectar"
+        ],
+        "text": "Waardplant van de koninginnenpage, een van onze mooiste vlinders: de rupsen eten het fijne blad. De gele schermen geven nectar."
+      }
     },
     {
       "id": "salvia-pratensis",
@@ -602,7 +775,13 @@
         "bees": 5,
         "note": "Vooral bij hommels en solitaire bijen erg populair; de lange buis past bij hun tong."
       },
-      "funFact": "De bloem heeft een hefboom: een duwtje van een hommel zwaait de meeldraden naar beneden en tikt stuifmeel op zijn rug."
+      "funFact": "De bloem heeft een hefboom: een duwtje van een hommel zwaait de meeldraden naar beneden en tikt stuifmeel op zijn rug.",
+      "butterflyLife": {
+        "roles": [
+          "nectar"
+        ],
+        "text": "De bloem is gemaakt voor hommels, maar ook vlinders weten met hun lange tong de nectar te bereiken."
+      }
     },
     {
       "id": "galium-verum",
@@ -625,7 +804,14 @@
         "bees": 3,
         "note": "Veel kleine bloemetjes leveren nectar voor kleine vlinders en vliegen; de rupsen van de walstrospijlstaart eten het blad."
       },
-      "funFact": "Werd vroeger gebruikt om melk te laten stremmen voor kaas. In het Engels heet het 'lady's bedstraw', omdat het als matrasvulling werd gebruikt."
+      "funFact": "Werd vroeger gebruikt om melk te laten stremmen voor kaas. In het Engels heet het 'lady's bedstraw', omdat het als matrasvulling werd gebruikt.",
+      "butterflyLife": {
+        "roles": [
+          "waardplant",
+          "nectar"
+        ],
+        "text": "Waardplant van de kolibrievlinder, een dagactieve pijlstaart. De honinggeurende bloemetjes geven nectar."
+      }
     },
     {
       "id": "geum-rivale",
@@ -648,7 +834,13 @@
         "bees": 4,
         "note": "Hommels klimmen onder de hangende bloemen en bereiken zo de nectar; goed voor het vroege voorjaar."
       },
-      "funFact": "De bloemen knikken, waardoor stuifmeel en nectar tegen regen beschermd zijn."
+      "funFact": "De bloemen knikken, waardoor stuifmeel en nectar tegen regen beschermd zijn.",
+      "butterflyLife": {
+        "roles": [
+          "schuilplek"
+        ],
+        "text": "De knikkende bloemen zijn vooral voor hommels. Voor vlinders is de plant op vochtige plekken vooral een rustig plekje in de schaduw."
+      }
     },
     {
       "id": "althaea-officinalis",
@@ -671,7 +863,14 @@
         "bees": 4,
         "note": "Nectar- en stuifmeelrijke bloemen voor bijen, hommels en kleine vlinders."
       },
-      "funFact": "De wortel was de oorspronkelijke grondstof voor marshmallows; 'marshmallow' is gewoon het Engelse woord voor heemst."
+      "funFact": "De wortel was de oorspronkelijke grondstof voor marshmallows; 'marshmallow' is gewoon het Engelse woord voor heemst.",
+      "butterflyLife": {
+        "roles": [
+          "waardplant",
+          "nectar"
+        ],
+        "text": "Familie van de kaasjeskruiden: de distelvlinder kan er eitjes op leggen. De zachtroze bloemen geven ook nectar."
+      }
     },
     {
       "id": "amaranthus-caudatus",
@@ -694,7 +893,13 @@
         "bees": 2,
         "note": "Vooral windbestoven; af en toe bezoeken bijen en zweefvliegen de bloemen, en de zaden zijn voedsel voor vogels."
       },
-      "funFact": "In de Andes wordt deze plant als graan (kiwicha) geteeld, al duizenden jaren."
+      "funFact": "In de Andes wordt deze plant als graan (kiwicha) geteeld, al duizenden jaren.",
+      "butterflyLife": {
+        "roles": [
+          "schuilplek"
+        ],
+        "text": "Weinig nectar, maar de grote bladeren en hangende pluimen bieden schaduw en beschutting."
+      }
     },
     {
       "id": "catananche-caerulea-blue",
@@ -717,7 +922,14 @@
         "bees": 4,
         "note": "Dagvlinders, hommels en zweefvliegen zijn trouwe bezoekers van de open bloemen in de zomer."
       },
-      "funFact": "De bloemknoppen en gedroogde bloemen ritselen als papier: een echte droogbloem."
+      "funFact": "De bloemknoppen en gedroogde bloemen ritselen als papier: een echte droogbloem.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "zonnen"
+        ],
+        "text": "Houdt van droog en zonnig. De papierachtige, blauwe bloemen geven nectar op warme plekken waar vlinders graag zijn."
+      }
     },
     {
       "id": "cornus-mas",
@@ -740,7 +952,16 @@
         "bees": 5,
         "note": "Een van de eerste nectar- en stuifmeelbronnen van het jaar: bijen, hommelkoninginnen en vroege vlinders zoals de citroenvlinder en kleine vos tanken hier bij."
       },
-      "funFact": "De rode vruchten (kornoeljes) zijn eetbaar en worden tot jam en siroop verwerkt."
+      "funFact": "De rode vruchten (kornoeljes) zijn eetbaar en worden tot jam en siroop verwerkt.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "waardplant",
+          "schuilplek"
+        ],
+        "text": "Bloeit al in februari: een van de eerste nectarbronnen voor vlinders die uit hun winterslaap komen, zoals de citroenvlinder.",
+        "boomblauwtje": "Jij als boomblauwtje legt je eitjes graag op de bloemknoppen van deze struik. Je rupsen eten daarna de knoppen en jonge besjes."
+      }
     },
     {
       "id": "frangula-alnus",
@@ -763,7 +984,16 @@
         "bees": 3,
         "note": "Waardplant van de citroenvlinder en het boomblauwtje; de bloemen zijn ook een goede nectarbron voor bijen."
       },
-      "funFact": "Het hout leverde de beste houtskool voor buskruit, daarom heette het ook wel kruithout."
+      "funFact": "Het hout leverde de beste houtskool voor buskruit, daarom heette het ook wel kruithout.",
+      "butterflyLife": {
+        "roles": [
+          "waardplant",
+          "nectar",
+          "schuilplek"
+        ],
+        "text": "Waardplant van de citroenvlinder: de rupsen eten alleen van sporkehout en wegedoorn. De kleine bloemetjes geven de hele zomer nectar.",
+        "boomblauwtje": "Jij als boomblauwtje legt je eitjes graag op de bloemknoppen van deze struik. Je rupsen eten daarna de knoppen en jonge besjes."
+      }
     },
     {
       "id": "eryngium-planum-hobbit-blue",
@@ -786,7 +1016,13 @@
         "bees": 5,
         "note": "Bijen, hommels, zweefvliegen en vlinders zitten er massaal op; een topplant voor insecten."
       },
-      "funFact": "Ondanks de naam is het geen echte distel, maar een verre verwant van wortel en peterselie (schermbloemigen)."
+      "funFact": "Ondanks de naam is het geen echte distel, maar een verre verwant van wortel en peterselie (schermbloemigen).",
+      "butterflyLife": {
+        "roles": [
+          "nectar"
+        ],
+        "text": "Elke blauwe bol bestaat uit tientallen bloemetjes vol nectar. Distels als deze trekken veel dagvlinders aan."
+      }
     },
     {
       "id": "sedum-album",
@@ -809,7 +1045,14 @@
         "bees": 3,
         "note": "Kleine bijen, zweefvliegen en vlinders bezoeken de bloemetjes; geschikt voor schrale, zonnige plekken."
       },
-      "funFact": "Veel gebruikt op groene daken: bij droogte slaat de plant water op in zijn dikke blaadjes."
+      "funFact": "Veel gebruikt op groene daken: bij droogte slaat de plant water op in zijn dikke blaadjes.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "zonnen"
+        ],
+        "text": "Groeit op warme, stenige plekken: ideaal om op te warmen. De witte stervormige bloemetjes geven nectar."
+      }
     },
     {
       "id": "thymus-pulegioides",
@@ -832,7 +1075,14 @@
         "bees": 5,
         "note": "Geweldige nectarbron voor bijen, hommels en vlinders; ook een waardplant van het tijmblauwtje."
       },
-      "funFact": "Anders dan kleine tijm heeft grote tijm vierkante stengels met haren op de hoeken."
+      "funFact": "Anders dan kleine tijm heeft grote tijm vierkante stengels met haren op de hoeken.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "zonnen"
+        ],
+        "text": "Een nectarrijk, laag kussen op een warme plek. Wilde tijm is in Europa ook de waardplant van het zeldzame tijmblauwtje."
+      }
     },
     {
       "id": "thymus-praecox-red-carpet",
@@ -855,7 +1105,14 @@
         "bees": 5,
         "note": "Zoals andere tijmsoorten een bijenmagneet in het voorjaar; ook vlinders komen voor de nectar."
       },
-      "funFact": null
+      "funFact": null,
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "zonnen"
+        ],
+        "text": "Een dicht rood tapijt van bloemetjes vol nectar, laag bij de warme grond: een vlinder kan hier tanken en tegelijk zonnen."
+      }
     },
     {
       "id": "euonymus-europaeus",
@@ -878,7 +1135,15 @@
         "bees": 2,
         "note": "De bloemen worden door vliegen, kleine bijen en zweefvliegen bezocht; rupsen van de kardinaalsmutsspinselmot eten het blad."
       },
-      "funFact": "De roze vrucht lijkt op de muts van een kardinaal. Ze is giftig voor mensen maar geliefd bij vogels."
+      "funFact": "De roze vrucht lijkt op de muts van een kardinaal. Ze is giftig voor mensen maar geliefd bij vogels.",
+      "butterflyLife": {
+        "roles": [
+          "waardplant",
+          "schuilplek"
+        ],
+        "text": "Waardplant van de stippelmot, waarvan de rupsen de struik soms in een spinsel hullen. De struik biedt ook beschutting.",
+        "boomblauwtje": "Jij als boomblauwtje legt je eitjes graag op de bloemknoppen van deze struik. Je rupsen eten daarna de knoppen en jonge besjes. Je wetenschappelijke naam Celastrina verwijst zelfs naar de kardinaalsmutsfamilie!"
+      }
     },
     {
       "id": "helianthemum-nummularium-the-bride",
@@ -901,7 +1166,15 @@
         "bees": 4,
         "note": "Bijen en zweefvliegen verzamelen stuifmeel; de bloem geeft weinig nectar."
       },
-      "funFact": "Een bloem leeft maar één dag, en de meeldraden bewegen als je ze aanraakt."
+      "funFact": "Een bloem leeft maar één dag, en de meeldraden bewegen als je ze aanraakt.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "zonnen",
+          "waardplant"
+        ],
+        "text": "Zonneroosjes houden van warmte, net als vlinders. Het bruin blauwtje kan er zijn eitjes op leggen."
+      }
     },
     {
       "id": "campanula-trachelium",
@@ -924,7 +1197,13 @@
         "bees": 4,
         "note": "Hommels en klokjesbijen kruipen in de klokjes; voor vlinders minder interessant."
       },
-      "funFact": "De Latijnse naam verwijst naar de keel: de plant werd vroeger gebruikt tegen keelpijn."
+      "funFact": "De Latijnse naam verwijst naar de keel: de plant werd vroeger gebruikt tegen keelpijn.",
+      "butterflyLife": {
+        "roles": [
+          "schuilplek"
+        ],
+        "text": "De klokjes zijn vooral voor bijen. Insecten schuilen er soms in als het regent of koud wordt."
+      }
     },
     {
       "id": "primula-elatior",
@@ -947,7 +1226,14 @@
         "bees": 4,
         "note": "Een vroege nectarbron: hommelkoninginnen en overwinterende vlinders tanken hier in het voorjaar."
       },
-      "funFact": "Sommige planten hebben bloemen met een lange stijl en andere met lange meeldraden. Dat bevordert kruisbestuiving."
+      "funFact": "Sommige planten hebben bloemen met een lange stijl en andere met lange meeldraden. Dat bevordert kruisbestuiving.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "waardplant"
+        ],
+        "text": "Een vroege nectarbron in het voorjaar. Sleutelbloemen zijn waardplant van de sleutelbloemvlinder, die in Nederland helaas verdwenen is."
+      }
     },
     {
       "id": "scabiosa-columbaria",
@@ -970,7 +1256,15 @@
         "bees": 5,
         "note": "Zowel dagvlinders als bijen, hommels en zweefvliegen gebruiken de brede bloemen met veel nectar; bloeit lang door."
       },
-      "funFact": "Bloeit door tot in de herfst, vaak als bijna alle andere planten al klaar zijn."
+      "funFact": "Bloeit door tot in de herfst, vaak als bijna alle andere planten al klaar zijn.",
+      "butterflyLife": {
+        "roles": [
+          "nectar",
+          "uitkijkpost"
+        ],
+        "text": "Een van de beste vlinderplanten: platte bloemhoofden vol nectar op lange stelen, de hele zomer lang.",
+        "boomblauwtje": "Een ideale tussenstop met nectar."
+      }
     },
     {
       "id": "centaurea-jacea",
@@ -993,7 +1287,13 @@
         "bees": 5,
         "note": "Een van de beste vlinder- en bijenplanten van Nederland: veel nectar, lange bloeitijd, grote variatie aan bezoekers."
       },
-      "funFact": "Net als bij de grote centaurie reageren de meeldraden op aanraking door te krommen."
+      "funFact": "Net als bij de grote centaurie reageren de meeldraden op aanraking door te krommen.",
+      "butterflyLife": {
+        "roles": [
+          "nectar"
+        ],
+        "text": "Knoopkruid hoort bij de topnectarplanten van graslanden. Veel dagvlinders, zoals het oranje zandoogje, komen er op af."
+      }
     },
     {
       "id": "allium-millenium",
@@ -1016,7 +1316,13 @@
         "bees": 5,
         "note": "Bloeit wanneer veel andere tuinplanten stoppen, en wordt druk bezocht door hommels, bijen en vlinders."
       },
-      "funFact": "De cultivar 'Millenium' werd in 2018 in de VS uitgeroepen tot Perennial Plant of the Year."
+      "funFact": "De cultivar 'Millenium' werd in 2018 in de VS uitgeroepen tot Perennial Plant of the Year.",
+      "butterflyLife": {
+        "roles": [
+          "nectar"
+        ],
+        "text": "De bolletjes van vele kleine bloemen zitten vol nectar, juist in de nazomer als er minder bloeit."
+      }
     },
     {
       "id": "campanula-persicifolia",
@@ -1039,7 +1345,13 @@
         "bees": 4,
         "note": "Bijen en hommels kruipen in de klokjes; voor vlinders minder belangrijk."
       },
-      "funFact": "De soortnaam persicifolia betekent perzikbladig: de smalle bladeren lijken op die van een perzikboom."
+      "funFact": "De soortnaam persicifolia betekent perzikbladig: de smalle bladeren lijken op die van een perzikboom.",
+      "butterflyLife": {
+        "roles": [
+          "schuilplek"
+        ],
+        "text": "Vooral een bijenplant. De open klokken zijn soms een schuilplek voor kleine insecten in de nacht."
+      }
     },
     {
       "id": "silene-flos-cuculi",
@@ -1062,7 +1374,13 @@
         "bees": 3,
         "note": "Een uitstekende nectarbron voor dagvlinders (zoals het oranjetipje) en nachtvlinders; ook voor bijen en hommels."
       },
-      "funFact": "De bloemen verschijnen rond de tijd dat de koekoek roept. Het schuim van de schuimcicade op dezelfde planten heet koekoeksspog."
+      "funFact": "De bloemen verschijnen rond de tijd dat de koekoek roept. Het schuim van de schuimcicade op dezelfde planten heet koekoeksspog.",
+      "butterflyLife": {
+        "roles": [
+          "nectar"
+        ],
+        "text": "De rafelige roze bloemen hebben een diepe buis. Vlinders met hun lange tong bereiken de nectar wel, veel andere insecten niet."
+      }
     },
     {
       "id": "symphytum-grandiflorum-wisley-blue",
@@ -1085,7 +1403,14 @@
         "bees": 5,
         "note": "Een vroege bron voor hommels en bijen, in een tijd waarin er nog weinig bloeit."
       },
-      "funFact": "Aardhommels bijten vaak een gaatje in de bloem om de nectar te bereiken, zonder te bestuiven (nectarroof)."
+      "funFact": "Aardhommels bijten vaak een gaatje in de bloem om de nectar te bereiken, zonder te bestuiven (nectarroof).",
+      "butterflyLife": {
+        "roles": [
+          "waardplant",
+          "schuilplek"
+        ],
+        "text": "Het dichte blad is een schuilplek op de grond. Smeerwortel is waardplant voor nachtvlinders zoals de bonte beer."
+      }
     },
     {
       "id": "daucus-carota",
@@ -1108,7 +1433,14 @@
         "bees": 3,
         "note": "Open schermen zijn ideaal voor zweefvliegen, sluipwespen en kleine bijen; de rupsen van de koninginnenpage eten ook het blad."
       },
-      "funFact": "Is de wilde voorouder van de gekweekte wortel. Het donkere bloempje in het midden lijkt op een insect en trekt andere insecten aan."
+      "funFact": "Is de wilde voorouder van de gekweekte wortel. Het donkere bloempje in het midden lijkt op een insect en trekt andere insecten aan.",
+      "butterflyLife": {
+        "roles": [
+          "waardplant",
+          "nectar"
+        ],
+        "text": "Waardplant van de koninginnenpage: de rupsen eten het blad. De brede witte schermen zijn ook een makkelijk nectarplatform."
+      }
     }
   ]
 }

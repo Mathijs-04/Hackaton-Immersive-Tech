@@ -1,6 +1,4 @@
 // Flight HUD: energy, warmth, species collection, status, toasts, and touch controls.
-import { esc } from './format.js';
-
 const $ = (id) => document.getElementById(id);
 
 export class FlightHud {
@@ -13,10 +11,7 @@ export class FlightHud {
     this.touch = matchMedia('(pointer: coarse)').matches;
     this.last = '';
     $('fl-name').textContent = `🦋 ${butterfly.name}`;
-    butterfly.addEventListener('visit', (e) => {
-      const { plant, count, total } = e.detail;
-      this.toast(`🌼 Nieuw bezocht: <b>${esc(plant.batch.name)}</b> · ${count}/${total}`);
-    });
+    // New species are celebrated in the landing popup (see main.js), not in a toast.
     this.setupTouch();
   }
 
@@ -35,7 +30,7 @@ export class FlightHud {
     this.toastTimer = setTimeout(() => {
       t.classList.add('out');
       setTimeout(() => { t.hidden = true; }, 400);
-    }, 2600);
+    }, 4200);
   }
 
   /** Called every frame; only touches the DOM when something visible changed. */
@@ -50,6 +45,8 @@ export class FlightHud {
     $('fl-energy').classList.toggle('low', b.energy < 0.2);
     $('fl-warmth').style.width = pct(b.warmth);
     $('fl-warmth').classList.toggle('low', b.warmth < 0.3);
+    $('m-energy').setAttribute('aria-valuenow', Math.round(b.energy * 100));
+    $('m-warmth').setAttribute('aria-valuenow', Math.round(b.warmth * 100));
     $('fl-visits').textContent = `${b.visited.size}/${b.totalSpecies}`;
     $('fl-status').textContent = b.statusText;
   }

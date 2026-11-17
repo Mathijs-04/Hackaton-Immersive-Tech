@@ -66,7 +66,7 @@ ui/           HUD, play/pause, plant list/card, flight HUD
 ```
 
 ### The butterfly 🦋
-Press **🦋 Vliegen** (or `V`) to fly an **Icarusblauwtje** (common blue). It is life-size (about 4 cm) and the camera sits close behind it, so the 9 m garden feels like a big world and the flowers tower overhead.
+Press **🦋 Vliegen** (or `V`) to fly a **Boomblauwtje** (holly blue). It is life-size (about 3 cm) and the camera sits close behind it, so the 9 m garden feels like a big world and the flowers tower overhead.
 
 - **Controls:** `WASD`/arrows steer, `Space` up, `Q` down, `Shift` faster, `Esc` stop. Drag to look around, scroll to zoom. On phones: a joystick and up/down buttons.
 - **Landing:** let go above a flower and the butterfly lands on a real flower head, sways with it in the wind and drinks nectar, which refills its energy. Each new species counts towards your collection (43 nectar species).

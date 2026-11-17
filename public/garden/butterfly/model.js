@@ -12,6 +12,11 @@ const V = (z) => (z + 0.08) / 0.16;
 const OUTLINE_UV = [FORE, HIND].map((pts) => pts.map(([x, z]) => [U(x), V(z)]));
 
 export const PALETTES = {
+  // Boomblauwtje (holly blue, Celastrina argiolus, male): pale lilac sky-blue, thin dark margin, white fringe.
+  boomblauwtje: {
+    inner: '#5468c4', base: '#8ea6ec', base2: '#bccbf5', margin: '#262638', marginWidth: 2, fringe: '#fbfbf7',
+    spots: [[U(0.06), V(-0.03), 2, 'rgba(30,30,60,0.45)']],
+  },
   // Icarusblauwtje (common blue, male): violet-blue with a thin dark margin and white fringe.
   icarus: {
     inner: '#2c2f7a', base: '#4f7fe0', base2: '#86b2f5', margin: '#23233a', marginWidth: 3, fringe: '#f6f6f2',
@@ -73,7 +78,7 @@ export function wingMaterial(palette) {
 
 /** The player's butterfly: a single animated model. */
 export class ButterflyModel {
-  constructor({ palette = PALETTES.icarus, scale = 0.2 } = {}) {
+  constructor({ palette = PALETTES.boomblauwtje, scale = 0.2 } = {}) {
     this.group = new THREE.Group();
     this.group.rotation.order = 'YXZ';
     this.group.scale.setScalar(scale);

@@ -61,6 +61,9 @@ export class Sensor {
     g.userData.isSensor = true;
     this.group = g;
 
+    // Landing spot for the butterfly: the top of the orb.
+    world.sensor.top = BED_HEIGHT + orbY + ORB_R;
+
     // Solid for the butterfly.
     const base = [world.sensor.x, BED_HEIGHT, world.sensor.z];
     world.staticColliders.push(
