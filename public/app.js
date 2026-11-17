@@ -1,6 +1,6 @@
 const $ = (id) => document.getElementById(id);
 const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-const getJSON = async (u) => { const r = await fetch(u); if (!r.ok) throw new Error(`${u}: HTTP ${r.status}`); return r.json(); };
+const getJSON = async (u) => { const r = await fetch(u, { cache: 'no-cache' }); if (!r.ok) throw new Error(`${u}: HTTP ${r.status}`); return r.json(); };
 const fmtTime = (iso) => new Date(iso).toLocaleString('nl-NL', { weekday: 'short', hour: '2-digit', minute: '2-digit' });
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -91,7 +91,7 @@ function renderPlants(plans) {
 let mapDone = false;
 async function load() {
   try {
-    const [garden, layout, plans] = await Promise.all([getJSON('/api/garden'), getJSON('/api/layout'), getJSON('/api/planting')]);
+    const [garden, layout, plans] = await Promise.all([getJSON('api/garden.json'), getJSON('api/layout.json'), getJSON('api/planting.json')]);
     renderReadings(garden);
     if (!mapDone) { renderMap(layout, garden); renderPlants(plans); mapDone = true; }
   } catch (e) { $('status').innerHTML = `<span class="err">Fout: ${esc(e.message)}</span>`; }

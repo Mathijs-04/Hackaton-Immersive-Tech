@@ -1,0 +1,628 @@
+{
+  "i2WdfCcDSy6Rqr6DfrTZtxm7r0gyESKV": [
+    {
+      "plant": {
+        "name": "Filipendula ulmaria",
+        "vernacular_name": "Moerasspirea",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Verbena bonariensis",
+        "vernacular_name": "Stijf ijzerhard",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 4,
+      "stage": "plant",
+      "planted_on": "2026-07-01",
+      "supplier": {
+        "name": "Own collection"
+      }
+    },
+    {
+      "plant": {
+        "name": "Cichorium intybus",
+        "vernacular_name": "Wilde cichorei",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Helianthus annuus",
+        "vernacular_name": null,
+        "taxonomic_rank": "Species"
+      },
+      "amount": null,
+      "stage": "seed",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Bolster"
+      }
+    },
+    {
+      "plant": {
+        "name": "Verbascum nigrum",
+        "vernacular_name": "Zwarte toorts",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Lythrum salicaria",
+        "vernacular_name": "Grote kattenstaart",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Malva sylvestris",
+        "vernacular_name": "Groot kaasjeskruid",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Dipsacus fullonum",
+        "vernacular_name": "Grote kaardenbol",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Thymus serpyllum",
+        "vernacular_name": "Kleine tijm",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Echium vulgare",
+        "vernacular_name": "Slangenkruid",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Geranium pratense",
+        "vernacular_name": "Beemdooievaarsbek",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Aster ageratoides 'Asran'",
+        "vernacular_name": null,
+        "taxonomic_rank": "Doubtful"
+      },
+      "amount": 1,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Tanacetum vulgare",
+        "vernacular_name": "Boerenwormkruid",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Viburnum opulus",
+        "vernacular_name": "Gelderse roos",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 1,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Tropaeolum majus",
+        "vernacular_name": null,
+        "taxonomic_rank": "Species"
+      },
+      "amount": null,
+      "stage": "seed",
+      "planted_on": null,
+      "supplier": {
+        "name": "Self-seeded"
+      }
+    },
+    {
+      "plant": {
+        "name": "Leucanthemum vulgare",
+        "vernacular_name": "Gewone margriet",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Papaver rhoeas",
+        "vernacular_name": "Grote klaproos",
+        "taxonomic_rank": "Species"
+      },
+      "amount": null,
+      "stage": "seed",
+      "planted_on": null,
+      "supplier": {
+        "name": "Self-seeded"
+      }
+    },
+    {
+      "plant": {
+        "name": "Centaurea scabiosa",
+        "vernacular_name": "Grote centaurie",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Limonium vulgare",
+        "vernacular_name": "Lamsoor",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Veronica longifolia",
+        "vernacular_name": "Lange ereprijs",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Dianthus carthusianorum",
+        "vernacular_name": "Kartuizer anjer",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 4,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Juncus inflexus",
+        "vernacular_name": "Zeegroene rus",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Saponaria officinalis",
+        "vernacular_name": "Zeepkruid",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Echinops bannaticus 'Blue Globe'",
+        "vernacular_name": null,
+        "taxonomic_rank": "Doubtful"
+      },
+      "amount": 1,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Foeniculum vulgare",
+        "vernacular_name": "Venkel",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Salvia pratensis",
+        "vernacular_name": "Veldsalie",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Galium verum",
+        "vernacular_name": "Geel walstro",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Geum rivale",
+        "vernacular_name": "Knikkend nagelkruid",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Althaea officinalis",
+        "vernacular_name": "Heemst",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 1,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Amaranthus caudatus",
+        "vernacular_name": null,
+        "taxonomic_rank": "Species"
+      },
+      "amount": null,
+      "stage": "seed",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Bolster"
+      }
+    },
+    {
+      "plant": {
+        "name": "Catananche caerulea 'Blue'",
+        "vernacular_name": null,
+        "taxonomic_rank": "Doubtful"
+      },
+      "amount": 1,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Cornus mas",
+        "vernacular_name": "Gele kornoelje",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 1,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Frangula alnus",
+        "vernacular_name": "Sporkehout",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 1,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Eryngium planum 'Hobbit Blue'",
+        "vernacular_name": null,
+        "taxonomic_rank": "Doubtful"
+      },
+      "amount": 1,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Sedum album",
+        "vernacular_name": "Wit vetkruid",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 6,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Thymus pulegioides",
+        "vernacular_name": "Grote tijm",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Thymus praecox 'Red Carpet'",
+        "vernacular_name": null,
+        "taxonomic_rank": "Doubtful"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Euonymus europaeus",
+        "vernacular_name": "Wilde kardinaalsmuts",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 1,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Helianthemum nummularium 'The Bride'",
+        "vernacular_name": null,
+        "taxonomic_rank": "Doubtful"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Campanula trachelium",
+        "vernacular_name": "Ruig klokje",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 1,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Primula elatior",
+        "vernacular_name": "Slanke sleutelbloem",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Scabiosa columbaria",
+        "vernacular_name": "Duifkruid",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Centaurea jacea",
+        "vernacular_name": "Knoopkruid",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Allium 'Millenium'",
+        "vernacular_name": null,
+        "taxonomic_rank": "Doubtful"
+      },
+      "amount": 1,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Campanula persicifolia",
+        "vernacular_name": "Prachtklokje",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Silene flos-cuculi",
+        "vernacular_name": "Echte koekoeksbloem",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-04-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Symphytum grandiflorum 'Wisley Blue'",
+        "vernacular_name": null,
+        "taxonomic_rank": "Doubtful"
+      },
+      "amount": 1,
+      "stage": "plant",
+      "planted_on": "2026-10-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    },
+    {
+      "plant": {
+        "name": "Daucus carota",
+        "vernacular_name": "Peen",
+        "taxonomic_rank": "Species"
+      },
+      "amount": 3,
+      "stage": "plant",
+      "planted_on": "2026-05-01",
+      "supplier": {
+        "name": "Natuurlijk sterker"
+      }
+    }
+  ]
+}

@@ -25,7 +25,7 @@ export class Hud {
     e.range.addEventListener('input', () => {
       const v = Number(e.range.value);
       if (v >= 0) store.goLive();
-      else store.setManual(Date.now() + v * HOUR);
+      else store.setManual(store.now + v * HOUR);
     });
     window.addEventListener('keydown', (ev) => {
       if (ev.target.closest?.('button, input, select, textarea')) return;
@@ -54,20 +54,23 @@ export class Hud {
     // Where the values come from: the newest reading (live) or the hour you picked.
     const newest = s.newest, from = newest.t - HOUR / 2;
     const ageH = (Date.now() - (from + HOUR)) / HOUR;
-    e.age.textContent = s.live
-      ? `Laatste meting: ${time(from)}–${time(from + HOUR)}${ageH > 3 ? ` (${Math.round(ageH)} uur geleden)` : ''} · elk uur ververst`
-      : `Je kijkt terug in de tijd. Druk op Live voor nu.`;
+    e.age.textContent = s.archived
+      ? (s.live ? `Laatste opname: ${short(from)} · de live-koppeling is gestopt` : 'Je kijkt terug in de tijd. Druk op Laatste voor de laatste opname.')
+      : s.live
+        ? `Laatste meting: ${time(from)}–${time(from + HOUR)}${ageH > 3 ? ` (${Math.round(ageH)} uur geleden)` : ''} · elk uur ververst`
+        : `Je kijkt terug in de tijd. Druk op Live voor nu.`;
     e.hud.classList.toggle('past', !s.live);
-    $('hud-eyebrow').textContent = s.live ? 'Live uit de echte tuin' : 'Terugkijken';
+    $('hud-eyebrow').textContent = s.live ? (s.archived ? 'Laatste opname' : 'Live uit de echte tuin') : 'Terugkijken';
+    $('live-label').textContent = s.archived ? 'Laatste' : 'Live';
 
     // Time picker.
-    const min = -Math.ceil((Date.now() - s.start) / HOUR);
-    const val = s.live ? 0 : Math.max(min, Math.round((s.t - Date.now()) / HOUR));
+    const min = -Math.ceil((s.now - s.start) / HOUR);
+    const val = s.live ? 0 : Math.max(min, Math.round((s.t - s.now) / HOUR));
     e.range.min = String(min);
     e.range.max = '0';
     e.range.value = String(val);
-    const label = s.live ? `Nu · ${time(s.t)}` : short(s.t);
-    e.range.setAttribute('aria-valuetext', s.live ? `Live, nu ${time(s.t)}` : short(s.t));
+    const label = s.live ? `${s.archived ? 'Laatste' : 'Nu'} · ${time(s.t)}` : short(s.t);
+    e.range.setAttribute('aria-valuetext', s.live ? `${s.archived ? 'Laatste opname' : 'Live, nu'} ${time(s.t)}` : short(s.t));
     e.label.textContent = label;
     e.live.setAttribute('aria-pressed', String(s.live));
 

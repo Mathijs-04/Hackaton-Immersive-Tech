@@ -22,7 +22,7 @@ import { Life } from './life/life.js';
 import { Hud } from './ui/hud.js';
 import { Panels } from './ui/panels.js';
 import { FlightHud } from './ui/flight-hud.js';
-import { esc, num } from './ui/format.js';
+import { esc, num, short } from './ui/format.js';
 import { loadPlantInfo, infoFor, nameFor, plantHTML, sensorHTML, hiveHTML } from './ui/plant-info.js';
 
 const params = new URLSearchParams(location.search);
@@ -31,7 +31,7 @@ const overlay = document.getElementById('overlay');
 function fail(message) {
   document.getElementById('loader').innerHTML =
     `<div class="sprout">🥀</div><div class="loader-brand">Biotopia</div><p><b>De tuin kon niet laden.</b></p><p>${esc(message)}</p>` +
-    '<p><a href="/">Naar het 2D-dashboard</a></p>';
+    '<p><a href="../">Naar het 2D-dashboard</a></p>';
   console.error(message);
 }
 
@@ -77,6 +77,17 @@ async function boot() {
   // --- UI
   const $ = (id) => document.getElementById(id);
   const hud = new Hud(store, history, atmosphere);
+  // When the live feed has stopped (project over), the welcome dialog says so honestly.
+  const archiveNote = () => {
+    const el = document.getElementById('intro-archive');
+    el.hidden = !store.archived;
+    document.getElementById('intro-live-line').innerHTML = store.archived
+      ? 'Met de tijdbalk onderaan kijk je terug naar eerdere uren van de afgelopen dagen.'
+      : 'Je ziet de tuin <strong>zoals hij nu is</strong>: is het daar donker of regent het, dan hier ook. Met de tijdbalk onderaan kijk je terug naar eerdere uren.';
+    if (store.archived) el.innerHTML = `<strong>Let op:</strong> de live-koppeling met de Plantenluisteraar is gestopt. Je ziet de laatste opname van <strong>${esc(short(store.end - 1800e3))}</strong>, dus de zon en het weer staan stil op dat moment.`;
+  };
+  archiveNote();
+  store.addEventListener('data', archiveNote);
   let flying = false;
   const anyDialogOpen = () => !!document.querySelector('dialog[open]');
   const focusBatch = (batch) => {
@@ -298,8 +309,9 @@ async function boot() {
     });
   }
 
-  // --- New readings: reload once per hour, a few minutes after the hour. The server fetches from
-  // the Bioto API at most once per clock hour and caches it, so this never spams the API.
+  // --- New readings. The browser only re-reads our own copy of the data (the local server's cache, or the
+  // static file on GitHub Pages) every 15 min; the Bioto API itself is called at most once per hour,
+  // by the server or the scheduled workflow, never by the browser.
   let lastFetch = Date.now();
   const refresh = async () => {
     lastFetch = Date.now();
@@ -311,15 +323,13 @@ async function boot() {
   // Background tabs throttle timers: catch up when the page becomes visible again.
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') return;
-    const due = new Date(); due.setMinutes(7, 0, 0);
-    if (due > Date.now()) due.setHours(due.getHours() - 1);
-    if (lastFetch < due.getTime()) refresh();
+    if (Date.now() - lastFetch > 15 * 60e3) refresh();
     if (store.live) store.goLive();
   });
   const scheduleRefresh = () => {
     const now = new Date(), next = new Date(now);
-    next.setMinutes(7, 0, 0);
-    if (next <= now) next.setHours(next.getHours() + 1);
+    next.setMinutes(Math.floor((now.getMinutes() - 7) / 15) * 15 + 22, 0, 0); // :07, :22, :37, :52
+    if (next <= now) next.setMinutes(next.getMinutes() + 15);
     setTimeout(async () => {
       await refresh();
       scheduleRefresh();

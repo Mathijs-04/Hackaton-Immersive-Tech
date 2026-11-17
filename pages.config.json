@@ -1,0 +1,1 @@
+{ "activeUntil": null, "comment": "Hourly API refresh is only allowed until this time (ISO, UTC). null = never. Set it when the site goes live: now + 48 h." }

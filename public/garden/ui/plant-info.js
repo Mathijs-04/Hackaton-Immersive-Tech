@@ -8,7 +8,7 @@ export const BIOTO_URL = 'https://bioto.co/';
 /** Map of API plant name (latin, incl. cultivar) → info entry. Never throws: the 3D garden works without it. */
 export async function loadPlantInfo() {
   try {
-    const res = await fetch('/data/plants.json');
+    const res = await fetch('../data/plants.json');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const { plants } = await res.json();
     return new Map(plants.map((p) => [p.latinName, p]));

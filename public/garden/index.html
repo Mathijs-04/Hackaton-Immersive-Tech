@@ -10,8 +10,8 @@
 <script type="importmap">
 {
   "imports": {
-    "three": "/vendor/three/three.module.min.js",
-    "three/addons/": "/vendor/three/addons/"
+    "three": "../vendor/three/three.module.min.js",
+    "three/addons/": "../vendor/three/addons/"
   }
 }
 </script>
@@ -28,7 +28,7 @@
         <h1 class="brand" id="app-title"><span aria-hidden="true">🌿</span> Biotopia</h1>
         <p class="garden-line"><span id="garden-name">Puintuin</span> · <span class="eyebrow-inline" id="hud-eyebrow">Live uit de echte tuin</span></p>
       </div>
-      <a class="link" href="/" title="Naar het 2D-dashboard">2D</a>
+      <a class="link" href="../" title="Naar het 2D-dashboard">2D</a>
     </div>
     <div class="clock"><span id="clock">–</span> · <span id="weather"></span></div>
     <p class="data-age" id="data-age"></p>
@@ -63,7 +63,7 @@
 
   <!-- Time: live by default; look back hour by hour -->
   <section class="panel timebar" id="timebar" aria-label="Tijd" hidden>
-    <button class="live-btn" id="btn-live" type="button" aria-pressed="true" title="Terug naar nu (L)"><span class="dot" aria-hidden="true"></span>Live</button>
+    <button class="live-btn" id="btn-live" type="button" aria-pressed="true" title="Terug naar nu (L)"><span class="dot" aria-hidden="true"></span><span id="live-label">Live</span></button>
     <input class="time-range" id="time-range" type="range" min="-168" max="0" step="1" value="0" aria-label="Kies een moment in de afgelopen dagen">
     <span class="time-label" id="time-label" aria-hidden="true"></span>
   </section>
@@ -101,11 +101,12 @@
     <h2 id="intro-title" class="brand-title">Biotopia</h2>
     <p>Deze tuin bestaat echt. In Biotopia zie je een <strong>digitale kopie van de Puintuin</strong>: een bloemrijke tuin vol inheemse planten voor bijen, vlinders en andere insecten.</p>
     <p>In de tuin staat de <strong>Plantenluisteraar</strong> van Bioto. Dit meetstation meet elk uur de temperatuur, de luchtvochtigheid, het bodemvocht en het licht, en deelt die data met deze app. Het weer, de zon en de tijd die je hier ziet komen dus uit de echte tuin.</p>
+    <p class="now" id="intro-archive" hidden></p>
     <h3>Zo ontdek je de tuin</h3>
     <ul class="steps">
       <li><span aria-hidden="true">👆</span> <span><strong>Klik op een plant</strong> om te zien welke het is en waarom insecten hem nodig hebben.</span></li>
       <li><span aria-hidden="true">🖱️</span> <span>Sleep om rond te kijken, scroll om in te zoomen.</span></li>
-      <li><span aria-hidden="true">🕒</span> <span>Je ziet de tuin <strong>zoals hij nu is</strong>: is het daar donker of regent het, dan hier ook. Met de tijdbalk onderaan kijk je terug naar eerdere uren.</span></li>
+      <li><span aria-hidden="true">🕒</span> <span id="intro-live-line">Je ziet de tuin <strong>zoals hij nu is</strong>: is het daar donker of regent het, dan hier ook. Met de tijdbalk onderaan kijk je terug naar eerdere uren.</span></li>
       <li><span aria-hidden="true">🦋</span> <span>Kies <strong>Beleef</strong> om de tuin te beleven als vlinder of als bij.</span></li>
     </ul>
     <p class="fine">De soorten en aantallen kloppen met de echte tuin. De precieze plek van elke plant is nagebootst.</p>

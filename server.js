@@ -24,6 +24,8 @@ const routes = {
   '/api/layout': getLayout,
   '/api/planting': getPlantingPlans,
 };
+// Same files as on GitHub Pages (api/*.json), so the front end uses one set of URLs everywhere.
+for (const name of ['garden', 'history', 'layout', 'planting']) routes[`/api/${name}.json`] = routes[`/api/${name}`];
 
 async function serveStatic(pathname, res) {
   for (const [prefix, dir] of STATIC) {

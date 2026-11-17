@@ -1,0 +1,80 @@
+name: Hourly data refresh (limited window)
+
+# Calls the Bioto API ONCE per run, once per hour, and only until "activeUntil" in pages.config.json.
+# When that moment has passed, the first run after it disables this workflow, so it stops for good.
+# Layout and planting plan are committed in static-data/, so only /partner/garden/{uuid}/ is requested.
+# The secrets BIOTO_TOKEN and GARDEN_UUID are only used by the "Build" step and never written to the site.
+
+on:
+  schedule:
+    - cron: '17 * * * *'   # hh:17 (not on the hour: GitHub's scheduler is busiest then)
+  workflow_dispatch:        # a manual run is allowed, but build-pages.js still skips the API within 45 min of the last refresh
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: write            # only to disable this workflow when the window is over
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Is the refresh window still open?
+        id: window
+        run: node scripts/pages-window.js
+
+      - name: Window over, stop the schedule
+        if: steps.window.outputs.active != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "The refresh window is over: disabling this workflow. The site stays online with the last data."
+          gh workflow disable pages-refresh.yml --repo "$GITHUB_REPOSITORY"
+
+      - name: Install
+        if: steps.window.outputs.active == 'true'
+        run: npm ci --ignore-scripts
+
+      - name: Build (one Bioto API request)
+        if: steps.window.outputs.active == 'true'
+        env:
+          BIOTO_TOKEN: ${{ secrets.BIOTO_TOKEN }}
+          GARDEN_UUID: ${{ secrets.GARDEN_UUID }}
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: node scripts/build-pages.js --refresh
+
+      - name: Verify (URLs, imports, no secrets in the site)
+        if: steps.window.outputs.active == 'true'
+        env:
+          BIOTO_TOKEN: ${{ secrets.BIOTO_TOKEN }}
+          GARDEN_UUID: ${{ secrets.GARDEN_UUID }}
+        run: node scripts/verify-dist.js
+
+      - uses: actions/configure-pages@v5
+        if: steps.window.outputs.active == 'true'
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.window.outputs.active == 'true'
+        with:
+          path: dist
+
+      - name: Deploy
+        id: deployment
+        if: steps.window.outputs.active == 'true'
+        uses: actions/deploy-pages@v4

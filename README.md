@@ -19,6 +19,8 @@ npm start              # http://localhost:3000
 
 `npm run fetch` pre-downloads the layout and planting plan (also happens automatically on first request).
 
+**Hosting on GitHub Pages** (static site, hourly data via a GitHub Action for a limited window, no secrets in the site): see [PAGES.md](PAGES.md).
+
 ## How data flows (and why the API stays happy)
 
 - The browser only calls our own `/api/*`. The token lives in `.env` on the server.

@@ -41,13 +41,22 @@ export class TimeStore extends EventTarget {
     // and the sensor values come from the newest hourly reading. Manual: a moment someone picked.
     this.live = true;
     this.append(apiReadings);
-    this.t = Date.now();
+    this.t = this.now;
   }
+
+  /**
+   * Archived: the newest reading is more than 6 h old (the live feed stopped, e.g. the project is
+   * over, or the API has been down for a long time). We then show the last reading instead of
+   * pretending that the sun and the sensor values are "now".
+   */
+  get archived() { return Date.now() - this.end > 6 * HOUR; }
+  /** "Now" for the garden: the wall clock, or the last reading when archived. */
+  get now() { return this.archived ? this.end : Date.now(); }
 
   get start() { return this.readings[0].t; }
   get end() { return this.readings[this.readings.length - 1].t; }
   /** Latest moment you can look at: now (values after the newest reading stay at that reading). */
-  get latest() { return Math.max(this.end, Date.now()); }
+  get latest() { return Math.max(this.end, this.now); }
   /** The newest hourly reading (its hour starts at reading.t − 30 min). */
   get newest() { return this.readings[this.readings.length - 1]; }
 
@@ -157,7 +166,7 @@ export class TimeStore extends EventTarget {
 
   /** Look at a chosen moment. Going to (almost) now switches back to live. */
   setManual(t) {
-    if (t >= Date.now() - 60e3) return this.goLive();
+    if (t >= this.now - 60e3) return this.goLive();
     const wasLive = this.live;
     this.live = false;
     this.setTime(t);
@@ -169,12 +178,12 @@ export class TimeStore extends EventTarget {
   goLive() {
     const was = this.live;
     this.live = true;
-    this.setTime(Date.now());
+    this.setTime(this.now);
     if (!was) this.dispatchEvent(new Event('state'));
   }
 
   /** Live: follow the wall clock. Updating every 20 s is plenty (the sun moves ~0.08° in that time). */
   update() {
-    if (this.live && Date.now() - this.t > 20e3) this.setTime(Date.now());
+    if (this.live && this.now - this.t > 20e3) this.setTime(this.now);
   }
 }

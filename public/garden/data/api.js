@@ -1,8 +1,10 @@
-// Loads our own cached API routes. The browser never talks to api.bioto.co directly:
-// the local server holds the token and enforces the "max once per hour" rule.
+// Loads our own copy of the data. The browser never talks to api.bioto.co directly:
+//  - locally, server.js serves /api/*.json from its disk cache (token stays in .env);
+//  - on GitHub Pages, a scheduled workflow writes the same files as static JSON (see PAGES.md).
+// URLs are relative to /garden/ so both setups (and a /<repo>/ sub-path) work.
 
 async function getJSON(url) {
-  const res = await fetch(url);
+  const res = await fetch(url, { cache: 'no-cache' }); // always revalidate: new readings arrive hourly
   if (!res.ok) {
     let detail = '';
     try { detail = (await res.json()).error || ''; } catch { /* not JSON */ }
@@ -14,7 +16,7 @@ async function getJSON(url) {
 function check(cond, msg) { if (!cond) throw new Error(`Onverwachte data: ${msg}`); }
 
 export async function loadHistory() {
-  const h = await getJSON('/api/history');
+  const h = await getJSON('../api/history.json');
   check(Array.isArray(h.readings) && h.readings.length > 1, 'history.readings ontbreekt of is leeg');
   check(h.loc && Number.isFinite(h.loc.latitude), 'history.loc ontbreekt');
   return h;
@@ -22,7 +24,7 @@ export async function loadHistory() {
 
 export async function loadAll() {
   const [history, layout, planting] = await Promise.all([
-    loadHistory(), getJSON('/api/layout'), getJSON('/api/planting'),
+    loadHistory(), getJSON('../api/layout.json'), getJSON('../api/planting.json'),
   ]);
   check(layout.type === 'FeatureCollection' && layout.features?.length, 'layout heeft geen vlakken');
   check(planting && typeof planting === 'object', 'planting is geen object');
