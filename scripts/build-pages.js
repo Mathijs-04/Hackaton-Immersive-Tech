@@ -6,7 +6,8 @@
 // API budget (this script is the only thing on GitHub that talks to Bioto):
 //   - exactly ONE request per run (/partner/garden/{uuid}/): layout and planting plan are committed
 //     once in static-data/ and never fetched again;
-//   - only inside the window in pages.config.json ("activeUntil"); after that it never calls the API;
+//   - once per scheduled hour, and only while the optional end date in pages.config.json ("activeUntil")
+//     has not passed (empty = no end); an unparsable date counts as "ended", so it can never over-call;
 //   - skipped when the published site was refreshed less than 45 minutes ago (double triggers, manual runs);
 //   - at most 2 attempts, and only for server errors / network errors (never retried on 4xx).
 // Secrets only exist in this process: the token is sent as a header, never written to a file or logged.
@@ -85,8 +86,8 @@ function copyVendor() {
 
 async function main() {
   const config = readJSON(process.env.PAGES_CONFIG || path.join(ROOT, 'pages.config.json')); // PAGES_CONFIG: tests only
-  const until = config.activeUntil ? Date.parse(config.activeUntil) : 0;
-  const inWindow = Date.now() < until;
+  const limited = config.activeUntil !== null && config.activeUntil !== undefined && config.activeUntil !== '';
+  const inWindow = Date.now() < (limited ? Date.parse(config.activeUntil) : Infinity); // NaN -> false
   let refresh = process.argv.includes('--refresh');
 
   // 1. Static parts: the front end, plus Three.js and the area layout / planting plan.
@@ -107,7 +108,7 @@ async function main() {
 
   // 3. Fresh data: one API request, only when allowed.
   let refreshed = false;
-  if (refresh && !inWindow) { log(`outside the active window (until ${config.activeUntil || 'not set'}): NOT calling the API`); refresh = false; }
+  if (refresh && !inWindow) { log(`past the end date ${config.activeUntil} in pages.config.json: NOT calling the API`); refresh = false; }
   if (refresh && refreshedAt && Date.now() - Date.parse(refreshedAt) < COOLDOWN_MS) {
     log(`site was refreshed ${Math.round((Date.now() - Date.parse(refreshedAt)) / 60e3)} min ago (< 45 min): NOT calling the API`);
     refresh = false;

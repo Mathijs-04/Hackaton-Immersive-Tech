@@ -1,11 +1,16 @@
-// Tells the workflow whether the hourly refresh window is still open (pages.config.json "activeUntil").
-// Prints active=true|false to $GITHUB_OUTPUT. A missing or invalid date means "closed": no API calls.
+// Tells the workflow whether the hourly refresh may run (pages.config.json "activeUntil").
+//   activeUntil empty / null  -> no end: refresh every hour until the workflow is disabled
+//   activeUntil = ISO date    -> optional end: refresh only until then, then the workflow disables itself
+//   activeUntil unparsable    -> treated as "closed" (safe default: no API calls)
+// Prints active=true|false to $GITHUB_OUTPUT.
 const fs = require('fs');
 const path = require('path');
 
 const config = JSON.parse(fs.readFileSync(process.env.PAGES_CONFIG || path.join(__dirname, '..', 'pages.config.json'), 'utf8')); // PAGES_CONFIG: tests only
-const until = config.activeUntil ? Date.parse(config.activeUntil) : NaN;
-const active = Number.isFinite(until) && Date.now() < until;
-const left = Number.isFinite(until) ? Math.round((until - Date.now()) / 36e5 * 10) / 10 : null;
-console.log(active ? `Refresh window open: ${left} h left (until ${config.activeUntil}).` : `Refresh window closed (activeUntil: ${config.activeUntil ?? 'not set'}).`);
+const limited = config.activeUntil !== null && config.activeUntil !== undefined && config.activeUntil !== '';
+const until = limited ? Date.parse(config.activeUntil) : Infinity;
+const active = Date.now() < until; // NaN (invalid date) compares false -> closed
+if (!limited) console.log('Refresh runs every hour with no end date.');
+else if (active) console.log(`Refresh window open: ${Math.round((until - Date.now()) / 36e5 * 10) / 10} h left (until ${config.activeUntil}).`);
+else console.log(`Refresh window closed (activeUntil: ${config.activeUntil}).`);
 if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `active=${active}\n`);
